@@ -145,7 +145,87 @@ class CotrollerUser {
         return res.status(200).json({status: 'success', message: 'Bạn đã đăng xuất'});
     }
 
-    
+    // User Update
+    async updateInfoUser(req, res) {
+        try {
+            const { id } = req.user;
+            const { fullName, address, phone, sex } = req.body;
+            const user = await User.findOne({ where: { id } });
+            if (!user) return res.status(404).json({ message: 'Không tìm thấy tài khoản' });
+
+            await user.update({ fullName, address, phone, sex });
+
+            return res.status(200).json({ status: 'success', message: 'Cập nhật thông tin thành công' });
+        } catch (error) {
+            return res.status(500).json({ message: 'Lỗi server' });
+        }
+    }
+
+    async getUsers(req, res) {
+        const users = await User.findAll();
+        return res.status(200).json({ status: 'success', message: 'Lấy thông tin thành công', data: users });
+    }
+
+    // Admin update
+    async updateUser(req, res) {
+        const { userId, fullName, email, role } = req.body;
+        const user = await User.findOne({ where: { id: userId } });
+        if (!user) return res.status(404).json({ message: 'Người dùng không tồn tại' });
+        await user.update({ fullName, email, role })
+        return res.status(200).json({ status: 'success', message: 'Cập nhật người dùng thành công' });
+    }
+
+    // Xóa
+    async deleteUser(req, res) {
+        const { userId } = req.body;
+        const user = await User.findOne({ where: { id: userId } });
+        if (!user) return res.status(404).json({ message: 'Người dùng không tồn tại' });
+
+        await user.destroy();
+        return res.status(200).json({ status: 'success', message: 'Xóa người dùng thành công' });
+    }
+
+    // RequestID
+    async requestIdStudent(req, res) {
+        const { userId } = req.user;
+        const user = await User.findOne({ id: userId });
+        if(!user) return res.status(400).json({message: "Người dùng không tồn tại"});
+        if( user.idStudent !== null && user.idStudent === '0') return res.status(400).json({ message: 'Vui lòng chờ cấp ID sinh viên'});
+
+        user.idStudent = '0';
+        await user.save();
+        return res.status(200).json({status:'success', message: "Yêu cầu thành công"});
+    }
+
+    // ConfirmID
+    async confirmIdStudent(req, res) {
+        const {idStudent, userId} = req.body
+        const user = await User.findOne({ id: userId });
+        if(!user) return res.status(400).json({ message: "Người dùng không tồn tại" });
+        if( !idStudent || idStudent === '0' ) return req.status(400).json({ message: 'Vui lòng nhập ID hợp lệ'});
+        user.idStudent = idStudent;
+        await user.save();
+        
+        return res.status(200).json({ status: 'success', message: 'Xác nhận thành công' });
+    }
+
+    // Trạng thái
+
+
+
+    // Get danh sách chờ cấp mã
+     async getListRequest(req, res){
+        const requestList = User.findAll({
+            where: { idStudent: '0' },
+            attributes: ['id', 'fullName', 'email', 'phone', 'createdAt'],
+            order: [['createdAt', 'DESC']],
+        })
+        return res.status(200).json({
+            status: 'success',
+            message: 'success',
+            data: requestList
+        })
+     }
 
 
 

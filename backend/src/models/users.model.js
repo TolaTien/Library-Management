@@ -20,12 +20,12 @@ const User = connect.define(
         },
         phone: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
 
         },
         address: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         email: {
             type: DataTypes.STRING,

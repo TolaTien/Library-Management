@@ -145,6 +145,8 @@ class CotrollerUser {
         return res.status(200).json({status: 'success', message: 'Bạn đã đăng xuất'});
     }
 
+    
+
 
 
 }

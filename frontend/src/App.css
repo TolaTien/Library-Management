@@ -1,42 +1,53 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* --- CSS Variables --- */
+:root {
+    --color-page-bg: #f9fafb; /* Lớp nền chung cho toàn bộ ứng dụng */
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* --- MAIN-PAGE-LAYOUT BLOCK --- */
+.main-page-layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-page-bg);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* --- PRODUCT-GRID ELEMENT --- */
+.main-page__product-grid {
+    /* Thay thế w-[90%] mx-auto mt-5 */
+    width: 90%;
+    max-width: 1400px; 
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1.25rem; /* mt-5 */
+    padding: 0 0.5rem; /* Padding nhẹ hai bên */
+    
+    /* Thay thế grid grid-cols-4 md:grid-cols-2 lg:grid-cols-5 gap-4 */
+    display: grid;
+    gap: 1rem; /* gap-4 */
+    
+    /* Thiết lập Responsive Grid */
+    
+    /* Mặc định (nhỏ): 2 cột */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+@media (min-width: 640px) { /* sm breakpoint */
+    .main-page__product-grid {
+        /* Chuyển sang 3 cột */
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
 }
 
-.card {
-  padding: 2em;
+@media (min-width: 768px) { /* md breakpoint */
+    .main-page__product-grid {
+        /* Chuyển sang 4 cột */
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
 }
 
-.read-the-docs {
-  color: #888;
+@media (min-width: 1024px) { /* lg breakpoint */
+    .main-page__product-grid {
+        /* Thay thế lg:grid-cols-5 */
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
 }

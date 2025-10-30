@@ -1,7 +1,10 @@
 const User = require('../models/users.model');
+const Product = require('../models/product.model')
+const History = require('../models/historyBook.model');
 const { createRefreshToken, createToken, verifyToken } = require('../services/tokenServices');
 const bcrypt = require('bcrypt');
 const CryptoJS = require('crypto-js');
+const { Op } = require('sequelize');
 require('dotenv').config();
 
 class ControllerUser {
@@ -187,8 +190,8 @@ class ControllerUser {
 
     // Request ID
     async requestIdStudent(req, res) {
-        const { userId } = req.user;
-        const user = await User.findOne({ where: { id: userId } });
+        const { id } = req.user;
+        const user = await User.findOne({ where: { id: id } });
         if (!user) return res.status(400).json({ message: "Người dùng không tồn tại" });
         if (user.idStudent === '0') return res.status(400).json({ message: 'Vui lòng chờ cấp ID sinh viên' });
 
@@ -209,7 +212,41 @@ class ControllerUser {
         return res.status(200).json({ status: 'success', message: 'Xác nhận thành công' });
     }
 
-    // NOTE
+    // Biểu đồ thống kê
+    async getStatistics(req, res) {
+        try {
+            const totalUsers = await User.count();
+            const totalBooks = await Product.count();
+            const pendingRequests = await History.count({ where: {status: 'pending'}});
+            const bookInStock = await Product.count({ where: { stock: { [Op.gt] : 0 }}});
+            const booksOutOfStock = totalBooks - bookInStock;
+            const bookStatus = [
+                {type: 'Còn sách', value: bookInStock },
+                {type: 'Hết sách', value: booksOutOfStock }
+            ]
+            const aprovedBooks = await History.count( { where: {status: 'success' } });
+            const rejectedBooks = await History.count({ where: {status: 'cancel' } });
+            const expiredDay = new Date();
+            expiredDay.setDate(expiredDay.getDate() - 7);
+            const expiredBooks = await History.count({ where: {status: 'success', borrowDate: { [Op.lt]: expiredDay } }} );
+            const  booksData = [
+                { status: 'Đã duyệt', count: aprovedBooks },
+                { status: 'Chờ duyệt', count: pendingRequests },
+                { status: 'Từ chối', count: rejectedBooks },
+                { status: 'Quá hạn', count: expiredBooks },
+            ]
+            return res.status(200).json({
+                status: 'success',
+                message: 'Lấy thống kê thành công',
+                data: { totalUsers, totalBooks, pendingRequests, bookStatus, booksData },
+            });
+        }catch(err) {
+            console.error(err);
+            res.status(500).json({ message: 'Lỗi server'});
+        }
+        
+    }
+
 
     // Danh sách chờ cấp mã
     async getListRequest(req, res) {

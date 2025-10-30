@@ -1,7 +1,7 @@
 const History = require('../models/historyBook.model');
 const User = require('../models/users.model');
 const Product = require('../models/product.model');
-const { where } = require('sequelize');
+
 
 class historyBookController {
     // Tạo lịch sử mượn sách

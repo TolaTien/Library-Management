@@ -1,0 +1,204 @@
+:root {
+    --color-primary-blue: #3b82f6; /* blue-500 */
+    --color-secondary-indigo: #4f46e5; /* indigo-600 */
+    --color-green-success: #10b981; /* green-600 */
+    --color-gray-text: #1f2937; /* gray-800 */
+    --color-white: #ffffff;
+    --color-blue-50: #eff6ff;
+    --color-indigo-50: #eef2ff;
+    --color-green-50: #f0fdf4;
+    --color-emerald-50: #ecfdf5;
+    --color-blue-200: #bfdbfe;
+    --color-green-200: #a7f3d0;
+}
+
+/* --- MODAL CUSTOMIZATION (BEM: borrow-book-modal) --- */
+/* Ant Design Modal base class: .ant-modal */
+.borrow-book-modal .ant-modal-content {
+    border-radius: 1rem; /* Custom border radius for modal */
+    padding: 0;
+    overflow: hidden;
+}
+
+/* --- MODAL-BORROW BLOCK --- */
+.modal-borrow__title-wrapper {
+    /* Thay thế flex items-center space-x-2 */
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* space-x-2 */
+    padding: 1rem 1.5rem 0.5rem; /* Padding cho tiêu đề */
+}
+
+.modal-borrow__title-icon {
+    /* Thay thế text-blue-600 */
+    color: #2563eb; /* blue-600 */
+    font-size: 1.25rem;
+}
+
+.modal-borrow__title-text {
+    /* Thay thế text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent */
+    font-size: 1.25rem; /* text-xl */
+    font-weight: 700; /* font-bold */
+    /* Gradient Text Effect */
+    background: linear-gradient(to right, #2563eb, #7c3aed); /* blue-600 to purple-600 */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+.modal-borrow__content {
+    /* Thay thế space-y-6 */
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; /* space-y-6 (24px) */
+    padding: 1rem 1.5rem 1.5rem; /* Padding cho nội dung */
+}
+
+/* --- CARD ELEMENTS --- */
+.modal-borrow__card {
+    /* Thiết lập chung */
+    border-radius: 0.75rem !important;
+    padding: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.modal-borrow__card--book {
+    /* Thay thế bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 */
+    background: linear-gradient(to right, var(--color-blue-50), var(--color-indigo-50)) !important;
+    border: 1px solid var(--color-blue-200) !important;
+}
+
+.modal-borrow__card--borrower {
+    /* Thay thế bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 */
+    background: linear-gradient(to right, var(--color-green-50), var(--color-emerald-50)) !important;
+    border: 1px solid var(--color-green-200) !important;
+}
+
+.modal-borrow__section-title {
+    /* Thay thế text-gray-800 mb-4 */
+    color: var(--color-gray-text) !important;
+    margin-bottom: 1rem !important; /* mb-4 */
+    font-size: 1.25rem !important;
+}
+
+/* --- BOOK INFO ELEMENTS --- */
+.modal-borrow__book-image-col {
+    /* Thay thế flex justify-center */
+    display: flex;
+    justify-content: center;
+}
+
+.modal-borrow__book-image {
+    /* Thay thế rounded-lg shadow-md object-cover */
+    border-radius: 0.5rem !important; /* rounded-lg */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06); /* shadow-md */
+    object-fit: cover;
+}
+
+.modal-borrow__book-name {
+    /* Thay thế text-gray-800 mb-2 */
+    color: var(--color-gray-text) !important;
+    margin-bottom: 0.5rem !important;
+    font-size: 1rem !important;
+}
+
+.modal-borrow__book-details {
+    /* Thay thế grid grid-cols-1 md:grid-cols-2 gap-2 text-sm */
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem; /* gap-2 */
+    font-size: 0.875rem; /* text-sm */
+}
+
+@media (min-width: 768px) { /* md breakpoint */
+    .modal-borrow__book-details {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.modal-borrow__stock-count {
+    /* Thay thế text-green-600 */
+    color: var(--color-green-success) !important;
+    font-weight: 700;
+}
+
+/* --- FORM ELEMENTS --- */
+.modal-borrow__section-subtitle {
+    /* Thay thế Title level={5} text-gray-800 mb-4 */
+    color: var(--color-gray-text) !important;
+    margin-bottom: 1rem !important;
+    font-size: 1rem !important;
+}
+
+.modal-borrow__input.ant-input,
+.modal-borrow__input.ant-input-number,
+.modal-borrow__datepicker.ant-picker {
+    /* Thay thế h-10 và tùy chỉnh input */
+    height: 2.5rem; /* h-10 (40px) */
+    border-radius: 0.375rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.modal-borrow__input--number {
+    width: 100% !important;
+}
+
+.modal-borrow__input--disabled.ant-input-disabled {
+    /* Thay thế bg-gray-100 */
+    background-color: #f3f4f6 !important;
+    color: #4b5563 !important;
+    cursor: not-allowed;
+}
+
+.modal-borrow__datepicker {
+    width: 100%;
+}
+
+/* --- DIVIDER ELEMENT --- */
+.modal-borrow__divider {
+    /* Thay thế my-6 */
+    margin-top: 1.5rem !important; /* my-6 */
+    margin-bottom: 1.5rem !important; /* my-6 */
+    border-top-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+.modal-borrow__divider--small {
+    /* Thay thế my-4 */
+    margin-top: 1rem !important; /* my-4 */
+    margin-bottom: 1rem !important; /* my-4 */
+}
+
+/* --- ACTIONS ELEMENTS --- */
+.modal-borrow__actions {
+    /* Thay thế flex justify-end space-x-3 pt-4 */
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem; /* space-x-3 */
+    padding-top: 1rem; /* pt-4 */
+}
+
+.modal-borrow__button {
+    /* Thiết lập chung cho button */
+    height: 2.5rem; /* h-10 */
+    padding: 0 1.5rem; /* px-6 */
+    font-weight: 500;
+    border-radius: 0.375rem;
+}
+
+.modal-borrow__button--submit {
+    /* Thay thế bg-gradient-to-r from-blue-500 to-indigo-600 border-none hover:from-blue-600 hover:to-indigo-700 */
+    background: linear-gradient(to right, var(--color-primary-blue), var(--color-secondary-indigo)) !important;
+    border: none !important;
+    color: var(--color-white) !important;
+    transition: all 0.3s ease-in-out;
+}
+
+.modal-borrow__button--submit:hover {
+    background: linear-gradient(to right, #2563eb, #4338ca) !important; /* blue-600 to indigo-700 */
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+}
+
+.modal-borrow__button--cancel {
+    border-color: #d9d9d9 !important;
+}

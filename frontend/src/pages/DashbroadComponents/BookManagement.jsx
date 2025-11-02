@@ -22,7 +22,6 @@ const BookForm = ({ form, onFinish, initialValues, isEdit = false }) => {
             // Nếu là edit và có ảnh, tạo file list cho Upload component
             if (isEdit && initialValues.image) {
                 formValues.image = {
-                    fileList: [
                         {
                             uid: '-1',
                             name: 'current-image',

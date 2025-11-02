@@ -98,7 +98,6 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL,
   `password` varchar(255) DEFAULT NULL,
   `role` enum('admin','user') NOT NULL DEFAULT 'user',
-  `typeLogin` enum('google','email') NOT NULL,
   `idStudent` varchar(255) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,

@@ -3,7 +3,7 @@ const { Sequelize } = require("sequelize");
 
 
 const connect = new Sequelize(
-    'demo',
+    'mydb',
     'root',
     'dqhuy132006',
     {

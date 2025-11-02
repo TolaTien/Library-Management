@@ -1,0 +1,278 @@
+/* --- LIBRARY-HEADER BLOCK --- */
+.library-header {
+    /* Thay thế bg-white shadow-md border-b border-gray-200 */
+    background-color: var(--color-white, #ffffff);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Đổ bóng tinh tế */
+    border-bottom: 1px solid var(--color-border, #e5e7eb);
+    position: sticky; /* Giữ header ở trên cùng (Thêm vào để hiện đại hơn) */
+    top: 0;
+    z-index: 1000;
+}
+
+/* Biến màu đặc trưng của dự án (Tông xanh dương/thư viện) */
+:root {
+    --color-primary: #007bff; /* Xanh dương mạnh mẽ */
+    --color-primary-hover: #0056b3;
+    --color-text-dark: #1f2937; /* Gray-900 */
+    --color-text-medium: #6b7280; /* Gray-500 */
+    --color-background-hover: #f3f4f6; /* Gray-100 */
+    --color-white: #ffffff;
+    --color-border: #d1d5db; /* Gray-300 */
+}
+
+.library-header__container {
+    /* Thay thế w-[90%] mx-auto px-4 sm:px-6 lg:px-8 */
+    width: 90%;
+    max-width: 1400px; /* Thêm max-width để hiện đại hơn */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.library-header__content {
+    /* Thay thế flex items-center justify-between h-16 */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4rem; /* h-16 = 64px = 4rem */
+}
+
+/* --- LOGO ELEMENT --- */
+.library-header__logo-link {
+    text-decoration: none;
+}
+
+.library-header__logo {
+    /* Thay thế flex items-center flex-shrink-0 */
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.library-header__title {
+    /* Thay thế text-2xl font-bold text-blue-600 */
+    font-size: 1.5rem; /* text-2xl */
+    font-weight: 700; /* font-bold */
+    color: var(--color-primary);
+    margin: 0; /* Đảm bảo không có margin mặc định */
+}
+
+/* --- SEARCH ELEMENT --- */
+.library-header__search {
+    /* Thay thế flex-1 max-w-lg mx-8 relative */
+    flex-grow: 1;
+    max-width: 32rem; /* max-w-lg (512px) */
+    margin-left: 2rem;
+    margin-right: 2rem;
+    position: relative;
+}
+
+.library-header__search-wrapper {
+    /* Thay thế relative */
+    position: relative;
+}
+
+.library-header__search-icon-wrapper {
+    /* Thay thế absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none */
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    padding-left: 0.75rem;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+}
+
+.library-header__search-icon {
+    /* Thay thế h-5 w-5 text-gray-400 */
+    height: 1.25rem;
+    width: 1.25rem;
+    color: #9ca3af; /* Gray-400 */
+}
+
+.library-header__search-input {
+    /* Thay thế block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent */
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.75rem 0.5rem 2.5rem; /* pl-10 (2.5rem) */
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem; /* rounded-lg */
+    outline: none;
+    transition: all 0.2s ease-in-out;
+
+    /* Focus styles */
+    /* Thay thế focus:ring-2 focus:ring-blue-500 focus:border-transparent */
+    &:focus {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25); /* Focus ring tùy chỉnh */
+    }
+}
+
+/* --- SEARCH RESULTS ELEMENT --- */
+.library-header__search-results {
+    /* Thay thế absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg */
+    position: absolute;
+    z-index: 10;
+    width: 100%;
+    margin-top: 0.25rem;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06); /* shadow-lg */
+    overflow: hidden; /* Quan trọng để bo tròn góc */
+}
+
+.library-header__search-results-list {
+    /* Thay thế max-h-80 overflow-y-auto */
+    max-height: 20rem; /* max-h-80 (320px) */
+    overflow-y: auto;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.library-header__search-result-link {
+    /* Thay thế flex items-center p-3 hover:bg-gray-100 transition-colors */
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    text-decoration: none;
+    color: inherit;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.library-header__search-result-link:hover {
+    background-color: var(--color-background-hover);
+}
+
+.library-header__search-result-image {
+    /* Thay thế w-12 h-16 object-cover rounded-md mr-4 */
+    width: 3rem; /* w-12 */
+    height: 4rem; /* h-16 */
+    object-fit: cover;
+    border-radius: 0.375rem; /* rounded-md */
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.library-header__search-result-name {
+    /* Thay thế font-semibold text-gray-800 */
+    font-weight: 600; /* font-semibold */
+    color: var(--color-text-dark);
+    margin: 0;
+    line-height: 1.3;
+}
+
+.library-header__search-result-publisher {
+    /* Thay thế text-sm text-gray-500 */
+    font-size: 0.875rem; /* text-sm */
+    color: var(--color-text-medium);
+    margin: 0;
+}
+
+
+/* --- USER ACTION ELEMENT --- */
+.library-header__user-action {
+    /* Thay thế flex items-center space-x-4 */
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* space-x-4 */
+}
+
+/* User Info Dropdown Trigger */
+.library-header__user-avatar-wrapper {
+    /* Thay thế flex items-center space-x-3 cursor-pointer hover:bg-gray-50 px-3 py-2 rounded-lg transition-colors */
+    display: flex;
+    align-items: center;
+    gap: 0.75rem; /* space-x-3 */
+    cursor: pointer;
+    padding: 0.5rem 0.75rem; /* px-3 py-2 */
+    border-radius: 0.5rem; /* rounded-lg */
+    transition: background-color 0.15s ease-in-out;
+}
+
+.library-header__user-avatar-wrapper:hover {
+    background-color: #f9fafb; /* Gray-50 */
+}
+
+/* Ant Design Avatar customization (Vì đây là component AntD, ta dùng class của nó hoặc inline style nếu cần) */
+.library-header__user-avatar {
+    /* Thay thế bg-blue-600 */
+    background-color: var(--color-primary) !important; 
+    flex-shrink: 0; /* Giúp tránh bị co lại */
+}
+
+.library-header__user-info {
+    /* Thay thế hidden sm:block */
+    /* Đảm bảo nó được hiển thị trên màn hình lớn hơn */
+    display: none;
+}
+@media (min-width: 640px) { /* sm breakpoint */
+    .library-header__user-info {
+        display: block;
+    }
+}
+
+.library-header__user-name {
+    /* Thay thế text-sm font-medium text-gray-900 */
+    font-size: 0.875rem; /* text-sm */
+    font-weight: 500; /* font-medium */
+    color: var(--color-text-dark);
+    margin: 0;
+    white-space: nowrap; /* Tránh xuống dòng */
+}
+
+.library-header__user-email {
+    /* Thay thế text-xs text-gray-500 */
+    font-size: 0.75rem; /* text-xs */
+    color: var(--color-text-medium);
+    margin: 0;
+    white-space: nowrap;
+}
+
+/* Auth Buttons */
+.library-header__auth-buttons {
+    /* Thay thế space-x-4 */
+    display: flex;
+    gap: 1rem; /* space-x-4 */
+}
+
+.library-header__button {
+    /* Thiết lập chung cho các button Link */
+    font-size: 0.875rem; /* text-sm */
+    font-weight: 500; /* font-medium */
+    padding: 0.5rem 0.75rem; /* px-3 py-2 (cho Button AntD) */
+    border-radius: 0.375rem; /* rounded-md */
+    transition: all 0.15s ease-in-out;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.library-header__button--login {
+    /* Thay thế text-gray-700 hover:text-blue-600 */
+    color: #4b5563; /* Gray-700 */
+    background-color: transparent;
+    border: 1px solid transparent;
+
+    &:hover {
+        color: var(--color-primary);
+        background-color: var(--color-background-hover);
+        border-color: var(--color-background-hover);
+    }
+}
+
+.library-header__button--register {
+    /* Thay thế bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors */
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding: 0.5rem 1rem; /* px-4 py-2 */
+    border-radius: 0.5rem; /* rounded-lg */
+
+    &:hover {
+        background-color: var(--color-primary-hover);
+    }
+}

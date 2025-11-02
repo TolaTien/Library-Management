@@ -1,0 +1,130 @@
+/* --- CSS Variables (Sync with project colors) --- */
+:root {
+    --color-dark-bg: #1f2937; /* gray-800 */
+    --color-dark-text: #ffffff; /* white */
+    --color-text-light: #d1d5db; /* gray-300 */
+    --color-text-lighter: #9ca3af; /* gray-400 */
+    --color-border-dark: #374151; /* gray-700 */
+    --color-primary-blue: #3b82f6; /* blue-500 (Project Accent) */
+}
+
+/* --- LIBRARY-FOOTER BLOCK --- */
+.library-footer {
+    /* Thay thế bg-gray-800 text-white mt-auto */
+    background-color: var(--color-dark-bg);
+    color: var(--color-dark-text);
+    margin-top: auto;
+    width: 100%;
+    /* Thêm shadow nhẹ phía trên để phân biệt với nội dung chính */
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.library-footer__container {
+    /* Thay thế max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 */
+    max-width: 72rem; /* max-w-6xl */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 2rem; /* py-8 */
+    padding-bottom: 2rem; /* py-8 */
+}
+
+.library-footer__sections {
+    /* Thay thế grid grid-cols-1 md:grid-cols-3 gap-8 */
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem; /* gap-8 (32px) */
+}
+
+@media (min-width: 768px) { /* md breakpoint */
+    .library-footer__sections {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* --- HEADING ELEMENT --- */
+.library-footer__heading {
+    /* Thay thế text-lg font-semibold mb-4 */
+    font-size: 1.125rem; /* text-lg */
+    font-weight: 600; /* font-semibold */
+    margin-bottom: 1rem; /* mb-4 */
+    color: var(--color-dark-text);
+    /* Dùng màu accent cho phần logo/title chính */
+    border-left: 3px solid var(--color-primary-blue);
+    padding-left: 0.5rem;
+}
+
+.library-footer__heading--logo {
+    /* Thay thế flex items-center */
+    display: flex;
+    align-items: center;
+    color: var(--color-primary-blue); /* Màu accent cho logo */
+    border: none;
+    padding-left: 0;
+}
+
+/* --- TEXT ELEMENT --- */
+.library-footer__text {
+    /* Thiết lập chung: text-sm text-gray-300 */
+    font-size: 0.875rem; /* text-sm */
+    color: var(--color-text-light);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.library-footer__text--about {
+    /* Thay thế leading-relaxed */
+    line-height: 1.625;
+}
+
+/* --- LINK LIST ELEMENT --- */
+.library-footer__list {
+    /* Thay thế space-y-2 text-sm */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* space-y-2 (8px) */
+    font-size: 0.875rem; /* text-sm */
+}
+
+.library-footer__link {
+    /* Thay thế text-gray-300 hover:text-white transition-colors */
+    color: var(--color-text-light);
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+    display: inline-block;
+    padding: 0.1rem 0; /* Cho dễ click hơn */
+}
+
+.library-footer__link:hover {
+    color: var(--color-dark-text);
+    /* Hiệu ứng nổi bật hiện đại */
+    text-shadow: 0 0 5px rgba(59, 130, 246, 0.5); 
+}
+
+/* --- CONTACT INFO ELEMENT --- */
+.library-footer__contact-info {
+    /* Thay thế space-y-2 text-sm text-gray-300 */
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* space-y-2 (8px) */
+}
+
+/* --- COPYRIGHT ELEMENT --- */
+.library-footer__copyright {
+    /* Thay thế border-t border-gray-700 mt-8 pt-6 text-center */
+    border-top: 1px solid var(--color-border-dark);
+    margin-top: 2rem; /* mt-8 */
+    padding-top: 1.5rem; /* pt-6 */
+    text-align: center;
+}
+
+.library-footer__copyright-text {
+    /* Thay thế text-gray-400 text-sm */
+    color: var(--color-text-lighter);
+    font-size: 0.875rem; /* text-sm */
+    margin: 0;
+}

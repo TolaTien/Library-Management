@@ -15,24 +15,24 @@ const storage = multer.diskStorage({
 
 var upload = multer({ storage: storage });
 
-const { authUser, asyncHandler } = require("../auth/checkAuth");
+const { authUser,  check } = require("../auth/checkAuth");
 
 const controllerProduct = require("../controllers/product.controller");
 
 router.post(
   "/upload-image",
   upload.single("image"),
-  asyncHandler(controllerProduct.uploadImage)
+  check(controllerProduct.uploadImage)
 );
 router.post(
   "/create",
   upload.single("image"),
-  asyncHandler(controllerProduct.createProduct)
+  check(controllerProduct.createProduct)
 );
-router.get("/get-all", asyncHandler(controllerProduct.getAllProduct));
-router.get("/get-one", asyncHandler(controllerProduct.getOneProduct));
-router.get("/search", asyncHandler(controllerProduct.searchProduct));
-router.post("/update", asyncHandler(controllerProduct.updateProduct));
-router.post("/delete", asyncHandler(controllerProduct.deleteProduct));
+router.get("/get-all", check(controllerProduct.getAllProduct));
+router.get("/get-one", check(controllerProduct.getOneProduct));
+router.get("/search", check(controllerProduct.searchProduct));
+router.post("/update", check(controllerProduct.updateProduct));
+router.post("/delete", check(controllerProduct.deleteProduct));
 
 module.exports = router;

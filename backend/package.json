@@ -15,7 +15,11 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+<<<<<<< HEAD
 
+=======
+    "multer": "^2.0.2",
+>>>>>>> a789c817e0eabbf3563d3d31502266cff92dd460
     "mysql2": "^3.15.1",
 
     "nodemon": "^3.1.10",

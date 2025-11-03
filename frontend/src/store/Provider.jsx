@@ -12,6 +12,7 @@ export function Provider({ children }) {
     const [dataUser, setDataUser] = useState({});
 
     const fetchAuth = async () => {
+
         try {
             const res = await requestAuth();
             const bytes = CryptoJS.AES.decrypt(res.metadata, import.meta.env.VITE_SECRET_CRYPTO);
@@ -38,13 +39,9 @@ export function Provider({ children }) {
 
     return (
         <>
-            <Context.Provider
-                value={{
-                    dataUser,
-                }}
-            >
+            <Context.Provider value={{dataUser,}}>
                 {children}
-                <ModalBuyBook />
+                <ModalBuyBook/>
                 <ToastContainer />
             </Context.Provider>
         </>

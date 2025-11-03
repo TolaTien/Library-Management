@@ -1,5 +1,6 @@
 // Import file CSS riêng
 import './Footer.css'; 
+import libraryImage from "../assets/images/library-icon.png"
 
 function Footer() {
     return (
@@ -10,7 +11,7 @@ function Footer() {
                     {/* Thông tin thư viện */}
                     <div className="library-footer__section library-footer__section--about">
                         <h3 className="library-footer__heading library-footer__heading--logo">
-                            📚 Thư Viện
+                            <img className="footer-library-image" src={libraryImage} alt="library-icon" /> Thư Viện
                         </h3>
                         <p className="library-footer__text library-footer__text--about">
                             Hệ thống quản lý thư viện hiện đại, cung cấp dịch vụ mượn sách trực tuyến 

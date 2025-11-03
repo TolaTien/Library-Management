@@ -1,0 +1,87 @@
+/* --- CSS Variables --- */
+:root {
+    --color-border: #e5e7eb;            /* gray-200 */
+    --color-primary-blue: #3b82f6;      
+}
+
+/* --- PERSONAL-INFO-CARD BLOCK --- */
+.personal-info-card.ant-card {
+    /* Đảm bảo Card base không có border, style đã được đặt ở InfoUser.css */
+    border: none;
+}
+
+/* --- LOADING ELEMENT --- */
+.personal-info-card__loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+
+/* --- CONTENT ELEMENT --- */
+.personal-info-card__content {
+    /* Thay thế flex flex-col items-center md:flex-row md:items-start gap-6 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem; /* gap-6 */
+}
+
+@media (min-width: 768px) { /* md breakpoint */
+    .personal-info-card__content {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+}
+
+/* --- AVATAR SECTION ELEMENT --- */
+.personal-info-card__avatar-section {
+    /* Thay thế flex flex-col items-center gap-2 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem; /* gap-2 */
+    flex-shrink: 0;
+    min-width: 120px; /* Giữ chỗ cho avatar */
+}
+
+.personal-info-card__avatar {
+    border: 2px solid var(--color-border);
+}
+
+.personal-info-card__avatar-upload {
+    /* Đảm bảo nút đổi ảnh nằm dưới avatar */
+    width: 100%;
+    text-align: center;
+}
+
+
+/* --- DETAILS SECTION ELEMENT (Chứa Form hoặc Descriptions) --- */
+.personal-info-card__details-section {
+    /* Thay thế flex-1 w-full */
+    flex-grow: 1;
+    width: 100%;
+}
+
+.personal-info-card__descriptions {
+    /* Tùy chỉnh Descriptions Ant Design nếu cần */
+    margin-bottom: 1rem;
+}
+
+/* --- BUTTONS --- */
+.personal-info-card__button--request {
+    /* Thay thế mt-4 */
+    margin-top: 1rem !important; /* mt-4 */
+}
+
+.personal-info-card__form-actions {
+    /* Dòng chứa nút Save và Cancel */
+    margin-top: 1.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #f0f0f0;
+}
+
+.personal-info-card__button--save {
+    /* Thay thế mr-2 */
+    margin-right: 0.5rem !important; /* mr-2 */
+}

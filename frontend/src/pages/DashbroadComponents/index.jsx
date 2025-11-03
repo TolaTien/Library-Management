@@ -3,10 +3,12 @@ import { Layout, Menu } from 'antd';
 import { UserOutlined, SolutionOutlined, IdcardOutlined, BookOutlined, LineChartOutlined } from '@ant-design/icons';
 
 import UserManagement from './UserManagement';
-import LoanRequestManagement from './LoanRequestManagement';
+import LoanRequestManagement from './LoanRequestManagment';
 import CardIssuanceManagement from './CardIssuanceManagement';
 import BookManagement from './BookManagement';
 import Statistics from './Statistics';
+// Import file CSS riêng
+import './Index.css';
 
 const { Header, Content, Sider, Footer } = Layout;
 
@@ -26,10 +28,19 @@ const IndexDashBroad = () => {
     };
 
     return (
-        <Layout style={{ minHeight: '100vh' }}>
+        // BEM: admin-dashboard-layout
+        <Layout className="admin-dashboard-layout">
             <Sider breakpoint="lg" collapsedWidth="0">
-                <div className="h-8 m-4 bg-gray-700 text-white text-center leading-8">Logo</div>
-                <Menu theme="dark" mode="inline" defaultSelectedKeys={['stats']} onClick={(e) => setSelectedKey(e.key)}>
+                {/* BEM: admin-dashboard__logo */}
+                <div className="admin-dashboard__logo">Library Admin</div> 
+                
+                <Menu 
+                    theme="dark" 
+                    mode="inline" 
+                    defaultSelectedKeys={['stats']} 
+                    onClick={(e) => setSelectedKey(e.key)}
+                    className="admin-dashboard__menu"
+                >
                     <Menu.Item key="stats" icon={<LineChartOutlined />}>
                         Thống kê
                     </Menu.Item>
@@ -47,14 +58,24 @@ const IndexDashBroad = () => {
                     </Menu.Item>
                 </Menu>
             </Sider>
-            <Layout>
-                <Header className="bg-white p-0" />
-                <Content style={{ margin: '24px 16px 0' }}>
-                    <div className="p-6 bg-white" style={{ minHeight: 360 }}>
+            
+            {/* BEM: admin-dashboard__main-layout */}
+            <Layout className="admin-dashboard__main-layout">
+                {/* BEM: admin-dashboard__header */}
+                <Header className="admin-dashboard__header" />
+                
+                {/* BEM: admin-dashboard__content-wrapper */}
+                <Content className="admin-dashboard__content-wrapper">
+                    {/* BEM: admin-dashboard__content-panel */}
+                    <div className="admin-dashboard__content-panel">
                         {renderContent()}
                     </div>
                 </Content>
-                <Footer style={{ textAlign: 'center' }}>Library Management ©2024 Created by Cascade</Footer>
+                
+                {/* BEM: admin-dashboard__footer */}
+                <Footer className="admin-dashboard__footer">
+                    Library Management ©2024 Created by Cascade
+                </Footer>
             </Layout>
         </Layout>
     );

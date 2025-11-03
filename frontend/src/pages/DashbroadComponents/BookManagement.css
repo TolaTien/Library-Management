@@ -1,0 +1,77 @@
+/* --- CSS Variables (Tái sử dụng từ các file trước) --- */
+:root {
+    --color-primary-blue: #3b82f6;      /* blue-500 */
+    --color-primary-blue-hover: #2563eb;/* blue-600 */
+    --color-red-danger: #ff4d4f;        /* Antd default danger */
+    --color-text-dark: #1f2937;         /* gray-800 */
+}
+
+/* --- BOOK-ADMIN-PANEL BLOCK --- */
+.book-admin-panel {
+    /* Thay thế p-4 */
+    padding: 1rem;
+    background-color: #f0f2f5; /* Nền nhẹ nhàng cho Admin panel */
+}
+
+/* --- HEADER ELEMENT --- */
+.book-admin-panel__header {
+    /* Thay thế flex justify-between items-center mb-4 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem; /* mb-4 */
+    padding: 0.5rem 0;
+}
+
+.book-admin-panel__title {
+    /* Thay thế text-2xl font-bold */
+    font-size: 1.5rem; /* text-2xl */
+    font-weight: 700; /* font-bold */
+    color: var(--color-text-dark);
+    margin: 0;
+}
+
+/* --- TABLE WRAPPER --- */
+.book-admin-panel__table-wrapper {
+    background-color: white;
+    border-radius: 0.5rem;
+    overflow: hidden; /* Quan trọng để giữ bo góc cho bảng Ant Design */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* --- TABLE IMAGE ELEMENT --- */
+.book-admin-panel__table-image {
+    /* Thay thế style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '4px' }} */
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #f0f0f0;
+}
+
+/* --- ACTION BUTTONS ELEMENT --- */
+.book-admin-panel__action-buttons {
+    /* Thay thế flex gap-2 */
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* --- FORM ELEMENTS (Cho InputNumber trong BookForm) --- */
+.book-admin-panel__full-width-input {
+    /* Thay thế className="w-full" */
+    width: 100% !important;
+}
+
+/* --- UPLOAD FORM ITEM --- */
+/* Đảm bảo Form Item của Upload không bị dãn rộng không cần thiết */
+.book-admin-panel__form-upload .ant-form-item-control-input-content {
+    /* Dùng flex để giữ input gọn gàng */
+    display: flex; 
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* --- MODAL CUSTOMIZATION (Không cần nhiều, chủ yếu dùng AntD class) --- */
+.book-admin-panel__modal .ant-modal-header {
+    border-bottom: 1px solid #f0f0f0;
+}

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Tag, Modal, Form, Input, message } from 'antd';
 import { requestGetRequestLoan, requestConfirmIdStudent } from '../../config/request';
+// Import file CSS riêng
+import './CardIssuanceManagement.css'; 
 
 const CardIssuanceManagement = () => {
     const [data, setData] = useState([]);
@@ -79,15 +81,17 @@ const CardIssuanceManagement = () => {
         fetchData();
     };
 
+    // --- Định nghĩa Cột Bảng ---
     const columns = [
-        { title: 'ID', dataIndex: 'id', key: 'id', render: (text) => <span>{text.slice(0, 10)}</span> },
+        { title: 'ID', dataIndex: 'id', key: 'id', render: (text) => <span className="card-issuance-panel__id">{text.slice(0, 10)}</span> },
         {
             title: 'Ảnh đại diện',
             dataIndex: 'avatar',
             key: 'avatar',
+            // BEM: card-issuance-panel__avatar
             render: (text) => (
                 <img
-                    style={{ width: '70px', height: '70px', borderRadius: '50%', objectFit: 'cover' }}
+                    className="card-issuance-panel__avatar"
                     src={`${import.meta.env.VITE_API_URL_IMAGE}/${text}`}
                     alt="avatar"
                 />
@@ -107,8 +111,9 @@ const CardIssuanceManagement = () => {
         {
             title: 'Hành động',
             key: 'action',
+            // BEM: card-issuance-panel__action-buttons
             render: (text, record) => (
-                <div className="flex gap-2">
+                <div className="card-issuance-panel__action-buttons">
                     {record.idStudent === '0' ? (
                         <>
                             <Button type="primary" onClick={() => showIssueModal(record)}>
@@ -127,11 +132,19 @@ const CardIssuanceManagement = () => {
     ];
 
     return (
-        <div>
-            <h2 className="text-2xl mb-4 font-bold">Quản lý cấp thẻ sinh viên</h2>
-            <Table columns={columns} dataSource={data} rowKey="id" loading={loading} />
+        // BEM: card-issuance-panel
+        <div className="card-issuance-panel">
+            {/* BEM: card-issuance-panel__header */}
+            <div className="card-issuance-panel__header">
+                <h2 className="card-issuance-panel__title">Quản lý cấp thẻ sinh viên</h2>
+            </div>
+            
+            {/* BEM: card-issuance-panel__table-wrapper */}
+            <div className="card-issuance-panel__table-wrapper">
+                <Table columns={columns} dataSource={data} rowKey="id" loading={loading} />
+            </div>
 
-            {/* Modal Cấp thẻ */}
+            {/* Modal Cấp thẻ (Cấu hình Ant Design giữ nguyên) */}
             <Modal
                 title={`Cấp thẻ cho: ${selectedUser?.fullName}`}
                 open={isIssueModalVisible}
@@ -140,6 +153,7 @@ const CardIssuanceManagement = () => {
                 confirmLoading={loading}
                 okText="Cấp thẻ"
                 cancelText="Hủy"
+                className="card-issuance-panel__modal"
             >
                 <Form form={form} onFinish={onIssueFormFinish} layout="vertical">
                     <Form.Item
@@ -152,7 +166,7 @@ const CardIssuanceManagement = () => {
                 </Form>
             </Modal>
 
-            {/* Modal Hủy yêu cầu */}
+            {/* Modal Hủy yêu cầu (Cấu hình Ant Design giữ nguyên) */}
             <Modal
                 title="Xác nhận hủy yêu cầu"
                 open={isCancelModalVisible}
@@ -162,6 +176,7 @@ const CardIssuanceManagement = () => {
                 okText="Xác nhận hủy"
                 cancelText="Không"
                 okButtonProps={{ danger: true }}
+                className="card-issuance-panel__modal-delete"
             >
                 <p>
                     Bạn có chắc chắn muốn hủy yêu cầu cấp thẻ của <b>{selectedUser?.fullName}</b> không?

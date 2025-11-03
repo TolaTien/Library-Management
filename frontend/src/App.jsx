@@ -27,7 +27,7 @@ function App() {
 
             {/* BEM: main-page__product-grid */}
             <main className="main-page__product-grid">
-                {dataProduct.map((item) => (
+                {dataProduct?.map((item) => (
                     <CardBody key={item.id} data={item} />
                 ))}
             </main>

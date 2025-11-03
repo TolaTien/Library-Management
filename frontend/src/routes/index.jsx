@@ -5,6 +5,7 @@ import RegisterUser from '../pages/RegisterUser';
 import Admin from '../pages/DashbroadComponents/index';
 import InforUser from '../pages/InforUser';
 import ForgotPassword from '../pages/ForgotPassword';
+
 export const routes = [
     {
         path: '/',

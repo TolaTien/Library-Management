@@ -5,6 +5,7 @@ import { UserOutlined, LogoutOutlined, SettingOutlined, HistoryOutlined, SendOut
 import { useEffect, useState } from 'react';
 import useDebounce from '../hooks/useDebounce';
 import { requestLogout, requestSearchProduct } from '../config/request';
+import libraryIcon from '../assets/images/library-icon.png';
 // Import file CSS riêng
 import './Header.css'; 
 
@@ -58,7 +59,7 @@ function Header() {
                     {/* Logo */}
                     <Link to={'/'} className="library-header__logo-link">
                         <div className="library-header__logo">
-                            <h1 className="library-header__title">📚 Thư Viện</h1>
+                            <h1 className="library-header__title"> <img className="library-icon" src={libraryIcon} alt="library-icon" />Thư Viện</h1>
                         </div>
                     </Link>
                     

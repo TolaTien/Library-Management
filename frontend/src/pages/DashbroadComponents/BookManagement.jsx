@@ -8,6 +8,8 @@ import {
     requestUpdateProduct,
     requestUploadImageProduct,
 } from '../../config/request';
+// Import file CSS riêng
+import './BookManagement.css'; 
 
 const { Search } = Input;
 const { Option } = Select;
@@ -45,6 +47,8 @@ const BookForm = ({ form, onFinish, initialValues, isEdit = false }) => {
                 name="image"
                 label="Ảnh bìa"
                 rules={[{ required: !isEdit, message: 'Vui lòng tải lên ảnh bìa!' }]}
+                // BEM: book-admin-panel__form-upload
+                className="book-admin-panel__form-upload"
             >
                 <Upload
                     name="image"
@@ -88,10 +92,11 @@ const BookForm = ({ form, onFinish, initialValues, isEdit = false }) => {
                 label="Năm xuất bản"
                 rules={[{ required: true, message: 'Vui lòng nhập năm xuất bản!' }]}
             >
-                <InputNumber className="w-full" />
+                {/* BEM: book-admin-panel__full-width-input */}
+                <InputNumber className="book-admin-panel__full-width-input" />
             </Form.Item>
             <Form.Item name="stock" label="Số lượng" rules={[{ required: true, message: 'Vui lòng nhập số lượng!' }]}>
-                <InputNumber className="w-full" min={0} />
+                <InputNumber className="book-admin-panel__full-width-input" min={0} />
             </Form.Item>
             <Form.Item name="description" label="Mô tả">
                 <Input.TextArea />
@@ -107,7 +112,7 @@ const BookForm = ({ form, onFinish, initialValues, isEdit = false }) => {
                 </Select>
             </Form.Item>
             <Form.Item name="pages" label="Số trang" rules={[{ required: true, message: 'Vui lòng nhập số trang!' }]}>
-                <InputNumber className="w-full" min={1} />
+                <InputNumber className="book-admin-panel__full-width-input" min={1} />
             </Form.Item>
             <Form.Item
                 name="language"
@@ -127,7 +132,9 @@ const BookForm = ({ form, onFinish, initialValues, isEdit = false }) => {
     );
 };
 
+// Component chính
 const BookManagement = () => {
+    // ... [Logic component giữ nguyên] ...
     const [data, setData] = useState([]);
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
@@ -277,15 +284,17 @@ const BookManagement = () => {
         setDeletingBook(null);
     };
 
+    // --- Cột Bảng ---
     const columns = [
         {
             title: 'Ảnh',
             dataIndex: 'image',
             key: 'image',
             width: 100,
+            // BEM: book-admin-panel__table-image
             render: (text) => (
                 <img
-                    style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '4px' }}
+                    className="book-admin-panel__table-image"
                     src={text?.startsWith('http') ? text : `${import.meta.env.VITE_API_URL_IMAGE}/${text}`}
                     alt="book cover"
                     onError={(e) => {
@@ -324,9 +333,10 @@ const BookManagement = () => {
             title: 'Hành động',
             key: 'action',
             width: 150,
+            // BEM: book-admin-panel__action-buttons
             render: (_, record) => (
-                <span className="flex gap-2">
-                    <Button type="primary" size="small" onClick={() => showEditModal(record)} loading={loading}>
+                <span className="book-admin-panel__action-buttons">
+                    <Button type="primary" size="small" onClick={() => showEditModal(record)} loading={loading} className="book-admin-panel__button--edit">
                         Sửa
                     </Button>
                     <Button
@@ -335,6 +345,7 @@ const BookManagement = () => {
                         size="small"
                         onClick={() => showDeleteModal(record)}
                         loading={loading}
+                        className="book-admin-panel__button--delete"
                     >
                         Xóa
                     </Button>
@@ -344,26 +355,32 @@ const BookManagement = () => {
     ];
 
     return (
-        <div className="p-4">
-            <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold">Quản lý sách</h2>
+        // BEM: book-admin-panel
+        <div className="book-admin-panel">
+            {/* BEM: book-admin-panel__header */}
+            <div className="book-admin-panel__header">
+                <h2 className="book-admin-panel__title">Quản lý sách</h2>
                 <Button type="primary" onClick={showAddModal} loading={loading}>
                     Thêm sách
                 </Button>
             </div>
 
-            <Table
-                columns={columns}
-                dataSource={data}
-                rowKey="id"
-                loading={loading}
-                pagination={{
-                    pageSize: 10,
-                    showSizeChanger: true,
-                    showQuickJumper: true,
-                    showTotal: (total, range) => `${range[0]}-${range[1]} của ${total} sách`,
-                }}
-            />
+            {/* BEM: book-admin-panel__table-wrapper */}
+            <div className="book-admin-panel__table-wrapper">
+                <Table
+                    columns={columns}
+                    dataSource={data}
+                    rowKey="id"
+                    loading={loading}
+                    pagination={{
+                        pageSize: 10,
+                        showSizeChanger: true,
+                        showQuickJumper: true,
+                        showTotal: (total, range) => `${range[0]}-${range[1]} của ${total} sách`,
+                    }}
+                />
+            </div>
+            
 
             {/* Modal Thêm Sách */}
             <Modal
@@ -375,6 +392,7 @@ const BookManagement = () => {
                 cancelText="Hủy"
                 width={800}
                 confirmLoading={loading}
+                className="book-admin-panel__modal"
             >
                 <BookForm form={addForm} onFinish={onAddFinish} />
             </Modal>
@@ -389,6 +407,7 @@ const BookManagement = () => {
                 cancelText="Hủy"
                 width={800}
                 confirmLoading={loading}
+                className="book-admin-panel__modal"
             >
                 <BookForm form={editForm} onFinish={onEditFinish} initialValues={editingBook} isEdit={true} />
             </Modal>
@@ -403,8 +422,9 @@ const BookManagement = () => {
                 cancelText="Hủy"
                 okButtonProps={{ danger: true }}
                 confirmLoading={loading}
+                className="book-admin-panel__modal-delete"
             >
-                <p>Bạn có chắc chắn muốn xóa sách "{deletingBook?.nameProduct}" không?</p>
+                <p>Bạn có chắc chắn muốn xóa sách "<strong>{deletingBook?.nameProduct}</strong>" không?</p>
             </Modal>
         </div>
     );

@@ -1,0 +1,62 @@
+/* --- CSS Variables (Giả định đã có file variables.css chung) --- */
+:root {
+    --color-text-dark: #1f2937;         /* gray-800 */
+    --color-panel-bg: #f0f2f5;          /* Nền admin panel */
+}
+
+/* --- CARD-ISSUANCE-PANEL BLOCK --- */
+.card-issuance-panel {
+    /* Thay thế div bọc ngoài p-4 (nếu cần) */
+    padding: 1rem;
+    background-color: var(--color-panel-bg);
+    min-height: 100%;
+}
+
+/* --- HEADER ELEMENT --- */
+.card-issuance-panel__header {
+    /* Thay thế div bọc h2 và button (nếu có) */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem; /* mb-4 */
+}
+
+.card-issuance-panel__title {
+    /* Thay thế text-2xl mb-4 font-bold */
+    font-size: 1.5rem; /* text-2xl */
+    font-weight: 700; /* font-bold */
+    color: var(--color-text-dark);
+    margin: 0;
+}
+
+/* --- AVATAR ELEMENT --- */
+.card-issuance-panel__avatar {
+    /* Thay thế style={{ width: '70px', height: '70px', borderRadius: '50%', objectFit: 'cover' }} */
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #e0e0e0;
+}
+
+/* --- ACTION BUTTONS ELEMENT --- */
+.card-issuance-panel__action-buttons {
+    /* Thay thế flex gap-2 */
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* --- TABLE WRAPPER (Để tùy chỉnh Ant Design Table nếu cần) --- */
+.card-issuance-panel__table-wrapper {
+    background-color: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* --- ID Column Customization (Optional, for Ant Design Table) --- */
+.card-issuance-panel__id {
+    font-size: 0.85rem;
+    font-family: monospace;
+    color: #999;
+}

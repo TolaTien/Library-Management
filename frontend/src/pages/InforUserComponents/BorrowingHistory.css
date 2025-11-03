@@ -1,0 +1,135 @@
+/* --- CSS Variables --- */
+:root {
+    --color-text-medium: #4b5563;       /* gray-600 (Text secondary) */
+    --color-red-danger: #ef4444;        /* red-500 */
+    --color-border: #e5e7eb;            /* gray-200 */
+    --color-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05); 
+    --color-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+}
+
+/* --- BORROW-HISTORY BLOCK (Ant Design Card) --- */
+.borrow-history.ant-card {
+    border: none;
+}
+
+/* --- LOADING ELEMENT --- */
+.borrow-history__loading {
+    /* Thay thế flex justify-center items-center h-64 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 16rem; /* h-64 (256px) */
+}
+
+/* --- LIST ELEMENT (Ant Design List) --- */
+.borrow-history__list .borrow-history__item-list {
+    /* Thay thế !p-0 mb-4 */
+    padding: 0 !important;
+    margin-bottom: 1rem; /* mb-4 */
+    border-bottom: none !important;
+}
+
+/* --- ITEM ELEMENT (Container bọc mỗi mục) --- */
+.borrow-history__item {
+    /* Thay thế bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-300 */
+    background-color: var(--color-card-bg);
+    padding: 1rem; /* p-4 */
+    border-radius: 0.5rem; /* rounded-lg */
+    box-shadow: var(--color-shadow-sm); 
+    border: 1px solid var(--color-border);
+    transition: box-shadow 0.3s ease-in-out;
+    width: 100%;
+}
+
+.borrow-history__item:hover {
+    box-shadow: var(--color-shadow-md);
+}
+
+/* --- ITEM CONTENT (Flex container bên trong) --- */
+.borrow-history__item-content {
+    /* Thay thế flex flex-col sm:flex-row gap-4 */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* gap-4 */
+}
+
+@media (min-width: 640px) { /* sm breakpoint */
+    .borrow-history__item-content {
+        flex-direction: row;
+    }
+}
+
+/* --- IMAGE ELEMENT --- */
+.borrow-history__image {
+    /* Thay thế width={100} className="rounded object-cover self-center sm:self-start" */
+    width: 100px !important;
+    height: 140px; /* Tỉ lệ phổ biến cho sách */
+    object-fit: cover;
+    border-radius: 4px; /* rounded */
+    align-self: center;
+    flex-shrink: 0;
+}
+@media (min-width: 640px) {
+    .borrow-history__image {
+        align-self: flex-start;
+    }
+}
+
+
+/* --- INFO COLUMN --- */
+.borrow-history__info-column {
+    /* Thay thế flex-grow */
+    flex-grow: 1;
+}
+
+.borrow-history__book-title {
+    /* Thay thế level={5} className="mb-1" */
+    margin-bottom: 0.25rem !important;
+}
+
+.borrow-history__details {
+    /* Thay thế w-full text-sm */
+    width: 100%;
+    font-size: 0.875rem; /* text-sm */
+}
+
+.borrow-history__days-remaining {
+    /* Thay thế text-red-500 */
+    color: var(--color-red-danger);
+    font-weight: 500;
+    margin: 0;
+    padding-top: 0.5rem;
+}
+
+
+/* --- ACTION COLUMN --- */
+.borrow-history__action-column {
+    /* Thay thế flex flex-col items-start sm:items-end justify-between mt-2 sm:mt-0 */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-top: 0.5rem; /* mt-2 */
+}
+
+@media (min-width: 640px) {
+    .borrow-history__action-column {
+        align-items: flex-end;
+        margin-top: 0;
+    }
+}
+
+.borrow-history__status-tag {
+    margin-bottom: 0.5rem; /* mb-2 */
+}
+
+.borrow-history__id-text {
+    /* Thay thế text-xs */
+    font-size: 0.75rem !important; /* text-xs */
+    margin-bottom: 0.5rem;
+}
+
+.borrow-history__button--cancel {
+    /* Đảm bảo nút có margin top khi cần */
+    margin-top: 0.5rem;
+}

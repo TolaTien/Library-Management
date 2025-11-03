@@ -121,7 +121,7 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
             footer={null}
             width={800}
             className="borrow-book-modal"
-            destroyOnClose
+            destroyOnHidden
         >
             {/* BEM: modal-borrow__content */}
             <div className="modal-borrow__content">

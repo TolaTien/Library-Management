@@ -13,7 +13,7 @@ function App() {
     useEffect(() => {
         const fetchData = async () => {
             const res = await requestGetAllProduct();
-            setDataProduct(res.metadata);
+            setDataProduct(res.data);
         };
         fetchData();
     }, []);

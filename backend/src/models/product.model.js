@@ -2,7 +2,7 @@
 const { DataTypes } = require('sequelize');
 const { connect } = require('../config/connectDB');
 
-const product = connect.define('product', {
+const product = connect.define('products', {
     id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,

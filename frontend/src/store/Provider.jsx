@@ -14,7 +14,7 @@ export function Provider({ children }) {
     const fetchAuth = async () => {
         try {
             const res = await requestAuth();
-            const bytes = CryptoJS.AES.decrypt(res.metadata, import.meta.env.VITE_SECRET_CRYPTO);
+            const bytes = CryptoJS.AES.decrypt(res.data, import.meta.env.VITE_SECRET_CRYPTO);
             const originalText = bytes.toString(CryptoJS.enc.Utf8);
             if (!originalText) {
                 console.error('Failed to decrypt data');

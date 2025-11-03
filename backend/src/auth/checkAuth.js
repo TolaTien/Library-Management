@@ -1,6 +1,6 @@
 const { verifyToken } = require('../services/tokenServices');
 
-const asyncHandler = (fn) => {
+const check = (fn) => {
     return (req, res, next) => {
         fn(req, res, next).catch(next);
     };
@@ -9,7 +9,7 @@ const asyncHandler = (fn) => {
 const authUser = async (req, res, next) => {
     try{
         const user = req.cookies.token;
-        if(!user) throw new error("Vui lòng đăng nhập!");
+        if(!user) throw new Error("Vui lòng đăng nhập!");
         const data  = await verifyToken(user);
         req.user = data;
         next();
@@ -20,6 +20,6 @@ const authUser = async (req, res, next) => {
 };
 
 module.exports = {
-    asyncHandler,
+    check,
     authUser
 };

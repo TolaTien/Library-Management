@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Layout } from 'antd';
 import Sidebar from './InforUserComponents/Sidebar';
-import PersonalInfo from './InforUserComponents/PersonalInfo';
+import PersonalInfor from './InforUserComponents/PersonalInfor';
 import BorrowingHistory from './InforUserComponents/BorrowingHistory';
 import Header from '../components/Header';
 import Footer from '../components/Footer';

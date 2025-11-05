@@ -1,8 +1,6 @@
 import React from 'react';
 import { Menu } from 'antd';
 import { UserOutlined, HistoryOutlined, LogoutOutlined } from '@ant-design/icons';
-// Import file CSS riêng
-import './Sidebar.css'; 
 
 const Sidebar = ({ setActiveComponent, activeComponent }) => {
     const handleLogout = () => {
@@ -33,9 +31,8 @@ const Sidebar = ({ setActiveComponent, activeComponent }) => {
     ];
 
     return (
-        // BEM: user-sidebar
         <Menu
-            className="user-sidebar"
+            className="h-full"
             selectedKeys={[activeComponent]}
             mode="inline"
             items={items}
@@ -44,3 +41,4 @@ const Sidebar = ({ setActiveComponent, activeComponent }) => {
 };
 
 export default Sidebar;
+

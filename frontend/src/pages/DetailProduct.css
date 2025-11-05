@@ -140,8 +140,8 @@
     margin-bottom: 0.5rem;
 }
 
-/* --- METADATA SECTION --- */
-.product-detail__metadata {
+/* --- data SECTION --- */
+.product-detail__data {
     /* Thay thế bg-gray-50 p-4 rounded-lg */
     background-color: var(--color-page-bg);
     padding: 1rem; /* p-4 */
@@ -149,7 +149,7 @@
     border: 1px solid var(--color-border);
 }
 
-.product-detail__metadata-heading {
+.product-detail__data-heading {
     /* Thay thế text-base font-semibold text-gray-800 mb-3 */
     font-size: 1rem; /* text-base */
     font-weight: 600; /* font-semibold */
@@ -157,7 +157,7 @@
     margin-bottom: 0.75rem; /* mb-3 */
 }
 
-.product-detail__metadata-list {
+.product-detail__data-list {
     /* Thay thế space-y-2 text-sm */
     display: flex;
     flex-direction: column;
@@ -165,18 +165,18 @@
     font-size: 0.875rem; /* text-sm */
 }
 
-.product-detail__metadata-item {
+.product-detail__data-item {
     /* Thay thế flex justify-between */
     display: flex;
     justify-content: space-between;
 }
 
-.product-detail__metadata-label {
+.product-detail__data-label {
     /* Thay thế text-gray-600 */
     color: var(--color-text-medium);
 }
 
-.product-detail__metadata-value {
+.product-detail__data-value {
     /* Thay thế font-medium text-gray-800 */
     font-weight: 500;
     color: var(--color-text-dark);

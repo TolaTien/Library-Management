@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Layout } from 'antd';
-import Sidebar from './InforUserComponents/Sidebar';
-import PersonalInfo from './InforUserComponents/PersonalInfor';
-import BorrowingHistory from './InforUserComponents/BorrowingHistory';
+import Sidebar from "./InforUserComponents/Sidebar.jsx";
+import PersonalInfo from "./InforUserComponents/PersonalInfor.jsx";
+import BorrowingHistory from "./InforUserComponents/BorrowingHistory.jsx";
+
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useEffect } from 'react';

@@ -20,7 +20,7 @@ function DetailProduct() {
     useEffect(() => {
         const fetchData = async () => {
             const res = await requestGetOneProduct(id);
-            setDataProduct(res.metadata);
+            setDataProduct(res.data);
         };
         fetchData();
     }, [id]);
@@ -73,36 +73,36 @@ function DetailProduct() {
                             </div>
 
                             {/* Book Information */}
-                            <div className="product-detail__metadata">
-                                <h3 className="product-detail__metadata-heading">Thông tin chi tiết</h3>
-                                <div className="product-detail__metadata-list">
-                                    <div className="product-detail__metadata-item">
-                                        <span className="product-detail__metadata-label">Nhà xuất bản:</span>
-                                        <span className="product-detail__metadata-value">{dataProduct.publisher}</span>
+                            <div className="product-detail__data">
+                                <h3 className="product-detail__data-heading">Thông tin chi tiết</h3>
+                                <div className="product-detail__data-list">
+                                    <div className="product-detail__data-item">
+                                        <span className="product-detail__data-label">Nhà xuất bản:</span>
+                                        <span className="product-detail__data-value">{dataProduct.publisher}</span>
                                     </div>
-                                    <div className="product-detail__metadata-item">
-                                        <span className="product-detail__metadata-label">Công ty phát hành:</span>
-                                        <span className="product-detail__metadata-value">
+                                    <div className="product-detail__data-item">
+                                        <span className="product-detail__data-label">Công ty phát hành:</span>
+                                        <span className="product-detail__data-value">
                                             {dataProduct.publishingCompany}
                                         </span>
                                     </div>
-                                    <div className="product-detail__metadata-item">
-                                        <span className="product-detail__metadata-label">Loại bìa:</span>
-                                        <span className="product-detail__metadata-value">
+                                    <div className="product-detail__data-item">
+                                        <span className="product-detail__data-label">Loại bìa:</span>
+                                        <span className="product-detail__data-value">
                                             {dataProduct.coverType === 'hard' ? 'Bìa cứng' : 'Bìa mềm'}
                                         </span>
                                     </div>
-                                    <div className="product-detail__metadata-item">
-                                        <span className="product-detail__metadata-label">Số trang:</span>
-                                        <span className="product-detail__metadata-value">{dataProduct.pages} trang</span>
+                                    <div className="product-detail__data-item">
+                                        <span className="product-detail__data-label">Số trang:</span>
+                                        <span className="product-detail__data-value">{dataProduct.pages} trang</span>
                                     </div>
-                                    <div className="product-detail__metadata-item">
-                                        <span className="product-detail__metadata-label">Ngôn ngữ:</span>
-                                        <span className="product-detail__metadata-value">{dataProduct.language}</span>
+                                    <div className="product-detail__data-item">
+                                        <span className="product-detail__data-label">Ngôn ngữ:</span>
+                                        <span className="product-detail__data-value">{dataProduct.language}</span>
                                     </div>
-                                    <div className="product-detail__metadata-item">
-                                        <span className="product-detail__metadata-label">Năm xuất bản:</span>
-                                        <span className="product-detail__metadata-value">{dataProduct.publishYear}</span>
+                                    <div className="product-detail__data-item">
+                                        <span className="product-detail__data-label">Năm xuất bản:</span>
+                                        <span className="product-detail__data-value">{dataProduct.publishYear}</span>
                                     </div>
                                 </div>
                             </div>

@@ -12,11 +12,9 @@ import './Header.css';
 function Header() {
     const { dataUser } = useStore();
     const navigate = useNavigate();
-
     const [valueSearch, setValueSearch] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [isResultVisible, setIsResultVisible] = useState(false);
-
     const debounce = useDebounce(valueSearch, 500);
 
     const handleLogout = async () => {
@@ -40,8 +38,8 @@ function Header() {
             }
             try {
                 const res = await requestSearchProduct(debounce);
-                setSearchResults(res.metadata);
-                setIsResultVisible(res.metadata.length > 0);
+                setSearchResults(res.data);
+                setIsResultVisible(res.data.length > 0);
             } catch (error) {
                 console.error('Failed to search for products:', error);
                 setSearchResults([]);
@@ -97,10 +95,7 @@ function Header() {
                                 <ul className="library-header__search-results-list">
                                     {searchResults.map((product) => (
                                         <li key={product.id} className="library-header__search-result-item">
-                                            <Link
-                                                to={`/product/${product.id}`}
-                                                className="library-header__search-result-link"
-                                            >
+                                            <Link to={`/product/${product.id}`}className="library-header__search-result-link">
                                                 <img
                                                     src={`${import.meta.env.VITE_API_URL_IMAGE}/${product.image}`}
                                                     alt={product.nameProduct}
@@ -127,13 +122,13 @@ function Header() {
                                     items: [
                                         {
                                             key: 'profile',
-                                            icon: <UserOutlined />,
+                                            icon: <UserOutlined/>,
                                             label: 'Thông tin cá nhân',
                                             onClick: () => navigate('/infoUser'),
                                         },
                                         {
                                             key: 'settings',
-                                            icon: <HistoryOutlined />,
+                                            icon: <HistoryOutlined/>,
                                             label: 'Lịch sử mượn sách',
                                             onClick: () => navigate('/infoUser'),
                                         },

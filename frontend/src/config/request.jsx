@@ -2,10 +2,7 @@ import axios from 'axios';
 
 import { apiClient } from './axiosClient';
 
-const request = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
-    withCredentials: true,
-});
+const request = axios.create({baseURL: import.meta.env.VITE_API_URL, withCredentials: true,});
 
 const apiUser = '/api/user';
 
@@ -66,11 +63,6 @@ export const requestResetPassword = async (data) => {
 
 export const requestIdStudent = async () => {
     const res = await apiClient.post(`${apiUser}/request-id-student`);
-    return res.data;
-};
-
-export const requestUploadImage = async (data) => {
-    const res = await apiClient.post(`${apiUser}/upload-image`, data);
     return res.data;
 };
 

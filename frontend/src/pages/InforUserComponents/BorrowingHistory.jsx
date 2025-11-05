@@ -3,8 +3,6 @@ import { Card, Empty, List, Tag, Image, Typography, Space, Spin, Button } from '
 import { requestCancelBook, requestGetHistoryUser } from '../../config/request';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
-// Import file CSS riêng
-import './BorrowingHistory.css'; 
 
 const { Text, Title } = Typography;
 
@@ -23,7 +21,7 @@ const BorrowingHistory = () => {
         const fetchData = async () => {
             try {
                 const res = await requestGetHistoryUser();
-                setBorrowedBooks(res.metadata);
+                setBorrowedBooks(res.data);
             } catch (error) {
                 toast.error(error.response.data.message);
             } finally {
@@ -33,62 +31,47 @@ const BorrowingHistory = () => {
         fetchData();
     }, []);
 
-    const handleCancelBook = async (idHistory) => {
-        try {
-            await requestCancelBook({ idHistory });
-            toast.success('Huỷ mượn sách thành công');
-            // Tải lại danh sách sau khi hủy
-            setLoading(true);
-            const res = await requestGetHistoryUser();
-            setBorrowedBooks(res.metadata);
-            setLoading(false);
-        } catch (error) {
-            toast.error(error.response.data.message);
-        }
-    };
-
     if (loading) {
-        // BEM: borrow-history__loading
         return (
-            <div className="borrow-history__loading">
+            <div className="flex justify-center items-center h-64">
                 <Spin size="large" />
             </div>
         );
     }
 
+    const handleCancelBook = async (idHistory) => {
+        try {
+            await requestCancelBook({ idHistory });
+            toast.success('Huỷ mượn sách thành công');
+        } catch (error) {
+            toast.error(error.response.data.message);
+        }
+    };
+
     return (
-        <Card title="Lịch sử mượn sách" bordered={false} className="borrow-history">
+        <Card title="Lịch sử mượn sách" bordered={false}>
             {borrowedBooks.length > 0 ? (
                 <List
                     itemLayout="vertical"
                     dataSource={borrowedBooks}
-                    // BEM: borrow-history__list
-                    className="borrow-history__list"
                     renderItem={(item) => {
                         const statusInfo = statusConfig[item.status] || { text: item.status, color: 'default' };
                         return (
-                            // BEM: borrow-history__item-list
-                            <List.Item key={item.id} className="borrow-history__item-list">
-                                {/* BEM: borrow-history__item */}
-                                <div className="borrow-history__item">
-                                    {/* BEM: borrow-history__item-content */}
-                                    <div className="borrow-history__item-content">
-                                        {/* Image */}
+                            <List.Item key={item.id} className="!p-0 mb-4">
+                                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                                    <div className="flex flex-col sm:flex-row gap-4">
                                         <Image
                                             width={100}
-                                            // BEM: borrow-history__image
-                                            className="borrow-history__image"
+                                            className="rounded object-cover self-center sm:self-start"
                                             src={`${import.meta.env.VITE_API_URL}/${item.product.image}`}
                                             alt={item.product.nameProduct}
                                             preview={false}
                                         />
-                                        {/* Info Column */}
-                                        <div className="borrow-history__info-column">
-                                            <Title level={5} className="borrow-history__book-title">
+                                        <div className="flex-grow">
+                                            <Title level={5} className="mb-1">
                                                 {item.product.nameProduct}
                                             </Title>
-                                            {/* BEM: borrow-history__details */}
-                                            <Space direction="vertical" size="small" className="borrow-history__details">
+                                            <Space direction="vertical" size="small" className="w-full text-sm">
                                                 <Text type="secondary">Số lượng: {item.quantity}</Text>
                                                 <Text type="secondary">
                                                     Ngày mượn: {dayjs(item.borrowDate).format('DD/MM/YYYY')}
@@ -97,29 +80,22 @@ const BorrowingHistory = () => {
                                                     Ngày trả: {dayjs(item.returnDate).format('DD/MM/YYYY')}
                                                 </Text>
                                                 {item.status === 'success' && (
-                                                    <p className="borrow-history__days-remaining">
+                                                    <p className="text-red-500">
                                                         Số ngày còn lại : {dayjs(item.returnDate).diff(dayjs(), 'day')}{' '}
                                                         ngày
                                                     </p>
                                                 )}
                                             </Space>
                                         </div>
-                                        {/* Actions/Status Column */}
-                                        {/* BEM: borrow-history__action-column */}
-                                        <div className="borrow-history__action-column">
-                                            <Tag color={statusInfo.color} className="borrow-history__status-tag">
+                                        <div className="flex flex-col items-start sm:items-end justify-between mt-2 sm:mt-0">
+                                            <Tag color={statusInfo.color} className="mb-2">
                                                 {statusInfo.text}
                                             </Tag>
-                                            <Text type="secondary" className="borrow-history__id-text">
+                                            <Text type="secondary" className="text-xs">
                                                 Mã mượn: {item.id.substring(0, 8)}
                                             </Text>
                                             {item.status === 'pending' && (
-                                                <Button 
-                                                    danger 
-                                                    type="primary" 
-                                                    onClick={() => handleCancelBook(item.id)}
-                                                    className="borrow-history__button--cancel"
-                                                >
+                                                <Button danger type="primary" onClick={() => handleCancelBook(item.id)}>
                                                     Huỷ mượn
                                                 </Button>
                                             )}

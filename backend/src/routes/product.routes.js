@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
 
 var upload = multer({ storage: storage });
 
-const { authUser,  check } = require("../auth/checkAuth");
+const { authUser, check } = require("../auth/checkAuth");
 
 const controllerProduct = require("../controllers/product.controller");
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Tag, Modal, Form, Input, message } from 'antd';
+import './CardIssuanceManagement.css';
 import { requestGetRequestLoan, requestConfirmIdStudent } from '../../config/request';
 
 const CardIssuanceManagement = () => {
@@ -127,8 +128,10 @@ const CardIssuanceManagement = () => {
     ];
 
     return (
-        <div>
-            <h2 className="text-2xl mb-4 font-bold">Quản lý cấp thẻ sinh viên</h2>
+        <div className="card-issuance-container">
+            <div className="card-isuance-header">
+                <h2>Quản lý cấp thẻ sinh viên</h2>
+            </div>
             <Table columns={columns} dataSource={data} rowKey="id" loading={loading} />
 
             {/* Modal Cấp thẻ */}

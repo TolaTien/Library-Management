@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Table, Button, Tag } from 'antd';
 import { requestGetAllHistoryBook, requestUpdateStatusBook } from '../../config/request';
 import dayjs from 'dayjs';
+import './LoanRequestManagement.css';
+
 
 const LoanRequestManagement = () => {
     const [data, setData] = useState([]);
@@ -98,10 +100,11 @@ const LoanRequestManagement = () => {
     ];
 
     return (
-        <div>
-            <h2 className="text-2xl mb-4 font-bold">Quản lý yêu cầu mượn sách</h2>
+        <div className="loan-request-container">
+            <h2 className="text-2x1 mb-4 font-bold">Quản lý yêu cầu mượn sách</h2>
             <Table columns={columns} dataSource={data} rowKey="id" />
         </div>
+
     );
 };
 

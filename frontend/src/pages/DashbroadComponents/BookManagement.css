@@ -1,0 +1,86 @@
+/* Toàn bộ phần quản lý sách */
+.book-management {
+    padding: 20px;
+    background-color: #f9fafb; /* nền sáng nhẹ */
+    min-height: 100vh;
+    font-family: "Segoe UI", Roboto, sans-serif;
+}
+
+/* Tiêu đề */
+.book-management h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 16px;
+}
+
+/* Thanh tiêu đề + nút thêm */
+.book-management .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Bảng danh sách */
+.ant-table {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Hình ảnh sách trong bảng */
+.ant-table img {
+    border-radius: 6px;
+    border: 1px solid #eee;
+}
+
+/* Các nút hành động */
+.book-management .ant-btn {
+    border-radius: 6px;
+}
+
+/* Nút thêm sách */
+.book-management .ant-btn-primary {
+    background-color: #1677ff;
+    border-color: #1677ff;
+}
+
+.book-management .ant-btn-primary:hover {
+    background-color: #0056d8;
+    border-color: #0056d8;
+}
+
+/* Modal form */
+.ant-modal-content {
+    border-radius: 10px;
+}
+
+.ant-form-item-label > label {
+    font-weight: 500;
+}
+
+/* Input và Select trong form */
+.ant-input,
+.ant-input-number,
+.ant-select-selector,
+.ant-upload {
+    border-radius: 6px !important;
+}
+
+/* Textarea */
+.ant-input-textarea {
+    border-radius: 6px;
+}
+
+/* Khoảng cách trong form */
+.ant-form-item {
+    margin-bottom: 16px;
+}
+
+/* Loading overlay (nếu có) */
+.book-management .ant-spin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

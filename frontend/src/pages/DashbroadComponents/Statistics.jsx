@@ -3,6 +3,8 @@ import { Row, Col, Card, Statistic } from 'antd';
 import { Pie, Column } from '@ant-design/charts';
 import { UserOutlined, BookOutlined, SolutionOutlined } from '@ant-design/icons';
 import { requestStatistics } from '../../config/request';
+import './Statistics.css';
+
 
 const Statistics = () => {
     const [data, setData] = useState({});
@@ -58,7 +60,7 @@ const Statistics = () => {
     };
 
     return (
-        <div>
+        <div className="statistics-container">
             <h2 className="text-2xl mb-4">Thống kê tổng quan</h2>
             <Row gutter={16} className="mb-6">
                 <Col span={8}>

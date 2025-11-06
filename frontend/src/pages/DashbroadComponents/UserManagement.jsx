@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Input, Modal, Form, Select } from 'antd';
+import './UserManagement.css';
 import { requestDeleteUser, requestGetAllUsers, requestUpdateUser, requestUpdateUserAdmin } from '../../config/request';
 
 const { Search } = Input;
@@ -85,7 +86,7 @@ const UserManagement = () => {
     };
 
     return (
-        <div>
+        <div className="user-management">
             <div className="flex justify-between mb-4">
                 <h2 className="text-2xl font-bold">Quản lý người dùng</h2>
             </div>

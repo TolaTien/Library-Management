@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import './BookManagement.css';
 import { Table, Button, Input, Modal, Form, InputNumber, Select, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import {
@@ -344,9 +345,9 @@ const BookManagement = () => {
     ];
 
     return (
-        <div className="p-4">
-            <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold">Quản lý sách</h2>
+        <div className="book-management">
+            <div className="header">
+                <h2>Quản lý sách</h2>
                 <Button type="primary" onClick={showAddModal} loading={loading}>
                     Thêm sách
                 </Button>

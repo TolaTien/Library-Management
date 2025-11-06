@@ -1,5 +1,6 @@
 import React from 'react';
 import { Menu } from 'antd';
+import './Sidebar.css';
 import { UserOutlined, HistoryOutlined, LogoutOutlined } from '@ant-design/icons';
 
 const Sidebar = ({ setActiveComponent, activeComponent }) => {
@@ -32,7 +33,7 @@ const Sidebar = ({ setActiveComponent, activeComponent }) => {
 
     return (
         <Menu
-            className="h-full"
+            className="dashbroad-sidebar"
             selectedKeys={[activeComponent]}
             mode="inline"
             items={items}

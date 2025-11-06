@@ -78,27 +78,27 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES ('24e96aa4-57b5-4077-9827-a9543fd83d12','uploads/products/1753791873669.webp','LỮ KHÁCH VEN ĐƯỜNG - Tâm An'),
-('9a3c4f9d-6b42-4c7e-b8a1-1d93d5d8c101','uploads/products/1753791873670.webp','Bí Mật Của May Mắn'),
-('a45b9d12-03cf-4c22-9e67-2bb20f4a6123','uploads/products/1753791873671.webp','Đắc Nhân Tâm'),
-('b84b2aa1-1139-4f9f-8894-1ab0e1fda32c','uploads/products/1753791873672.webp','Nhà Giả Kim'),
-('cc43df01-6c9d-4707-b0d5-9cc5c24b7114','uploads/products/1753791873673.webp','Tuổi Trẻ Đáng Giá Bao Nhiêu'),
-('d19e9c0a-9fa3-44d7-9088-8b4e9c5f6125','uploads/products/1753791873674.webp','Tôi Thấy Hoa Vàng Trên Cỏ Xanh'),
-('e39a7f77-2e33-4b25-93aa-2a1d8dcd3199','uploads/products/1753791873675.webp','Dám Bị Ghét'),
-('f7d69a13-0183-4b3f-88e7-8d9f812d729a','uploads/products/1753791873676.webp','Hành Trình Về Phương Đông'),
-('045b8e9c-7339-4d47-b3f8-f718c3a971bc','uploads/products/1753791873677.webp','Không Gia Đình'),
-('17bc27e1-1e25-4fb8-8135-52c37fbc629d','uploads/products/1753791873678.webp','Chiến Binh Cầu Vồng'),
-('23d41a60-9479-4ff3-b17b-2d5b0c3d82c3','uploads/products/1753791873679.webp','Sapiens - Lược Sử Loài Người'),
-('31fce8c5-9e8b-4a1b-9b67-9a6a56b841bb','uploads/products/1753791873680.webp','Muôn Kiếp Nhân Sinh'),
-('4b9a13fd-ec4c-4d26-9d7c-0e2b37f618e1','uploads/products/1753791873681.webp','Thép Đã Tôi Thế Đấy'),
-('5d8ce6b1-7185-4b74-bb27-4f12e0a991d2','uploads/products/1753791873682.webp','Người Giàu Có Nhất Thành Babylon'),
-('6a3a2bc4-35b3-46d7-9c4a-88276df931f0','uploads/products/1753791873683.webp','Đi Tìm Lẽ Sống'),
-('7e9c4d23-8efb-4a49-b1b9-1c32b9e4c9f3','uploads/products/1753791873684.webp','Bố Già'),
-('8f3c1e22-2c46-4d2c-bc5f-15b6d46b1b24','uploads/products/1753791873685.webp','Những Tù Nhân Của Địa Lý'),
-('92b5cf41-3a88-49b0-a55c-5f1dcd72e231','uploads/products/1753791873686.webp','Tâm Lý Học Thành Công'),
-('a06d3b31-409b-43c1-83b1-84c7b4d6b9e8','uploads/products/1753791873687.webp','Sức Mạnh Của Thói Quen'),
-('b28e1f3a-8a2b-4cde-9042-f12d37e941cd','uploads/products/1753791873688.webp','Trí Tuệ Do Thái'),
-('c8e2b71b-19d3-4c24-9b53-4a7b39e51a9e','uploads/products/1753791873689.webp','Thiên Tài Bên Trái, Kẻ Điên Bên Phải');
+INSERT INTO `products` VALUES ('24e96aa4-57b5-4077-9827-a9543fd83d12','uploads/products/1753791873669.jpg','LỮ KHÁCH VEN ĐƯỜNG - Tâm An'),
+('9a3c4f9d-6b42-4c7e-b8a1-1d93d5d8c101','uploads/products/1753791873670.jpg','Bí Mật Của May Mắn'),
+('a45b9d12-03cf-4c22-9e67-2bb20f4a6123','uploads/products/1753791873671.jpg','Đắc Nhân Tâm'),
+('b84b2aa1-1139-4f9f-8894-1ab0e1fda32c','uploads/products/1753791873672.jpg','Nhà Giả Kim'),
+('cc43df01-6c9d-4707-b0d5-9cc5c24b7114','uploads/products/1753791873673.jpg','Tuổi Trẻ Đáng Giá Bao Nhiêu'),
+('d19e9c0a-9fa3-44d7-9088-8b4e9c5f6125','uploads/products/1753791873674.jpg','Tôi Thấy Hoa Vàng Trên Cỏ Xanh'),
+('e39a7f77-2e33-4b25-93aa-2a1d8dcd3199','uploads/products/1753791873675.jpg','Dám Bị Ghét'),
+('f7d69a13-0183-4b3f-88e7-8d9f812d729a','uploads/products/1753791873676.jpg','Hành Trình Về Phương Đông'),
+('045b8e9c-7339-4d47-b3f8-f718c3a971bc','uploads/products/1753791873677.jpg','Không Gia Đình'),
+('17bc27e1-1e25-4fb8-8135-52c37fbc629d','uploads/products/1753791873678.jpg','Chiến Binh Cầu Vồng'),
+('23d41a60-9479-4ff3-b17b-2d5b0c3d82c3','uploads/products/1753791873679.jpg','Sapiens - Lược Sử Loài Người'),
+('31fce8c5-9e8b-4a1b-9b67-9a6a56b841bb','uploads/products/1753791873680.jpg','Muôn Kiếp Nhân Sinh'),
+('4b9a13fd-ec4c-4d26-9d7c-0e2b37f618e1','uploads/products/1753791873681.jpg','Thép Đã Tôi Thế Đấy'),
+('5d8ce6b1-7185-4b74-bb27-4f12e0a991d2','uploads/products/1753791873682.jpg','Người Giàu Có Nhất Thành Babylon'),
+('6a3a2bc4-35b3-46d7-9c4a-88276df931f0','uploads/products/1753791873683.jpg','Đi Tìm Lẽ Sống'),
+('7e9c4d23-8efb-4a49-b1b9-1c32b9e4c9f3','uploads/products/1753791873684.jpg','Bố Già'),
+('8f3c1e22-2c46-4d2c-bc5f-15b6d46b1b24','uploads/products/1753791873685.jpg','Những Tù Nhân Của Địa Lý'),
+('92b5cf41-3a88-49b0-a55c-5f1dcd72e231','uploads/products/1753791873686.jpg','Tâm Lý Học Thành Công'),
+('a06d3b31-409b-43c1-83b1-84c7b4d6b9e8','uploads/products/1753791873687.jpg','Sức Mạnh Của Thói Quen'),
+('b28e1f3a-8a2b-4cde-9042-f12d37e941cd','uploads/products/1753791873688.jpg','Trí Tuệ Do Thái'),
+('c8e2b71b-19d3-4c24-9b53-4a7b39e51a9e','uploads/products/1753791873689.jpg','Thiên Tài Bên Trái, Kẻ Điên Bên Phải');
 
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;

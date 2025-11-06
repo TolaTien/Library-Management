@@ -1,11 +1,23 @@
 import React from 'react';
 import { Menu } from 'antd';
 import { UserOutlined, HistoryOutlined, LogoutOutlined } from '@ant-design/icons';
+import { requestLogout } from "../../config/request";
+import { useNavigate } from 'react-router-dom';
+
+
 
 const Sidebar = ({ setActiveComponent, activeComponent }) => {
-    const handleLogout = () => {
-        console.log('User logged out');
-        // Thêm logic đăng xuất ở đây, ví dụ: xóa token, redirect về trang đăng nhập
+    const navigate = useNavigate();
+    const handleLogout = async () => {
+        try {
+            await requestLogout();
+            navigate('/');
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        } catch (error) {
+            console.error('Failed to logout:', error);
+        }
     };
 
     const items = [

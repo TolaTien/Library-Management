@@ -1,0 +1,56 @@
+/* Khung tổng thể */
+.borrowing-history {
+    background: #fff;
+    padding: 24px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Tiêu đề của card */
+.borrowing-history .ant-card-head-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Từng item trong danh sách */
+.borrowing-history .ant-list-item {
+    border: none !important;
+}
+
+/* Thẻ hiển thị từng cuốn sách */
+.borrowing-history .book-item {
+    background: #fafafa;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 16px;
+    transition: all 0.2s ease;
+}
+
+.borrowing-history .book-item:hover {
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+/* Ảnh sách */
+.borrowing-history img {
+    border-radius: 6px;
+}
+
+/* Tiêu đề sách */
+.borrowing-history h5 {
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+/* Nút “Huỷ mượn” */
+.borrowing-history .ant-btn-dangerous {
+    border-radius: 6px;
+    margin-top: 4px;
+}
+
+/* Tag trạng thái */
+.borrowing-history .ant-tag {
+    font-size: 13px;
+    padding: 4px 10px;
+}

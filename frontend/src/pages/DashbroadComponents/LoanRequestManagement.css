@@ -1,0 +1,37 @@
+/* Container chính */
+.loan-request-container {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Tiêu đề */
+.loan-request-container h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Ảnh sách trong bảng */
+.loan-request-container img {
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    transition: transform 0.2s ease;
+}
+
+.loan-request-container img:hover {
+    transform: scale(1.05);
+}
+
+/* Căn chỉnh các nút hành động */
+.loan-request-container .ant-btn {
+    margin-right: 8px;
+}
+
+/* Căn bảng cho gọn gàng */
+.loan-request-container .ant-table {
+    border-radius: 8px;
+    overflow: hidden;
+}

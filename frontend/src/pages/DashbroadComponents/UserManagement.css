@@ -1,0 +1,41 @@
+/* Tổng thể trang quản lý người dùng */
+.user-management {
+    background: #fff;
+    padding: 24px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Tiêu đề */
+.user-management h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 16px;
+}
+
+/* Thanh tìm kiếm */
+.user-management .ant-input-search {
+    margin-bottom: 16px;
+}
+
+/* Bảng dữ liệu */
+.user-management .ant-table {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Nút hành động trong bảng */
+.user-management .ant-btn {
+    border-radius: 6px;
+}
+
+/* Khoảng cách giữa 2 nút Sửa và Xóa */
+.user-management .ant-btn + .ant-btn {
+    margin-left: 8px;
+}
+
+/* Modal chỉnh sửa và xóa người dùng */
+.user-management .ant-modal {
+    border-radius: 10px;
+}

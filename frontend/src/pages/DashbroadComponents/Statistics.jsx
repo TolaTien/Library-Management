@@ -12,15 +12,15 @@ const Statistics = () => {
     useEffect(() => {
         const fetchData = async () => {
             const res = await requestStatistics();
-            setData(res);
+            setData(res.data);
         };
         fetchData();
     }, []);
 
     // Fake data for charts
-    const bookStatusData = data?.bookStatusData;
+    const bookStatusData = data?.bookStatus;
 
-    const loanStatusData = data?.loanStatusData;
+    const loanStatusData = data?.booksData;
 
     const pieConfig = {
         appendPadding: 10,

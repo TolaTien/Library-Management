@@ -144,7 +144,7 @@ const BookManagement = () => {
         try {
             setLoading(true);
             const res = await requestGetAllProduct();
-            setData(res.metadata);
+            setData(res.data);
         } catch (error) {
             console.error('Failed to fetch books:', error);
             message.error('Không thể tải dữ liệu sách');

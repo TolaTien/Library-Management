@@ -15,7 +15,7 @@ const CardIssuanceManagement = () => {
         setLoading(true);
         try {
             const res = await requestGetRequestLoan();
-            setData(res.metadata);
+            setData(res.data);
         } catch (error) {
             message.error('Không thể tải danh sách yêu cầu');
         } finally {
@@ -134,8 +134,8 @@ const CardIssuanceManagement = () => {
             </div>
             <Table columns={columns} dataSource={data} rowKey="id" loading={loading} />
 
-            {/* Modal Cấp thẻ */}
-            <Modal
+//             {/* Modal Cấp thẻ */}
+//             <Modal
                 title={`Cấp thẻ cho: ${selectedUser?.fullName}`}
                 open={isIssueModalVisible}
                 onOk={handleIssueOk}

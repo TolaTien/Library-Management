@@ -1,12 +1,5 @@
 {
   "dependencies": {
-<<<<<<< HEAD
-    "react-router-dom": "^7.9.5"
-  },
-  "devDependencies": {
-    "@types/react-router-dom": "^5.3.3"
-=======
     "multer": "^2.0.2"
->>>>>>> 1f8f9de6a5804e8ef73311bd547722d2599494ea
   }
 }

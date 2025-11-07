@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const { connect } = require('../config/connectDB');
 
 const historyBook = connect.define(
-    'historyBook',
+    'historyBooks',
     {
         id: {
             type: DataTypes.UUID,

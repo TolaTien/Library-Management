@@ -4,7 +4,7 @@ import { UserOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons';
 import { requestIdStudent, requestUpdateUser, requestUploadImage } from '../../config/request';
 import { toast } from 'react-toastify';
 import { useStore } from '../../hooks/useStore';
-import './PersonalInfo.css';
+import './PersonalInfor.css';
 
 const PersonalInfo = () => {
     const [loading, setLoading] = useState(true);

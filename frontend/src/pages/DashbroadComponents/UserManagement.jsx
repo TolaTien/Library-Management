@@ -51,7 +51,7 @@ const UserManagement = () => {
 
     const fetchData = async () => {
         const res = await requestGetAllUsers();
-        setData(res.metadata);
+        setData(res.data);
     };
 
     useEffect(() => {
@@ -93,8 +93,8 @@ const UserManagement = () => {
             <Search placeholder="Tìm kiếm người dùng" onSearch={() => {}} style={{ width: 300, marginBottom: 16 }} />
             <Table columns={columns} dataSource={data} rowKey="id" />
 
-            {/* Edit User Modal */}
-            <Modal
+//             {/* Edit User Modal */}
+//             <Modal
                 title="Sửa thông tin người dùng"
                 visible={isEditModalVisible}
                 onOk={handleUpdateUser}

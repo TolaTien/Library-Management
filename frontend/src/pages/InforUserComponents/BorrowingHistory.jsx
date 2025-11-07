@@ -23,7 +23,7 @@ const BorrowingHistory = () => {
         const fetchData = async () => {
             try {
                 const res = await requestGetHistoryUser();
-                setBorrowedBooks(res.metadata);
+                setBorrowedBooks(res.data);
             } catch (error) {
                 toast.error(error.response.data.message);
             } finally {

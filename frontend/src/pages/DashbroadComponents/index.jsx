@@ -62,7 +62,7 @@ const IndexDashBroad = () => {
                     {renderContent()}
                 </div>
             </Content>
-            <Footer>Library Management ©2024 Created by Cascade</Footer>
+            <Footer>Thư viện đẳng cấp nhất thế giới</Footer>
         </Layout>
     </Layout>
 );

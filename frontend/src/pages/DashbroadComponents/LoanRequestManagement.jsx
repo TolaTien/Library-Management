@@ -9,7 +9,7 @@ const LoanRequestManagement = () => {
     const [data, setData] = useState([]);
     const fetchData = async () => {
         const res = await requestGetAllHistoryBook();
-        setData(res.metadata);
+        setData(res.data);
     };
     useEffect(() => {
         fetchData();

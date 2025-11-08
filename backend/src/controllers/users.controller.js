@@ -191,24 +191,29 @@ class ControllerUser {
     // Request ID
     async requestIdStudent(req, res) {
         const { id } = req.user;
-        const user = await User.findOne({ where: { id: id } });
-        if (!user) return res.status(400).json({ message: "Người dùng không tồn tại" });
-        if (user.idStudent === '0') return res.status(400).json({ message: 'Vui lòng chờ cấp ID sinh viên' });
+        const user = await User.findOne({ where: { id } });
+        if (!user) return res.status(404).json({ message: 'Người dùng không tồn tại' });
+
+        if (user.idStudent !== null && user.idStudent === '0') {
+            return res.status(400).json({ message: 'Vui lòng chờ xác nhận ID sinh viên' });
+        }
 
         user.idStudent = '0';
         await user.save();
-        return res.status(200).json({ status: 'success', message: "Yêu cầu thành công" });
+
+        return res.status(200).json({ status: 'success', message: 'Yêu cầu thành công' });
     }
 
-    // Confirm ID
     async confirmIdStudent(req, res) {
         const { idStudent, userId } = req.body;
+        if (!idStudent || idStudent === '0') return res.status(400).json({ message: 'Vui lòng nhập ID sinh viên hợp lệ' });
+
         const user = await User.findOne({ where: { id: userId } });
-        if (!user) return res.status(400).json({ message: "Người dùng không tồn tại" });
-        if (!idStudent || idStudent === '0') return res.status(400).json({ message: 'Vui lòng nhập ID hợp lệ' });
+        if (!user) return res.status(404).json({ message: 'Người dùng không tồn tại' });
 
         user.idStudent = idStudent;
         await user.save();
+
         return res.status(200).json({ status: 'success', message: 'Xác nhận thành công' });
     }
 
@@ -252,7 +257,7 @@ class ControllerUser {
     async getListRequest(req, res) {
         const requestList = await User.findAll({
             where: { idStudent: '0' },
-            attributes: ['id', 'fullName', 'email', 'phone', 'createdAt'],
+            attributes: ['id', 'fullName', 'email', 'phone', 'idStudent', 'createdAt'],
             order: [['createdAt', 'DESC']],
         });
         return res.status(200).json({ status: 'success', message: 'success', data: requestList });

@@ -15,7 +15,7 @@ const verifyToken = (token) => {
     try{
         return jwt.verify(token, JWT_SECRET);
     }catch(err){
-        throw new err("Vui lòng đăng nhập lại ")
+        throw new Error("Token không hợp lệ hoặc hết hạn");
     }
 };
 

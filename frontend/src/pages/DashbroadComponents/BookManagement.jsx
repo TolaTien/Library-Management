@@ -144,7 +144,7 @@ const BookManagement = () => {
         try {
             setLoading(true);
             const res = await requestGetAllProduct();
-            setData(res.metadata);
+            setData(res.data);
         } catch (error) {
             console.error('Failed to fetch books:', error);
             message.error('Không thể tải dữ liệu sách');
@@ -186,7 +186,7 @@ const BookManagement = () => {
             const urlImage = await requestUploadImageProduct(formData);
             const data = {
                 ...values,
-                image: urlImage.metadata,
+                image: urlImage.data,
             };
 
             await requestCreateProduct(data);
@@ -231,7 +231,7 @@ const BookManagement = () => {
                     const formData = new FormData();
                     formData.append('image', newFile.originFileObj);
                     const urlImage = await requestUploadImageProduct(formData);
-                    imageUrl = urlImage.metadata;
+                    imageUrl = urlImage.data;
                 }
             }
 

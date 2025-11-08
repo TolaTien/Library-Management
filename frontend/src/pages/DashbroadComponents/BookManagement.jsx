@@ -285,14 +285,14 @@ const BookManagement = () => {
             key: 'image',
             width: 100,
             render: (text) => (
-                <img
-                    style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '4px' }}
-                    src={text?.startsWith('http') ? text : `${import.meta.env.VITE_API_URL_IMAGE}/${text}`}
-                    alt="book cover"
-                    onError={(e) => {
-                        e.target.src = '/placeholder-book.png'; // Fallback image
-                    }}
-                />
+                <div className="book-image-weapper">
+                    <img
+                        className="book-image"
+                        src={text?.startsWith('http') ? text : `${import.meta.env.VITE_API_URL_IMAGE}/${text}`}
+                        alt="book cover"
+                        onError={(e) => (e.target.src = '/placeholder-book.png')}
+                    />
+                </div>
             ),
         },
         {

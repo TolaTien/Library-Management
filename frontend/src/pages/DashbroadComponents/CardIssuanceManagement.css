@@ -60,3 +60,21 @@
     font-weight: 500;
     color: #444;
 }
+/*  fix giat lag */
+.avatar-wrapper {
+  width: 70px;
+  height: 70px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .25s ease; /* làm hover mượt */
+}
+
+.avatar-img:hover {
+  transform: scale(1.12); /* phóng to không làm layout giật */
+}

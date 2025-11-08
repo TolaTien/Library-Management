@@ -84,3 +84,25 @@
     justify-content: center;
     align-items: center;
 }
+.book-image-wrapper {
+  width: 80px;
+  height: 80px;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.book-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;   /* NGĂN LAG GIẬT */
+  transition: transform .25s ease;
+}
+
+.book-image:hover {
+  transform: scale(1.05);
+}
+

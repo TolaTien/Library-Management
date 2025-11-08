@@ -83,11 +83,13 @@ const CardIssuanceManagement = () => {
       dataIndex: 'avatar',
       key: 'avatar',
       render: (text) => (
-        <img
-          style={{ width: '70px', height: '70px', borderRadius: '50%', objectFit: 'cover' }}
-          src={`${import.meta.env.VITE_API_URL_IMAGE}/${text}`}
-          alt="avatar"
-        />
+        <div className="avatar-wrapper">
+          <img
+            className="avatar-img"
+            src={`${import.meta.env.VITE_API_URL_IMAGE}/${text}`}
+            alt="avatar"
+          />
+        </div>
       ),
     },
     { title: 'Họ và tên', dataIndex: 'fullName', key: 'fullName' },

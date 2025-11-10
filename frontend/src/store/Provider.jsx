@@ -39,7 +39,7 @@ export function Provider({ children }) {
 
     return (
         <>
-            <Context.Provider value={{dataUser,}}>
+            <Context.Provider value={{dataUser,setDataUser}}>
                 {children}
                 <ModalBuyBook/>
                 <ToastContainer />

@@ -1,6 +1,11 @@
-/* --- CSS Variables --- */
+/* --- Global Variables --- */
 :root {
-    --color-page-bg: #f9fafb; /* Lớp nền chung cho toàn bộ ứng dụng */
+    --color-page-bg: #f9fafb;
+    --color-text-medium: #6b7280;
+    --color-white: #ffffff;
+    --color-border: #e0e0e0;
+    --color-primary: #1e88e5;
+    --color-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 /* --- MAIN-PAGE-LAYOUT BLOCK --- */
@@ -11,43 +16,150 @@
     background-color: var(--color-page-bg);
 }
 
-/* --- PRODUCT-GRID ELEMENT --- */
-.main-page__product-grid {
-    /* Thay thế w-[90%] mx-auto mt-5 */
-    width: 90%;
-    max-width: 1400px; 
+/* ================================================= */
+/* 1. BỐ CỤC 2 CỘT (Filter + Grid) & CONTAINER */
+/* ================================================= */
+
+.main-page__infor-container {
+    width: 100%;
+    max-width: 1400px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 1.25rem; /* mt-5 */
-    padding: 0 0.5rem; /* Padding nhẹ hai bên */
+    padding: 0 0.5rem; 
+    margin-block: 1.5rem;
     
-    /* Thay thế grid grid-cols-4 md:grid-cols-2 lg:grid-cols-5 gap-4 */
+    /* FIX: Thiết lập bố cục 2 cột cho Desktop/Tablet */
     display: grid;
-    gap: 1rem; /* gap-4 */
+    /* Cột 1 (Filter): Fixed width (280px) | Cột 2 (Grid): Chiếm phần còn lại */
+    grid-template-columns: 350px 1fr; 
+    gap: 2rem; /* Khoảng cách giữa Filter và Grid */
+}
+
+/* --- FILTER ELEMENT (Cột Trái) --- */
+.main-page__filter {
+    /* Đảm bảo Filter luôn hiển thị và không bị co lại */
+    flex-shrink: 0;
+    padding: 1rem;
+    background-color: var(--color-white);
+    border-radius: 0.5rem;
+    box-shadow: var(--color-shadow-sm);
+    height: fit-content; /* Chỉ cao bằng nội dung */
+    position: sticky;
+
+    display: flex;
+    flex-direction: column; /* Xếp các filter-group theo chiều dọc */
+    gap: 1rem;
+    border: 1px solid var(--color-border);
+}
+
+/* --- PRODUCT-GRID ELEMENT (Cột Phải) --- */
+.main-page__product-grid {
+    /* Đây là khu vực sản phẩm. Nó sẽ chiếm cột thứ hai của main-page__infor-container */
     
-    /* Thiết lập Responsive Grid */
+    /* Thiết lập grid cho các CardBody bên trong */
+    display: grid;
+    gap: 1rem;
+
+    /* Responsive Columns: Sử dụng minmax để tạo số lượng cột linh hoạt */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     
-    /* Mặc định (nhỏ): 2 cột */
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    /* FIX: Để đảm bảo bố cục không co khi không có sản phẩm, 
+       chúng ta dựa vào min-height của .main-page__infor-container
+       và minmax(180px, 1fr) của grid-template-columns. */
 }
 
-@media (min-width: 640px) { /* sm breakpoint */
-    .main-page__product-grid {
-        /* Chuyển sang 3 cột */
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+/* ================================================= */
+/* 2. STYLE FILTER CONTROLS */
+/* ================================================= */
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.filter-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--color-text-dark, #1f2937);
+    font-size: 0.9rem;
+}
+
+.filter-input,
+.filter-select {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    transition: border-color 0.2s;
+    background-color: var(--color-white);
+    font-size: 1rem;
+}
+
+.filter-input:focus,
+.filter-select:focus {
+    border-color: var(--color-primary);
+    outline: none;
+}
+
+.filter-range {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.filter-group span {
+    font-size: 0.85rem;
+    color: var(--color-text-medium);
+    margin-top: 0.5rem;
+}
+
+/* ================================================= */
+/* 3. NO-RESULTS & LOADING FIX */
+/* ================================================= */
+
+.main-page__loading-text,
+.main-page__no-results {
+    /* Bắt buộc thông báo chiếm toàn bộ chiều rộng của cột Grid */
+    grid-column: 1 / -1; 
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    
+    padding: 3rem 1rem;
+    font-size: 1.1rem;
+    color: var(--color-text-medium);
+    border: 1px dashed var(--color-border);
+    border-radius: 0.5rem;
+    background-color: var(--color-white);
+}
+
+.main-page__no-results::before {
+    content: "⚠️";
+    font-size: 1.5rem;
+    margin-right: 1rem;
+}
+
+/* ================================================= */
+/* 4. MOBILE RESPONSIVENESS (< 768px) */
+/* ================================================= */
+
+@media (max-width: 768px) {
+    .main-page__infor-container {
+        /* Chuyển sang bố cục 1 cột (xếp chồng) */
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        /* Giảm max-width để fit màn hình nhỏ hơn */
+        width: 95%; 
     }
-}
-
-@media (min-width: 768px) { /* md breakpoint */
-    .main-page__product-grid {
-        /* Chuyển sang 4 cột */
-        grid-template-columns: repeat(4, minmax(0, 1fr));
+    
+    .main-page__filter {
+        /* Filter chiếm 100% chiều rộng, không cần fixed width */
+        width: 100%;
     }
-}
 
-@media (min-width: 1024px) { /* lg breakpoint */
     .main-page__product-grid {
-        /* Thay thế lg:grid-cols-5 */
-        grid-template-columns: repeat(5, minmax(0, 1fr));
+        /* Giảm số cột sản phẩm trên mobile */
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     }
 }

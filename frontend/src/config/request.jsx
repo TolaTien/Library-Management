@@ -16,10 +16,15 @@ export const requestLogin = async (data) => {
     return res;
 };
 
-export const requestLoginGoogle = async (data) => {
-    const res = await request.post(`${apiUser}/login-google`, data);
-    return res;
-};
+// export const requestLoginGoogle = async (data) => {
+//     const res = await request.post(`${apiUser}/login-google`, data);
+//     return res;
+// };
+
+export const requestUploadImage = async (data) => {
+    const res = await apiClient.post(`${apiUser}/upload-image`, data);
+    return res.data;
+}
 
 export const requestAuth = async () => {
     const res = await apiClient.get(`${apiUser}/auth`);

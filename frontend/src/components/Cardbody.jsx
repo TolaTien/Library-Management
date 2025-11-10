@@ -1,10 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen, faUser, faCalendar, faLanguage, faBoxes, faBuilding } from '@fortawesome/free-solid-svg-icons';
+import { faBookOpen, faUser, faCalendar, faLanguage, faBuilding } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-
 import ModalBuyBook from '../components/ModalBuyBook';
 import { useState } from 'react';
-// Import file CSS riêng
 import './Cardbody.css'; 
 
 function CardBody({ data }) {
@@ -26,9 +24,10 @@ function CardBody({ data }) {
             {/* Decorative gradient overlay */}
             <div className="book-card__overlay"></div>
             
-            {/* Ảnh sách */}
+            {/* 1. KHỐI HÌNH ẢNH (Bao gồm Stock và Bìa) */}
             <Link to={`/product/${data.id}`} className="book-card__link">
                 <div className="book-card__image-container">
+                    {/* Hình ảnh chính */}
                     <img
                         src={`${import.meta.env.VITE_API_URL_IMAGE}/${data.image}`}
                         className="book-card__image"
@@ -65,14 +64,15 @@ function CardBody({ data }) {
 
             {/* Nội dung chi tiết */}
             <div className="book-card__body">
-                {/* Tên sách */}
+                
+                {/* 2. TITLE (Tên sách) */}
                 <Link to={`/product/${data.id}`} className="book-card__title-link">
                     <h6 className="book-card__title">
                         {data.nameProduct}
                     </h6>
                 </Link>
 
-                {/* Thông tin chi tiết */}
+                {/* 3. THÔNG TIN CHI TIẾT (Metadata) */}
                 <div className="book-card__details">
                     
                     {/* Nhà xuất bản (Publisher) */}
@@ -110,7 +110,7 @@ function CardBody({ data }) {
                     )}
                 </div>
 
-                {/* Nút hành động */}
+                {/* 4. Nút hành động */}
                 <div className="book-card__action">
                     <button
                         onClick={() => showModal(data)}

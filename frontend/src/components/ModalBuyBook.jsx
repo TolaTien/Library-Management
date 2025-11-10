@@ -49,7 +49,7 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                 fullName: dataUser?.fullName || '',
                 address: dataUser?.address || '',
                 phoneNumber: dataUser?.phoneNumber || '',
-                studentId: dataUser?.idStudent || '',
+                // studentId: dataUser?.idStudent || '',
                 returnDate: minReturnDate, // Default return date
             });
         }

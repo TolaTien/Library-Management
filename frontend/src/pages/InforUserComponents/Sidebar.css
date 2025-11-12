@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Tổng thể sidebar */
 .dashboard-sidebar {
     height: 100%;
@@ -43,3 +44,12 @@
 .dashboard-sidebar .ant-menu-item.danger:hover {
     background-color: #fff2f0 !important;
 }
+=======
+/* --- USER-SIDEBAR BLOCK (Ant Design Menu) --- */
+.user-sidebar.ant-menu {
+    /* Thay thế h-full */
+    height: 100%;
+    /* Thêm style để menu khớp với container (InfoUser.css) */
+    border-right: none;
+}
+>>>>>>> 8e333a1de0fa3738b06091de65e0b379cdb131c5

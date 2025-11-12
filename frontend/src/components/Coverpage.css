@@ -1,0 +1,25 @@
+.cover-page-container {
+  width: 100%; /* Đảm bảo hình ảnh chiếm toàn bộ chiều rộng */
+  height: auto; /* Chiếm toàn bộ chiều cao của viewport */
+  display: flex;
+  justify-content: center; /* Căn giữa theo chiều ngang */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  overflow: hidden; /* Ẩn đi phần hình ảnh bị tràn ra ngoài */
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  margin-block: 3rem;
+}
+
+.cover-page-container img {
+  width: 100%;
+  height: 400px; /* Hình ảnh sẽ co giãn để vừa với container */
+  object-fit: cover; /* Đảm bảo hình ảnh lấp đầy container mà không bị biến dạng, có thể bị cắt bớt */
+  /* Hoặc object-fit: contain; nếu bạn muốn toàn bộ hình ảnh hiển thị, có thể có khoảng trắng */
+}
+.cover-page-img-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 15px;
+}

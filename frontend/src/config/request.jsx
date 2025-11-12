@@ -2,10 +2,7 @@ import axios from 'axios';
 
 import { apiClient } from './axiosClient';
 
-const request = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
-    withCredentials: true,
-});
+const request = axios.create({baseURL: import.meta.env.VITE_API_URL, withCredentials: true,});
 
 const apiUser = '/api/user';
 
@@ -19,6 +16,18 @@ export const requestLogin = async (data) => {
     return res;
 };
 
+<<<<<<< HEAD
+=======
+// export const requestLoginGoogle = async (data) => {
+//     const res = await request.post(`${apiUser}/login-google`, data);
+//     return res;
+// };
+
+export const requestUploadImage = async (data) => {
+    const res = await apiClient.post(`${apiUser}/upload-image`, data);
+    return res.data;
+}
+>>>>>>> 8e333a1de0fa3738b06091de65e0b379cdb131c5
 
 export const requestAuth = async () => {
     const res = await apiClient.get(`${apiUser}/auth`);
@@ -54,11 +63,6 @@ export const requestUpdateUserAdmin = async (data) => {
 
 export const requestIdStudent = async () => {
     const res = await apiClient.post(`${apiUser}/request-id-student`);
-    return res.data;
-};
-
-export const requestUploadImage = async (data) => {
-    const res = await apiClient.post(`${apiUser}/upload-image`, data);
     return res.data;
 };
 

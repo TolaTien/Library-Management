@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Toàn bộ phần thống kê */
 .statistics-container {
     background: #fff;
@@ -35,3 +36,47 @@
 .statistics-container .ant-row.mb-6 {
     margin-bottom: 24px;
 }
+=======
+/* --- CSS Variables --- */
+:root {
+    --color-text-dark: #1f2937;         /* gray-800 */
+    --color-kpi-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* --- STATS-PANEL BLOCK --- */
+.stats-panel {
+    padding: 0;
+}
+
+/* --- HEADER ELEMENT --- */
+.stats-panel__header {
+    /* Thay thế text-2xl mb-4 */
+    font-size: 1.5rem; /* text-2xl */
+    font-weight: 700; /* font-bold */
+    color: var(--color-text-dark);
+    margin-bottom: 1rem; /* mb-4 */
+    margin-top: 0;
+}
+
+/* --- KPI ROW ELEMENT --- */
+.stats-panel__kpi-row {
+    /* Thay thế mb-6 */
+    margin-bottom: 1.5rem !important; /* mb-6 */
+}
+
+.stats-panel__kpi-card {
+    border-radius: 8px !important;
+    box-shadow: var(--color-kpi-shadow);
+}
+
+/* --- CHART ROW ELEMENT --- */
+.stats-panel__chart-row {
+    /* Margin cho hàng biểu đồ */
+    margin-bottom: 1.5rem !important;
+}
+
+.stats-panel__chart-card {
+    border-radius: 8px !important;
+    box-shadow: var(--color-kpi-shadow);
+}
+>>>>>>> 8e333a1de0fa3738b06091de65e0b379cdb131c5

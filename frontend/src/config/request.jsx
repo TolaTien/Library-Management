@@ -16,8 +16,6 @@ export const requestLogin = async (data) => {
     return res;
 };
 
-<<<<<<< HEAD
-=======
 // export const requestLoginGoogle = async (data) => {
 //     const res = await request.post(`${apiUser}/login-google`, data);
 //     return res;
@@ -27,7 +25,6 @@ export const requestUploadImage = async (data) => {
     const res = await apiClient.post(`${apiUser}/upload-image`, data);
     return res.data;
 }
->>>>>>> 8e333a1de0fa3738b06091de65e0b379cdb131c5
 
 export const requestAuth = async () => {
     const res = await apiClient.get(`${apiUser}/auth`);

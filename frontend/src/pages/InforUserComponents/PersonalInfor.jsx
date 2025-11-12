@@ -4,11 +4,7 @@ import { UserOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons';
 import { requestIdStudent, requestUpdateUser, requestUploadImage } from '../../config/request';
 import { toast } from 'react-toastify';
 import { useStore } from '../../hooks/useStore';
-<<<<<<< HEAD
 import './PersonalInfor.css';
-=======
-import "./PersonalInfor.css";
->>>>>>> 8e333a1de0fa3738b06091de65e0b379cdb131c5
 
 const PersonalInfo = () => {
     // FIX: Đặt loading thành false sau khi dataUser được load lần đầu,
@@ -105,11 +101,7 @@ const PersonalInfo = () => {
         <Card
             title="Thông tin cá nhân"
             bordered={false}
-<<<<<<< HEAD
-            className="personal-info"
-=======
             className="personal-info-card"
->>>>>>> 8e333a1de0fa3738b06091de65e0b379cdb131c5
             extra={
                 !isEditing && (
                     <Button icon={<EditOutlined />} onClick={() => setIsEditing(true)} loading={loading}>

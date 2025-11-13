@@ -1,43 +1,44 @@
+/* --- CSS Variables --- */
 :root {
-    --color-primary-blue: #3b82f6; /* blue-500 */
-    --color-secondary-indigo: #4f46e5; /* indigo-600 */
-    --color-green-success: #10b981; /* emerald-500 */
-    --color-red-danger: #ef4444; /* red-500 */
-    --color-orange-warning: #f97316; /* orange-600 */
-    --color-gray-text: #4b5563; /* gray-600 */
+    --color-primary-blue: #3b82f6;      /* blue-500 */
+    --color-secondary-indigo: #4f46e5;  /* indigo-600 */
+    --color-green-success: #10b981;     /* emerald-500 */
+    --color-red-danger: #ef4444;        /* red-500 */
+    --color-orange-warning: #f97316;    /* orange-600 */
+    --color-gray-text: #4b5563;         /* gray-600 */
+    --color-text-dark: #1f2937;         /* gray-800 */
     --color-white: #ffffff;
-    --color-border: #f3f4f6; 
+    --color-border: #f3f4f6;            /* gray-100 */
+    --color-background-hover: #f9fafb;  /* gray-50 */
 }
 
 /* --- BOOK-CARD BLOCK --- */
 .book-card {
-    /* Thay thế h-full bg-gradient-to-br from-white to-blue-50/30 rounded-xl shadow-sm border border-gray-100 hover:shadow-xl hover:border-blue-300 hover:from-blue-50/50 hover:to-purple-50/30 transition-all duration-300 overflow-hidden group relative */
+    /* Thẻ cơ bản: Nền gradient, đổ bóng mềm mại, bo góc */
     height: 100%;
-    /* Gradient nền tinh tế */
     background: linear-gradient(to bottom right, var(--color-white), rgba(239, 246, 255, 0.3));
-    border-radius: 0.75rem; /* rounded-xl */
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+    border-radius: 0.75rem; 
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08); /* Đổ bóng nhẹ và tinh tế */
     border: 1px solid var(--color-border);
     overflow: hidden;
     position: relative;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Transition mềm mại */
+    
+    display: flex; 
+    flex-direction: column;
 }
 
 .book-card:hover {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); /* shadow-xl */
-    border-color: #93c5fd; /* blue-300 */
-    /* Hiệu ứng hover cho background */
-    background: linear-gradient(to bottom right, rgba(239, 246, 255, 0.5), rgba(243, 232, 255, 0.3));
+    /* Hiệu ứng nổi bật (Elevation) */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.12); 
+    border-color: #93c5fd; 
+    transform: translateY(-2px); /* Nhô lên nhẹ */
 }
 
 /* --- OVERLAY ELEMENT --- */
 .book-card__overlay {
-    /* Thay thế absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none */
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    top: 0; right: 0; bottom: 0; left: 0;
     background: linear-gradient(to bottom right, transparent, transparent, rgba(59, 130, 246, 0.05));
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
@@ -48,110 +49,99 @@
     opacity: 1;
 }
 
-/* --- IMAGE ELEMENTS --- */
+/* --- IMAGE ELEMENTS (1. Hình ảnh) --- */
 .book-card__image-container {
-    /* Thay thế relative overflow-hidden */
     position: relative;
     overflow: hidden;
+    height: 14rem; 
+    flex-shrink: 0;
 }
 
 .book-card__image {
-    /* Thay thế w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300 */
     width: 100%;
-    height: 14rem; /* h-56 (224px) */
+    height: 100%;
     object-fit: cover;
     transition: transform 0.3s ease-in-out;
 }
 .book-card:hover .book-card__image {
-    transform: scale(1.05);
+    transform: scale(1.08); /* Hiệu ứng zoom mạnh hơn khi hover */
 }
 
-/* --- BADGE ELEMENTS --- */
+/* --- BADGE ELEMENTS (Thông báo Stock/Bìa) --- */
 .book-card__badge-position {
-    /* Thay thế absolute top-3 right-3 hoặc absolute top-3 left-3 */
     position: absolute;
-    top: 0.75rem; /* top-3 */
+    top: 0.75rem;
     z-index: 20;
 }
 
 .book-card__badge-position--top-right {
-    right: 0.75rem; /* right-3 */
+    right: 0.75rem;
 }
 
 .book-card__badge-position--top-left {
-    left: 0.75rem; /* left-3 */
+    left: 0.75rem;
 }
 
 .book-card__badge {
-    /* Thiết lập chung cho badge: px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg backdrop-blur-sm */
-    padding: 0.375rem 0.75rem; /* py-1.5 px-3 */
-    border-radius: 9999px; /* rounded-full */
-    font-size: 0.75rem; /* text-xs */
-    font-weight: 600; /* font-semibold */
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05); /* shadow-lg */
-    /* Hiệu ứng backdrop-blur-sm không thể tái tạo hoàn toàn bằng CSS thuần mà không dùng Tailwind's utility, 
-    nhưng ta có thể dùng `rgba` để mô phỏng một chút độ trong suốt cho background */
-    
+    padding: 0.375rem 0.75rem;
+    border-radius: 9999px; 
+    font-size: 0.75rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); 
     display: inline-block;
     border-width: 1px;
 }
 
 /* Stock Badge Modifiers */
 .book-card__badge--in-stock {
-    /* Thay thế bg-gradient-to-r from-emerald-400 to-green-500 text-white border border-emerald-300/50 */
-    background: linear-gradient(to right, #34d399, #10b981); /* from-emerald-400 to-green-500 */
+    background: linear-gradient(to right, #34d399, var(--color-green-success));
     color: var(--color-white);
-    border-color: rgba(110, 231, 183, 0.5); /* emerald-300/50 */
+    border-color: rgba(110, 231, 183, 0.5);
 }
 
 .book-card__badge--out-of-stock {
-    /* Thay thế bg-gradient-to-r from-red-400 to-pink-500 text-white border border-red-300/50 */
-    background: linear-gradient(to right, #f87171, #ec4899); /* from-red-400 to-pink-500 */
+    background: linear-gradient(to right, #f87171, var(--color-red-danger));
     color: var(--color-white);
-    border-color: rgba(252, 165, 165, 0.5); /* red-300/50 */
+    border-color: rgba(252, 165, 165, 0.5);
 }
 
 /* Cover Type Badge Modifiers */
 .book-card__badge--hard-cover {
-    /* Thay thế bg-gradient-to-r from-blue-400 to-indigo-500 text-white border border-blue-300/50 */
-    background: linear-gradient(to right, #60a5fa, #6366f1); /* from-blue-400 to-indigo-500 */
+    background: linear-gradient(to right, #60a5fa, #6366f1);
     color: var(--color-white);
-    border-color: rgba(147, 197, 253, 0.5); /* blue-300/50 */
+    border-color: rgba(147, 197, 253, 0.5);
 }
 
 .book-card__badge--soft-cover {
-    /* Thay thế bg-gradient-to-r from-orange-400 to-amber-500 text-white border border-orange-300/50 */
-    background: linear-gradient(to right, #fb923c, #f59e0b); /* from-orange-400 to-amber-500 */
+    background: linear-gradient(to right, #fb923c, #f59e0b);
     color: var(--color-white);
-    border-color: rgba(253, 186, 116, 0.5); /* orange-300/50 */
+    border-color: rgba(253, 186, 116, 0.5);
 }
 
 /* --- BODY ELEMENTS --- */
 .book-card__body {
-    /* Thay thế p-4 flex flex-col h-[calc(100%-14rem)] relative z-10 */
-    padding: 1rem; /* p-4 */
+    padding: 1rem; 
     display: flex;
     flex-direction: column;
-    /* Điều chỉnh chiều cao còn lại sau khi trừ đi h-56 (14rem) của ảnh */
-    height: calc(100% - 14rem); 
+    flex-grow: 1; 
+    min-height: 0; 
     position: relative;
     z-index: 10;
 }
 
+/* 2. TITLE */
 .book-card__title-link {
     text-decoration: none;
     color: inherit;
 }
 
 .book-card__title {
-    /* Thay thế text-gray-800 font-bold mb-3 text-sm leading-tight hover:text-transparent hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 hover:bg-clip-text transition-all duration-300 line-clamp-2 */
-    color: #1f2937; /* gray-800 */
-    font-weight: 700; /* font-bold */
-    margin-bottom: 0.75rem; /* mb-3 */
-    font-size: 0.875rem; /* text-sm */
-    line-height: 1.25; /* leading-tight */
+    color: var(--color-text-dark);
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    font-size: 1rem; /* Tăng nhẹ font title */
+    line-height: 1.35; 
     transition: all 0.3s ease-in-out;
-    /* line-clamp-2 (phải dùng webkit - CSS thuần không hỗ trợ chính thức) */
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -160,160 +150,88 @@
 }
 
 .book-card__title:hover {
-    /* Tái tạo hiệu ứng hover text gradient (dùng CSS thuần) */
-    background: linear-gradient(to right, #2563eb, #7c3aed); /* blue-600 to purple-600 */
+    /* Hiệu ứng gradient mờ cho tiêu đề */
+    background: linear-gradient(to right, #2563eb, #7c3aed); 
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
 }
 
-/* --- DETAIL INFO ELEMENTS --- */
+/* 3. DETAIL INFO ELEMENTS (Metadata) */
 .book-card__details {
-    /* Thay thế space-y-2.5 mb-4 flex-grow */
     display: flex;
     flex-direction: column;
-    gap: 0.625rem; /* space-y-2.5 (10px) */
-    margin-bottom: 1rem; /* mb-4 */
-    flex-grow: 1;
-    min-height: 0; /* Cho phép flex-grow hoạt động tốt */
+    gap: 0.625rem;
+    margin-bottom: 1rem;
+    flex-grow: 1; /* Rất quan trọng: Đẩy Action button xuống dưới */
+    min-height: 0; 
 }
 
 .book-card__info-item {
-    /* Thiết lập chung: flex items-center text-xs text-gray-600 p-2 rounded-lg border */
     display: flex;
     align-items: center;
-    font-size: 0.75rem; /* text-xs */
+    font-size: 0.8rem; /* Font chi tiết nhỏ gọn */
     color: var(--color-gray-text);
-    padding: 0.5rem; /* p-2 */
-    border-radius: 0.5rem; /* rounded-lg */
-    border-width: 1px;
-}
-
-.book-card__info-item--publisher {
-    /* Thay thế bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100/50 */
-    background: linear-gradient(to right, #eff6ff, #eef2ff);
-    border-color: rgba(219, 234, 254, 0.5);
-}
-
-.book-card__info-item--company {
-    /* Thay thế bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-100/50 */
-    background: linear-gradient(to right, #f5f3ff, #fdf2f8);
-    border-color: rgba(243, 232, 255, 0.5);
-}
-
-.book-card__info-item--language {
-    /* Thay thế bg-gradient-to-r from-teal-50 to-cyan-50 border border-teal-100/50 */
-    background: linear-gradient(to right, #f0fdfa, #ecfeff);
-    border-color: rgba(204, 251, 241, 0.5);
-}
-
-.book-card__info-icon {
-    /* Thay thế mr-2 w-3 */
-    margin-right: 0.5rem; /* mr-2 */
-    width: 0.75rem; /* w-3 */
-    flex-shrink: 0;
-}
-
-.book-card__info-item--publisher .book-card__info-icon { color: var(--color-primary-blue); }
-.book-card__info-item--company .book-card__info-icon { color: #a855f7; } /* purple-500 */
-.book-card__info-item--language .book-card__info-icon { color: #14b8a6; } /* teal-500 */
-
-.book-card__info-text {
-    /* Thay thế truncate font-medium */
-    font-weight: 500; /* font-medium */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* --- METRIC ELEMENTS (Trang/Năm) --- */
-.book-card__metrics {
-    /* Thay thế flex items-center justify-between text-xs */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 0.75rem; /* text-xs */
-}
-
-.book-card__metric-item {
-    /* Thiết lập chung: flex items-center px-2 py-1.5 rounded-lg border */
-    display: flex;
-    align-items: center;
-    padding: 0.375rem 0.5rem; /* px-2 py-1.5 */
+    padding: 0.4rem 0.6rem; 
     border-radius: 0.5rem;
     border-width: 1px;
+    background: var(--color-background-hover); /* Nền nhẹ nhàng */
 }
 
-.book-card__metric-item--pages {
-    /* Thay thế bg-gradient-to-r from-green-50 to-emerald-50 border border-green-100/50 */
-    background: linear-gradient(to right, #f0fdf4, #ecfdf5);
-    border-color: rgba(220, 252, 231, 0.5);
-}
-
-.book-card__metric-item--year {
-    /* Thay thế bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-100/50 */
-    background: linear-gradient(to right, #fff7ed, #fffbeb);
-    border-color: rgba(255, 237, 213, 0.5);
-}
-
-.book-card__metric-icon {
-    /* Thay thế mr-1 w-3 */
-    margin-right: 0.25rem; /* mr-1 */
-    width: 0.75rem; /* w-3 */
-    flex-shrink: 0;
-}
-
+/* ... Các modifiers màu cho info-item và metric-item (Giữ nguyên) ... */
+.book-card__info-item--publisher { background: linear-gradient(to right, #eff6ff, #eef2ff); border-color: rgba(219, 234, 254, 0.5); }
+.book-card__info-item--company { background: linear-gradient(to right, #f5f3ff, #fdf2f8); border-color: rgba(243, 232, 255, 0.5); }
+.book-card__info-item--language { background: linear-gradient(to right, #f0fdfa, #ecfeff); border-color: rgba(204, 251, 241, 0.5); }
+.book-card__info-icon { margin-right: 0.5rem; width: 0.75rem; flex-shrink: 0; }
+.book-card__info-item--publisher .book-card__info-icon { color: var(--color-primary-blue); }
+.book-card__info-item--company .book-card__info-icon { color: #a855f7; }
+.book-card__info-item--language .book-card__info-icon { color: #14b8a6; }
+.book-card__info-text { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.book-card__metrics { display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; }
+.book-card__metric-item { display: flex; align-items: center; padding: 0.375rem 0.5rem; border-radius: 0.5rem; border-width: 1px; }
+.book-card__metric-item--pages { background: linear-gradient(to right, #f0fdf4, #ecfdf5); border-color: rgba(220, 252, 231, 0.5); }
+.book-card__metric-item--year { background: linear-gradient(to right, #fff7ed, #fffbeb); border-color: rgba(255, 237, 213, 0.5); }
+.book-card__metric-icon { margin-right: 0.25rem; width: 0.75rem; flex-shrink: 0; }
 .book-card__metric-item--pages .book-card__metric-icon { color: var(--color-green-success); }
 .book-card__metric-item--year .book-card__metric-icon { color: var(--color-orange-warning); }
+.book-card__metric-text { color: var(--color-gray-text); font-weight: 500; }
 
-.book-card__metric-text {
-    /* Thay thế text-gray-600 font-medium */
-    color: var(--color-gray-text);
-    font-weight: 500;
-}
-
-/* --- ACTION BUTTON ELEMENTS --- */
+/* 4. ACTION BUTTON ELEMENTS */
 .book-card__action {
-    /* Thay thế mt-auto */
-    margin-top: auto;
+    margin-top: auto; /* Đảm bảo nút luôn nằm dưới cùng */
 }
 
 .book-card__button {
-    /* Thiết lập chung: w-full py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-300 transform */
     width: 100%;
-    padding: 0.75rem 1rem; /* py-3 px-4 */
-    border-radius: 0.75rem; /* rounded-xl */
-    font-size: 0.875rem; /* text-sm */
-    font-weight: 600; /* font-semibold */
-    transition: all 0.3s ease-in-out;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    font-size: 0.9rem; /* Tăng nhẹ font nút */
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: none;
     cursor: pointer;
 }
 
-/* Button Modifiers */
 .book-card__button--borrow {
-    /* Thay thế bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600 hover:... text-white shadow-lg hover:shadow-xl border border-blue-400/30 */
     background: linear-gradient(to right, var(--color-primary-blue), #2563eb, var(--color-secondary-indigo));
     color: var(--color-white);
-    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3), 0 4px 6px -4px rgba(59, 130, 246, 0.3); /* shadow-lg custom blue */
-    border: 1px solid rgba(96, 165, 250, 0.3); /* blue-400/30 */
+    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
 }
 
 .book-card__button--borrow:hover {
-    /* Hiệu ứng hover cho gradient */
-    background: linear-gradient(to right, #2563eb, #1d4ed8, #4338ca); /* blue-600 to indigo-700 */
-    transform: scale(1.03); /* transform hover:scale-105 */
-    box-shadow: 0 15px 20px -5px rgba(59, 130, 246, 0.4), 0 6px 8px -6px rgba(59, 130, 246, 0.4);
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.5);
 }
 
 .book-card__button--borrow:active {
-    transform: scale(0.98); /* active:scale-95 */
+    transform: scale(0.98);
 }
 
 .book-card__button--disabled {
-    /* Thay thế bg-gradient-to-r from-gray-300 to-gray-400 text-gray-600 cursor-not-allowed shadow-sm */
-    background: linear-gradient(to right, #d1d5db, #9ca3af); /* gray-300 to gray-400 */
-    color: #4b5563; /* gray-600 */
+    background: linear-gradient(to right, #d1d5db, #9ca3af);
+    color: var(--color-gray-text);
     cursor: not-allowed;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
-    opacity: 0.8;
+    box-shadow: none;
+    opacity: 0.7;
 }

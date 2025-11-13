@@ -2,23 +2,23 @@ import React from 'react';
 import { Menu } from 'antd';
 import './Sidebar.css';
 import { UserOutlined, HistoryOutlined, LogoutOutlined } from '@ant-design/icons';
-import { requestLogout } from "../../config/request";
 import { useNavigate } from 'react-router-dom';
-
-
+import { requestLogout } from '../../config/request'; 
 
 const Sidebar = ({ setActiveComponent, activeComponent }) => {
     const navigate = useNavigate();
+
     const handleLogout = async () => {
+        console.log('User logged out');
         try {
             await requestLogout();
             navigate('/');
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
-        } catch (error) {
-            console.error('Failed to logout:', error);
+            setTimeout(() => window.location.reload(), 1000);
         }
+        catch (error) {
+            console.error('Logout failed:', error);
+        }
+        // Thêm logic đăng xuất ở đây, ví dụ: xóa token, redirect về trang đăng nhập
     };
 
     const items = [

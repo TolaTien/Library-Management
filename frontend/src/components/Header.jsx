@@ -5,17 +5,16 @@ import { UserOutlined, LogoutOutlined, SettingOutlined, HistoryOutlined, SendOut
 import { useEffect, useState } from 'react';
 import useDebounce from '../hooks/useDebounce';
 import { requestLogout, requestSearchProduct } from '../config/request';
+import libraryIcon from '../assets/images/library-icon.png';
 // Import file CSS riêng
 import './Header.css'; 
 
 function Header() {
     const { dataUser } = useStore();
     const navigate = useNavigate();
-
     const [valueSearch, setValueSearch] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [isResultVisible, setIsResultVisible] = useState(false);
-
     const debounce = useDebounce(valueSearch, 500);
 
     const handleLogout = async () => {
@@ -58,7 +57,7 @@ function Header() {
                     {/* Logo */}
                     <Link to={'/'} className="library-header__logo-link">
                         <div className="library-header__logo">
-                            <h1 className="library-header__title">📚 Thư Viện</h1>
+                            <h1 className="library-header__title"> <img className="library-icon" src={libraryIcon} alt="library-icon" />Thư Viện</h1>
                         </div>
                     </Link>
                     
@@ -96,10 +95,7 @@ function Header() {
                                 <ul className="library-header__search-results-list">
                                     {searchResults.map((product) => (
                                         <li key={product.id} className="library-header__search-result-item">
-                                            <Link
-                                                to={`/product/${product.id}`}
-                                                className="library-header__search-result-link"
-                                            >
+                                            <Link to={`/product/${product.id}`}className="library-header__search-result-link">
                                                 <img
                                                     src={`${import.meta.env.VITE_API_URL_IMAGE}/${product.image}`}
                                                     alt={product.nameProduct}
@@ -126,13 +122,13 @@ function Header() {
                                     items: [
                                         {
                                             key: 'profile',
-                                            icon: <UserOutlined />,
+                                            icon: <UserOutlined/>,
                                             label: 'Thông tin cá nhân',
                                             onClick: () => navigate('/infoUser'),
                                         },
                                         {
                                             key: 'settings',
-                                            icon: <HistoryOutlined />,
+                                            icon: <HistoryOutlined/>,
                                             label: 'Lịch sử mượn sách',
                                             onClick: () => navigate('/infoUser'),
                                         },

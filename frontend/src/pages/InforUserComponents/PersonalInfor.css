@@ -1,70 +1,92 @@
-/* Tổng thể card thông tin cá nhân */
-.personal-info {
-    background: #fff;
-    padding: 24px;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+/* --- CSS Variables --- */
+:root {
+    --color-border: #e0e0e0;            /* Border mềm */
+    --color-primary: #1e88e5;           /* Xanh Dương Sáng */
+    --color-text-dark: #374151;
 }
 
-/* Tiêu đề card */
-.personal-info .ant-card-head-title {
-    font-size: 20px;
-    font-weight: 600;
-    color: #333;
+/* --- PERSONAL-INFO-CARD BLOCK --- */
+.personal-info-card.ant-card {
+    /* Đảm bảo Card base không có border */
+    border: none;
 }
 
-/* Khu vực hiển thị ảnh và thông tin */
-.personal-info .profile-container {
+/* --- LOADING ELEMENT --- */
+.personal-info-card__loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+
+/* --- CONTENT ELEMENT --- */
+.personal-info-card__content {
+    /* Thay thế flex flex-col items-center md:flex-row md:items-start gap-6 */
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 24px;
+    gap: 1.5rem; /* gap-6 (24px) */
 }
 
-@media (min-width: 768px) {
-    .personal-info .profile-container {
+@media (min-width: 768px) { /* md breakpoint */
+    .personal-info-card__content {
         flex-direction: row;
         align-items: flex-start;
     }
 }
 
-/* Ảnh đại diện */
-.personal-info .ant-avatar {
-    border: 2px solid #e0e0e0;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+/* --- AVATAR SECTION ELEMENT --- */
+.personal-info-card__avatar-section {
+    /* Thay thế flex flex-col items-center gap-2 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem; /* gap-2 */
+    flex-shrink: 0;
+    min-width: 120px;
 }
 
-/* Nút "Đổi ảnh" */
-.personal-info .ant-upload button {
-    margin-top: 8px;
-    border-radius: 6px;
+.personal-info-card__avatar {
+    /* Vòng ngoài cho avatar */
+    border: 2px solid var(--color-border);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Form chỉnh sửa thông tin */
-.personal-info form {
-    background: #fafafa;
-    padding: 16px;
-    border-radius: 8px;
+.personal-info-card__avatar-upload {
+    width: 100%;
+    text-align: center;
 }
 
-/* Bảng mô tả thông tin */
-.personal-info .ant-descriptions {
-    background: #fafafa;
-    border-radius: 8px;
-    padding: 12px;
+
+/* --- DETAILS SECTION ELEMENT (Chứa Form hoặc Descriptions) --- */
+.personal-info-card__details-section {
+    /* Thay thế flex-1 w-full */
+    flex-grow: 1;
+    width: 100%;
 }
 
-/* Nút gửi yêu cầu cấp mã sinh viên */
-.personal-info .ant-btn-primary {
-    margin-top: 12px;
-    border-radius: 6px;
+.personal-info-card__descriptions {
+    /* Tùy chỉnh Descriptions Ant Design nếu cần */
+    margin-bottom: 1.5rem;
 }
 
-/* Nút Lưu và Hủy trong form */
-.personal-info .ant-btn {
-    border-radius: 6px;
+/* --- BUTTONS & FORM ACTIONS --- */
+.personal-info-card__button--request {
+    /* Thay thế mt-4 */
+    margin-top: 1rem !important; /* mt-4 */
+    background-color: var(--color-primary) !important;
 }
 
-.personal-info .ant-btn + .ant-btn {
-    margin-left: 8px;
+.personal-info-card__form-actions {
+    /* Dòng chứa nút Save và Cancel */
+    margin-top: 1.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    gap: 0.75rem; /* Khoảng cách giữa các nút */
+}
+
+.personal-info-card__button--save {
+    /* Thay thế mr-2 */
+    margin-right: 0.5rem !important; /* mr-2 */
 }

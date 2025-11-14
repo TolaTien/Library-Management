@@ -14,10 +14,10 @@ import {
 
 const { Option } = Select;
 
-/* ============================================================
-   📌 FORM SÁCH – CHIA RIÊNG COMPONENT
+/*
+    FORM SÁCH – CHIA RIÊNG COMPONENT              
    Form này được tái sử dụng cho Thêm + Sửa
-   ============================================================ */
+ */
 const BookForm = ({ form, initialValues = null, isEdit }) => {
     
     // Khi mở modal EDIT → tự fill form
@@ -105,9 +105,9 @@ const BookForm = ({ form, initialValues = null, isEdit }) => {
 
 
 
-/* ============================================================
+/*
    📌 COMPONENT CHÍNH: BOOK MANAGEMENT
-   ============================================================ */
+  */
 const BookManagement = () => {
 
     // Danh sách sách
@@ -125,9 +125,9 @@ const BookManagement = () => {
     const [form] = Form.useForm();
 
 
-    /* ============================================================
+/* 
        📌 Load danh sách sách từ API
-       ============================================================ */
+*/
     const fetchData = async () => {
         try {
             setLoading(true);
@@ -146,27 +146,27 @@ const BookManagement = () => {
     }, []);
 
 
-    /* ============================================================
+    /* 
        📌 Mở modal thêm sách
-       ============================================================ */
+    */
     const openAddModal = () => {
         setEditingBook(null);       // null = thêm mới
         form.resetFields();         // reset form
         setModalOpen(true);
     };
 
-    /* ============================================================
+    /* 
        📌 Mở modal sửa sách
-       ============================================================ */
+    */
     const openEditModal = (record) => {
         setEditingBook(record);
         setModalOpen(true);
     };
 
 
-    /* ============================================================
+    /*
        📌 Xử lý Submit Form (Thêm + Sửa)
-       ============================================================ */
+    */
     const handleSubmit = async () => {
         const values = await form.validateFields();
 
@@ -207,9 +207,9 @@ const BookManagement = () => {
     };
 
 
-    /* ============================================================
+    /*
        📌 Xử lý xóa sách
-       ============================================================ */
+    */
     const deleteBook = (record) => {
         Modal.confirm({
             title: "Xác nhận xóa",
@@ -232,9 +232,9 @@ const BookManagement = () => {
     };
 
 
-    /* ============================================================
+    /*
        📌 Cấu hình cột bảng
-       ============================================================ */
+    */
     const columns = [
         {
             title: "Ảnh",

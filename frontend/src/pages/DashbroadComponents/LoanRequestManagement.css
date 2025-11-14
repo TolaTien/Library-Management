@@ -1,34 +1,50 @@
-/* --- CSS Variables --- */
+/* 
+   =============== 1. CSS VARIABLES (BIẾN DÙNG CHUNG) =======
+ */
 :root {
-    --color-text-dark: #1f2937;         /* gray-800 */
-    --color-panel-bg: #f0f2f5;          /* Nền admin panel */
+    --color-text-dark: #1f2937;         /* Màu chữ chính */
+    --color-panel-bg: #f0f2f5;          /* Màu nền panel */
+    --border-light: #f0f0f0;            /* Đường viền nhạt */
 }
 
-/* --- LOAN-REQUEST-PANEL BLOCK --- */
+
+/*
+   =============== 2. LAYOUT CHUNG CHO PANEL  ===============
+ */
+
+/* Khung bao toàn bộ trang quản lý yêu cầu mượn */
 .loan-request-panel {
-    /* Thiết lập layout cơ bản nếu không được bọc trong div có padding */
-    padding: 1rem 0; 
+    padding: 1rem 0; /* giống padding của admin panel khác */
+    background-color: var(--color-panel-bg);
 }
 
-/* --- HEADER ELEMENT --- */
+
+/*
+   ===================== 3. HEADER ==========================
+   */
+
+/* Layout cho phần tiêu đề */
 .loan-request-panel__header {
-    /* Thay thế div bọc h2 (nếu có) */
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
 }
 
+/* Tiêu đề lớn */
 .loan-request-panel__title {
-    /* Thay thế text-2xl mb-4 font-bold */
-    font-size: 1.5rem; /* text-2xl */
-    font-weight: 700; /* font-bold */
+    font-size: 1.5rem;
+    font-weight: 700;
     color: var(--color-text-dark);
-    margin-top: 0;
-    margin-bottom: 0;
+    margin: 0;
 }
 
-/* --- TABLE WRAPPER --- */
+
+/* 
+   ================= 4. TABLE WRAPPER =======================
+    */
+
+/* Bọc bảng để có bo góc + bóng */
 .loan-request-panel__table-wrapper {
     background-color: white;
     border-radius: 0.5rem;
@@ -36,31 +52,46 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* --- TABLE IMAGE ELEMENT --- */
+
+/* 
+   ================= 5. ẢNH SÁCH HIỂN THỊ ===================
+*/
+
+/* Ảnh trong bảng */
 .loan-request-panel__table-image {
-    /* Thay thế style={{ width: '100px', height: '100px', objectFit: 'cover' }} */
     width: 100px;
     height: 100px;
     object-fit: cover;
     border-radius: 4px;
-    border: 1px solid #f0f0f0;
+    border: 1px solid var(--border-light);
 }
 
-/* --- ACTION BUTTONS ELEMENT --- */
+
+/* 
+   ================== 6. ACTION BUTTONS =====================
+  
+/* Bọc hai nút "Duyệt" / "Từ chối" */
 .loan-request-panel__action-buttons {
-    /* Thay thế span bọc buttons */
     display: flex;
     gap: 0.5rem;
 }
 
-/* --- ID Column Customization --- */
+
+/*
+   ================== 7. CUSTOM CỘT ID ======================
+ */
+
+/* Cột ID rút gọn */
 .loan-request-panel__id {
     font-size: 0.85rem;
     font-family: monospace;
     color: #999;
 }
 
-/* --- STATUS TAG (Ant Design Tag) --- */
+
+/*================== 8. STATUS TAG ========================= */
+
+/* Format lại text Tag cho đẹp */
 .loan-request-panel__status-tag {
-    text-transform: capitalize;
+    text-transform: capitalize; /* pending -> Pending */
 }

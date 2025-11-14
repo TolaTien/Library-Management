@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* 
    ====================== 1. GLOBAL =========================
 */
@@ -12,6 +13,9 @@
    ====================== 2. LAYOUT WRAPPER =================
 */
 
+=======
+/* Container chính */
+>>>>>>> 4fbd84f2dae40cb32d80bc3c0b22a8b8b10875d6
 .loan-request-container {
     padding: 1.5rem;
     background-color: var(--color-bg);
@@ -75,6 +79,7 @@
    ===================== 6. ACTION BUTTONS ====================
 */
 
+<<<<<<< HEAD
 /* Flex + gap bạn xử lý bằng class utility nhưng tôi làm cho đẹp hơn */
 .flex {
     display: flex;
@@ -98,4 +103,10 @@
     padding: 4px 10px !important;
     font-size: 0.85rem !important;
     border-radius: 6px !important;
+=======
+/* Căn bảng cho gọn gàng */
+.loan-request-container .ant-table {
+    border-radius: 8px;
+    overflow: hidden;
+>>>>>>> 4fbd84f2dae40cb32d80bc3c0b22a8b8b10875d6
 }

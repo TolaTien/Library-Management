@@ -6,7 +6,6 @@ import BorrowingHistory from "./InforUserComponents/BorrowingHistory.jsx";
 
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { useEffect } from 'react';
 // Import file CSS riêng
 import './InforUser.css';
 

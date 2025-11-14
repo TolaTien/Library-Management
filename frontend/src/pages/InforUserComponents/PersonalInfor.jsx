@@ -139,8 +139,7 @@ const PersonalInfo = () => {
                             <Form.Item
                                 name="fullName"
                                 label="Họ và tên"
-                                rules={[{ required: true, message: 'Vui lòng nhập họ tên!' }]}
-                            >
+                                rules={[{ required: true, message: 'Vui lòng nhập họ tên!' }]}>
                                 <Input />
                             </Form.Item>
                             <Form.Item name="phone" label="Số điện thoại">
@@ -160,7 +159,7 @@ const PersonalInfo = () => {
                     ) : (
                         <>
                             <Descriptions bordered layout="vertical" items={viewItems} className="personal-info-card__descriptions" />
-                            {safeDataUser.idStudent === 'Chưa có' && ( // Hiển thị nếu MSSV chưa có
+                            {!safeDataUser.idStudent && ( 
                                 <Button type="primary" onClick={handleRequestStudentId} className="personal-info-card__button--request">
                                     Gửi yêu cầu cấp mã sinh viên
                                 </Button>

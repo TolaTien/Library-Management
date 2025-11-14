@@ -1,66 +1,37 @@
-/* --- CSS Variables --- */
-:root {
-    --color-text-dark: #1f2937;         /* gray-800 */
-    --color-panel-bg: #f0f2f5;          /* Nền admin panel */
+/* Container chính */
+.loan-request-container {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-/* --- LOAN-REQUEST-PANEL BLOCK --- */
-.loan-request-panel {
-    /* Thiết lập layout cơ bản nếu không được bọc trong div có padding */
-    padding: 1rem 0; 
+/* Tiêu đề */
+.loan-request-container h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 20px;
 }
 
-/* --- HEADER ELEMENT --- */
-.loan-request-panel__header {
-    /* Thay thế div bọc h2 (nếu có) */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
+/* Ảnh sách trong bảng */
+.loan-request-container img {
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    transition: transform 0.2s ease;
 }
 
-.loan-request-panel__title {
-    /* Thay thế text-2xl mb-4 font-bold */
-    font-size: 1.5rem; /* text-2xl */
-    font-weight: 700; /* font-bold */
-    color: var(--color-text-dark);
-    margin-top: 0;
-    margin-bottom: 0;
+.loan-request-container img:hover {
+    transform: scale(1.05);
 }
 
-/* --- TABLE WRAPPER --- */
-.loan-request-panel__table-wrapper {
-    background-color: white;
-    border-radius: 0.5rem;
-    overflow: hidden; 
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+/* Căn chỉnh các nút hành động */
+.loan-request-container .ant-btn {
+    margin-right: 8px;
 }
 
-/* --- TABLE IMAGE ELEMENT --- */
-.loan-request-panel__table-image {
-    /* Thay thế style={{ width: '100px', height: '100px', objectFit: 'cover' }} */
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 4px;
-    border: 1px solid #f0f0f0;
-}
-
-/* --- ACTION BUTTONS ELEMENT --- */
-.loan-request-panel__action-buttons {
-    /* Thay thế span bọc buttons */
-    display: flex;
-    gap: 0.5rem;
-}
-
-/* --- ID Column Customization --- */
-.loan-request-panel__id {
-    font-size: 0.85rem;
-    font-family: monospace;
-    color: #999;
-}
-
-/* --- STATUS TAG (Ant Design Tag) --- */
-.loan-request-panel__status-tag {
-    text-transform: capitalize;
+/* Căn bảng cho gọn gàng */
+.loan-request-container .ant-table {
+    border-radius: 8px;
+    overflow: hidden;
 }

@@ -3,6 +3,8 @@ import { Card, Empty, List, Tag, Image, Typography, Space, Spin, Button } from '
 import { requestCancelBook, requestGetHistoryUser } from '../../config/request';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
+import './BorrowingHistory.css';
+
 
 const { Text, Title } = Typography;
 
@@ -49,7 +51,7 @@ const BorrowingHistory = () => {
     };
 
     return (
-        <Card title="Lịch sử mượn sách" bordered={false}>
+        <Card title="Lịch sử mượn sách" bordered={false} className="borrowing-history">
             {borrowedBooks.length > 0 ? (
                 <List
                     itemLayout="vertical"

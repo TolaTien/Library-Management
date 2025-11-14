@@ -16,10 +16,6 @@ export const requestLogin = async (data) => {
     return res;
 };
 
-// export const requestLoginGoogle = async (data) => {
-//     const res = await request.post(`${apiUser}/login-google`, data);
-//     return res;
-// };
 
 export const requestUploadImage = async (data) => {
     const res = await apiClient.post(`${apiUser}/upload-image`, data);
@@ -56,15 +52,7 @@ export const requestUpdateUserAdmin = async (data) => {
     return res.data;
 };
 
-export const requestForgotPassword = async (data) => {
-    const res = await apiClient.post(`${apiUser}/forgot-password`, data);
-    return res.data;
-};
 
-export const requestResetPassword = async (data) => {
-    const res = await apiClient.post(`${apiUser}/reset-password`, data);
-    return res.data;
-};
 
 export const requestIdStudent = async () => {
     const res = await apiClient.post(`${apiUser}/request-id-student`);
@@ -82,7 +70,7 @@ export const requestDeleteUser = async (data) => {
 };
 
 export const requestGetRequestLoan = async () => {
-    const res = await apiClient.get(`${apiUser}/get-request-loan`);
+    const res = await apiClient.get(`${apiUser}/get-request-list`);
     return res.data;
 };
 
@@ -92,7 +80,7 @@ export const requestConfirmIdStudent = async (data) => {
 };
 
 export const requestStatistics = async () => {
-    const res = await apiClient.get(`${apiUser}/statistics`);
+    const res = await apiClient.get(`${apiUser}/get-statistics`);
     return res.data;
 };
 

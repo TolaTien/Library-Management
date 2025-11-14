@@ -36,3 +36,4 @@ router.post("/update", check(controllerProduct.updateProduct));
 router.post("/delete", check(controllerProduct.deleteProduct));
 
 module.exports = router;
+ 

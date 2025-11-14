@@ -4,11 +4,7 @@ import { UserOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons';
 import { requestIdStudent, requestUpdateUser,  } from '../../config/request';
 import { toast } from 'react-toastify';
 import { useStore } from '../../hooks/useStore';
-<<<<<<< HEAD
 import './PersonalInfor.css';
-=======
-import "./PersonalInfor.css";
->>>>>>> 4fbd84f2dae40cb32d80bc3c0b22a8b8b10875d6
 
 const PersonalInfo = () => {
     // FIX: Đặt loading thành false sau khi dataUser được load lần đầu,
@@ -164,11 +160,7 @@ const PersonalInfo = () => {
                     ) : (
                         <>
                             <Descriptions bordered layout="vertical" items={viewItems} className="personal-info-card__descriptions" />
-<<<<<<< HEAD
-                            {!safeDataUser.idStudent && ( // Hiển thị nếu MSSV chưa có
-=======
                             {!safeDataUser.idStudent  && ( // Hiển thị nếu MSSV chưa có
->>>>>>> 4fbd84f2dae40cb32d80bc3c0b22a8b8b10875d6
                                 <Button type="primary" onClick={handleRequestStudentId} className="personal-info-card__button--request">
                                     Gửi yêu cầu cấp mã sinh viên
                                 </Button>

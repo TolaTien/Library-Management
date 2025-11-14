@@ -151,3 +151,6 @@ export const requestUpdateStatusBook = async (data) => {
     const res = await apiClient.post(`${apiHistoryBook}/update-status-book`, data);
     return res.data;
 };
+export const requestCancelIdStudent = (userId) => {
+  return axios.post('/cancel-id-student', { userId });
+};

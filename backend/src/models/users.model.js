@@ -16,12 +16,10 @@ const User = connect.define(
         fullName: {
             type: DataTypes.STRING,
             allowNull: false,
-
         },
         phone: {
             type: DataTypes.STRING,
             allowNull: true,
-
         },
         address: {
             type: DataTypes.STRING,
@@ -43,6 +41,10 @@ const User = connect.define(
         idStudent: {
             type: DataTypes.STRING,
             allowNull: true,
+        },
+        cardStatus: {
+            type: DataTypes.ENUM('not_requested', 'pending', 'active', 'cancelled'),
+            defaultValue: 'not_requested',
         },
     },
     {

@@ -1,33 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Tag, Modal, Form, Input, message } from 'antd';
 import './CardIssuanceManagement.css';
-import { 
-  requestGetRequestLoan, 
-  requestConfirmIdStudent, 
-  requestCancelIdStudent 
-} from '../../config/request';
+import { requestGetRequestLoan, requestConfirmIdStudent } from '../../config/request';
 
 const CardIssuanceManagement = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  const [modal, setModal] = useState({
-    visible: false,
-    type: null, // "issue" | "cancel"
-    user: null,
-  });
-
+  const [isIssueModalVisible, setIsIssueModalVisible] = useState(false);
+  const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [form] = Form.useForm();
 
-  // -------------------- LOAD DATA --------------------
   const fetchData = async () => {
     setLoading(true);
     try {
       const res = await requestGetRequestLoan();
-      setData(res.data || []); // đảm bảo luôn là mảng
-    } catch (err) {
-      console.error(err);
-      message.error("Không thể tải danh sách yêu cầu");
+      setData(res.data);
+    } catch {
+      message.error('Không thể tải danh sách yêu cầu');
     } finally {
       setLoading(false);
     }
@@ -37,142 +27,168 @@ const CardIssuanceManagement = () => {
     fetchData();
   }, []);
 
-  // -------------------- OPEN / CLOSE MODAL --------------------
-  const openModal = (type, user) => {
-    if (!user) return;
-    setModal({ visible: true, type, user });
+  // --- Modal Cấp thẻ ---
+  const showIssueModal = (user) => {
+    setSelectedUser(user);
+    setIsIssueModalVisible(true);
   };
 
-  const closeModal = () => {
-    setModal({ visible: false, type: null, user: null });
+  const handleIssueCancel = () => {
+    setIsIssueModalVisible(false);
     form.resetFields();
+    setSelectedUser(null);
   };
 
-  // -------------------- HANDLE ISSUE (CẤP THẺ) --------------------
-  const onIssueSubmit = async (values) => {
-    if (!modal.user) return;
+  const handleIssueOk = () => {
+    form.submit();
+  };
+
+  const onIssueFormFinish = async (values) => {
     setLoading(true);
     try {
-      await requestConfirmIdStudent({
-        userId: modal.user.id,
-        idStudent: values.idStudent,
-      });
-
-      setData(prev =>
-        prev.map(item =>
-          item.id === modal.user.id
-            ? { ...item, idStudent: values.idStudent }
-            : item
-        )
-      );
-
-      message.success(`Đã cấp thẻ cho ${modal.user.fullName}`);
-      closeModal();
-    } catch (err) {
-      console.error(err);
-      message.error("Cấp thẻ thất bại");
+      await requestConfirmIdStudent({ userId: selectedUser.id, idStudent: values.idStudent });
+      message.success(`Đã cấp thẻ cho ${selectedUser.fullName}`);
+      handleIssueCancel();
+      fetchData();
+    } catch {
+      message.error('Cấp thẻ thất bại');
     } finally {
       setLoading(false);
     }
   };
 
-  // -------------------- HANDLE CANCEL --------------------
-  const handleCancelRequest = async () => {
-    if (!modal.user) return;
+  // --- Modal Hủy ---
+  const showCancelModal = (user) => {
+    setSelectedUser(user);
+    setIsCancelModalVisible(true);
+  };
+
+  const handleCancelCancel = () => {
+    setIsCancelModalVisible(false);
+    setSelectedUser(null);
+  };
+
+  const handleCancelOk = async () => {
     setLoading(true);
     try {
-      await requestCancelIdStudent(modal.user.id);
+      // TODO: Nếu BE có API hủy yêu cầu, gọi ở đây
+      // await requestCancelIdStudent({ userId: selectedUser.id });
 
-      setData(prev =>
-        prev.map(item =>
-          item.id === modal.user.id ? { ...item, idStudent: "0" } : item
-        )
-      );
-
-      message.success(`Đã hủy yêu cầu cấp thẻ của ${modal.user.fullName}`);
-      closeModal();
-    } catch (err) {
-      console.error(err);
-      message.error("Hủy yêu cầu thất bại");
+      message.info(`Đã hủy yêu cầu cấp thẻ cho ${selectedUser.fullName}`);
+      handleCancelCancel();
+      fetchData();
+    } catch {
+      message.error('Hủy yêu cầu thất bại');
     } finally {
       setLoading(false);
     }
   };
 
-  // -------------------- TABLE COLUMNS --------------------
   const columns = [
-    { title: "ID", dataIndex: "id", render: text => <span>{text.slice(0,10)}</span> },
-    { title: "Họ và tên", dataIndex: "fullName" },
-    { title: "Email", dataIndex: "email" },
-    { title: "Số điện thoại", dataIndex: "phone" },
+    { title: 'ID', dataIndex: 'id', key: 'id', render: (text) => <span>{text.slice(0, 10)}</span> },
     {
-      title: "Trạng thái",
-      dataIndex: "idStudent",
-      render: v => (
-        <Tag color={v === "0" ? "blue" : "green"}>
-          {v === "0" ? "Chờ cấp" : "Đã cấp"}
+      title: 'Ảnh đại diện',
+      dataIndex: 'avatar',
+      key: 'avatar',
+      render: (text) => (
+        <div className="avatar-wrapper">
+          <img
+            className="avatar-img"
+            src={`${import.meta.env.VITE_API_URL_IMAGE}/${text}`}
+            alt="avatar"
+          />
+        </div>
+      ),
+    },
+    { title: 'Họ và tên', dataIndex: 'fullName', key: 'fullName' },
+    { title: 'Email', dataIndex: 'email', key: 'email' },
+    { title: 'Số điện thoại', dataIndex: 'phone', key: 'phone' },
+    {
+      title: 'Trạng thái',
+      key: 'cardStatus',
+      render: (_, record) => (
+        <Tag
+          color={
+            record.cardStatus === 'pending'
+              ? 'blue'
+              : record.cardStatus === 'active'
+              ? 'green'
+              : 'red'
+          }
+        >
+          {record.cardStatus === 'pending'
+            ? 'Chờ cấp'
+            : record.cardStatus === 'active'
+            ? 'Đã cấp'
+            : 'Đã hủy'}
         </Tag>
-      )
+      ),
     },
     {
-      title: "Hành động",
-      render: (_, record) =>
-        record.idStudent === "0" ? (
-          <div className="flex gap-2">
-            <Button type="primary" onClick={() => openModal("issue", record)}>Cấp thẻ</Button>
-            <Button danger type="primary" onClick={() => openModal("cancel", record)}>Hủy</Button>
-          </div>
-        ) : <span>-</span>
-    }
+      title: 'Hành động',
+      key: 'action',
+      render: (_, record) => (
+        <div className="flex gap-2">
+          {record.cardStatus === 'pending' ? (
+            <>
+              <Button type="primary" onClick={() => showIssueModal(record)}>
+                Cấp thẻ
+              </Button>
+              <Button type="primary" danger onClick={() => showCancelModal(record)}>
+                Hủy
+              </Button>
+            </>
+          ) : (
+            <span>-</span>
+          )}
+        </div>
+      ),
+    },
   ];
 
-  // -------------------- RENDER --------------------
   return (
     <div className="card-issuance-container">
       <div className="card-isuance-header">
         <h2>Quản lý cấp thẻ sinh viên</h2>
       </div>
 
-      <Table
-        columns={columns}
-        dataSource={data}
-        rowKey="id"
-        loading={loading}
-        pagination={{ pageSize: 10 }}
-      />
+      <Table columns={columns} dataSource={data} rowKey="id" loading={loading} />
 
-      {/* MODAL CẤP THẺ */}
+      {/* Modal Cấp thẻ */}
       <Modal
-        open={modal.visible && modal.type === "issue"}
-        title={`Cấp thẻ cho: ${modal.user?.fullName || ''}`}
-        onCancel={closeModal}
-        onOk={() => form.submit()}
+        title={`Cấp thẻ cho: ${selectedUser?.fullName}`}
+        open={isIssueModalVisible}
+        onOk={handleIssueOk}
+        onCancel={handleIssueCancel}
         confirmLoading={loading}
         okText="Cấp thẻ"
+        cancelText="Hủy"
       >
-        <Form form={form} layout="vertical" onFinish={onIssueSubmit}>
+        <Form form={form} onFinish={onIssueFormFinish} layout="vertical">
           <Form.Item
             name="idStudent"
             label="Mã số sinh viên"
-            rules={[{ required: true, message: "Vui lòng nhập MSSV!" }]}
+            rules={[{ required: true, message: 'Vui lòng nhập mã số sinh viên!' }]}
           >
             <Input placeholder="Nhập mã số sinh viên" />
           </Form.Item>
         </Form>
       </Modal>
 
-      {/* MODAL HỦY */}
+      {/* Modal Hủy yêu cầu */}
       <Modal
-        open={modal.visible && modal.type === "cancel"}
         title="Xác nhận hủy yêu cầu"
-        onCancel={closeModal}
-        onOk={handleCancelRequest}
-        okButtonProps={{ danger: true }}
+        open={isCancelModalVisible}
+        onOk={handleCancelOk}
+        onCancel={handleCancelCancel}
         confirmLoading={loading}
-        okText="Hủy yêu cầu"
+        okText="Xác nhận hủy"
         cancelText="Không"
+        okButtonProps={{ danger: true }}
       >
-        <p>Bạn có chắc chắn muốn hủy yêu cầu cấp thẻ của <b>{modal.user?.fullName || ''}</b> không?</p>
+        <p>
+          Bạn có chắc chắn muốn hủy yêu cầu cấp thẻ của <b>{selectedUser?.fullName}</b> không?
+        </p>
       </Modal>
     </div>
   );

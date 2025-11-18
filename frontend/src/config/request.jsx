@@ -56,6 +56,11 @@ export const requestUpdateUserAdmin = async (data) => {
     return res.data;
 };
 
+export const cancelRequestIdStudent = async (data) => {
+    const res = await apiClient.post(`${apiUser}/cancel-request-id`, data);
+    return res.data;
+};
+
 
 
 export const requestIdStudent = async () => {
@@ -87,6 +92,8 @@ export const requestStatistics = async () => {
     const res = await apiClient.get(`${apiUser}/get-statistics`);
     return res.data;
 };
+
+
 
 /// product
 const apiProduct = '/api/product';

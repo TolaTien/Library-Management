@@ -1,151 +1,111 @@
-import React, { useEffect, useState } from "react";
-import { Table, Button, Tag, message } from "antd";
-import dayjs from "dayjs";
-import "./LoanRequestManagement.css";
+import React, { useEffect, useState } from 'react';
+import { Table, Button, Tag } from 'antd';
+import { requestGetAllHistoryBook, requestUpdateStatusBook } from '../../config/request';
+import dayjs from 'dayjs';
+import './LoanRequestManagement.css';
 
-import {
-  requestGetAllHistoryBook,
-  requestUpdateStatusBook,
-} from "../../config/request";
 
 const LoanRequestManagement = () => {
-  /* -------------------- STATE -------------------- */
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  /* -------------------- FETCH DATA -------------------- */
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const res = await requestGetAllHistoryBook();
-      setData(res.data);
-    } catch {
-      message.error("Không thể tải dữ liệu!");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  /* -------------------- UPDATE STATUS -------------------- */
-  const handleUpdateStatus = async (record, newStatus) => {
-    const payload = {
-      idHistory: record.id,
-      status: newStatus,
-      productId: record.product.id,
-      userId: record.userId,
+    const [data, setData] = useState([]);
+    const fetchData = async () => {
+        const res = await requestGetAllHistoryBook();
+        setData(res.data);
+    };
+    useEffect(() => {
+        fetchData();
+    }, []);
+    const handleUpdateStatus = async (id, status, productId, userId) => {
+        try {
+            const data = {
+                idHistory: id,
+                status,
+                productId,
+                userId,
+            };
+            await requestUpdateStatusBook(data);
+            fetchData();
+        } catch (error) {
+            console.log(error);
+        }
     };
 
-    try {
-      await requestUpdateStatusBook(payload);
-      message.success(
-        newStatus === "success"
-          ? "Đã duyệt yêu cầu!"
-          : "Đã từ chối yêu cầu!"
-      );
-      fetchData();
-    } catch {
-      message.error("Cập nhật trạng thái thất bại!");
-    }
-  };
+    const columns = [
+        { title: 'ID Yêu cầu', dataIndex: 'id', key: 'id', render: (text) => <span>{text.slice(0, 10)}</span> },
+        { title: 'Người mượn', dataIndex: 'fullName', key: 'fullName' },
+        {
+            title: 'Ảnh',
+            dataIndex: 'product',
+            key: 'product',
+            render: (record) => (
+                <img
+                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                    src={`${import.meta.env.VITE_API_URL_IMAGE}/${record.image}`}
+                    alt=""
+                />
+            ),
+        },
+        { title: 'Tên sách', dataIndex: 'product', key: 'product', render: (record) => record.nameProduct },
+        { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
+        {
+            title: 'Ngày mượn',
+            dataIndex: 'borrowDate',
+            key: 'borrowDate',
+            render: (text) => dayjs(text).format('DD/MM/YYYY'),
+        },
+        {
+            title: 'Ngày trả',
+            dataIndex: 'returnDate',
+            key: 'returnDate',
+            render: (text) => dayjs(text).format('DD/MM/YYYY'),
+        },
+        {
+            title: 'Trạng thái',
+            key: 'status',
+            dataIndex: 'status',
+            render: (status) => {
+                let color = status === 'pending' ? 'green' : status === 'success' ? 'geekblue' : 'volcano';
+                return (
+                    <Tag color={color}>
+                        {status === 'pending' ? 'Chờ duyệt' : status === 'success' ? 'Đã duyệt' : 'Từ chối'}
+                    </Tag>
+                );
+            },
+        },
+        {
+            title: 'Hành động',
+            key: 'action',
+            render: (text, record) => (
+                <span>
+                    {record.status === 'pending' && (
+                        <Button
+                            onClick={() => handleUpdateStatus(record.id, 'success', record.product.id, record.userId)}
+                            type="primary"
+                        >
+                            Duyệt
+                        </Button>
+                    )}
+                    {record.status === 'pending' && (
+                        <Button
+                            onClick={() => handleUpdateStatus(record.id, 'cancel', record.product.id, record.userId)}
+                            type="primary"
+                            danger
+                        >
+                            {' '}
+                            Từ chối
+                        </Button>
+                    )}
+                </span>
+            ),
+        },
+    ];
 
-  /* -------------------- TABLE COLUMNS -------------------- */
-  const columns = [
-    {
-      title: "ID Yêu cầu",
-      dataIndex: "id",
-      render: (text) => <span>{text.slice(0, 10)}</span>,
-    },
-    {
-      title: "Người mượn",
-      dataIndex: "fullName",
-    },
-    {
-      title: "Ảnh",
-      dataIndex: "product",
-      render: (p) => (
-        <img
-          className="loan-img"
-          src={`${import.meta.env.VITE_API_URL_IMAGE}/${p.image}`}
-          alt="book"
-        />
-      ),
-    },
-    {
-      title: "Tên sách",
-      dataIndex: "product",
-      render: (p) => p.nameProduct,
-    },
-    { title: "Số lượng", dataIndex: "quantity" },
+    return (
+        <div className="loan-request-container">
+            <h2 className="text-2x1 mb-4 font-bold">Quản lý yêu cầu mượn sách</h2>
+            <Table columns={columns} dataSource={data} rowKey="id" />
+        </div>
 
-    {
-      title: "Ngày mượn",
-      dataIndex: "borrowDate",
-      render: (d) => dayjs(d).format("DD/MM/YYYY"),
-    },
-    {
-      title: "Ngày trả",
-      dataIndex: "returnDate",
-      render: (d) => dayjs(d).format("DD/MM/YYYY"),
-    },
-
-    /* -------------------- TRẠNG THÁI -------------------- */
-    {
-      title: "Trạng thái",
-      dataIndex: "status",
-      render: (status) => {
-        const map = {
-          pending: { color: "green", text: "Chờ duyệt" },
-          success: { color: "geekblue", text: "Đã duyệt" },
-          cancel: { color: "volcano", text: "Từ chối" },
-        };
-
-        return <Tag color={map[status].color}>{map[status].text}</Tag>;
-      },
-    },
-
-    /* -------------------- ACTION BUTTONS -------------------- */
-    {
-      title: "Hành động",
-      render: (_, record) =>
-        record.status === "pending" ? (
-          <div className="flex gap-2">
-            <Button
-              type="primary"
-              onClick={() => handleUpdateStatus(record, "success")}
-            >
-              Duyệt
-            </Button>
-
-            <Button
-              danger
-              type="primary"
-              onClick={() => handleUpdateStatus(record, "cancel")}
-            >
-              Từ chối
-            </Button>
-          </div>
-        ) : (
-          <span>-</span>
-        ),
-    },
-  ];
-
-  return (
-    <div className="loan-request-container">
-      <h2 className="loan-title">Quản lý yêu cầu mượn sách</h2>
-
-      <Table
-        columns={columns}
-        dataSource={data}
-        rowKey="id"
-        loading={loading}
-      />
-    </div>
-  );
+    );
 };
 
 export default LoanRequestManagement;

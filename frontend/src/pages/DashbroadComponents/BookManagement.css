@@ -1,103 +1,86 @@
-/* --- CSS Variables (Tái sử dụng từ các file trước) --- */
-:root {
-    --color-primary-blue: #3b82f6;      /* blue-500 */
-    --color-primary-blue-hover: #2563eb;/* blue-600 */
-    --color-red-danger: #ff4d4f;        /* Antd default danger */
-    --color-text-dark: #1f2937;         /* gray-800 */
+/* Toàn bộ phần quản lý sách */
+.book-management {
+    padding: 20px;
+    background-color: #f9fafb; /* nền sáng nhẹ */
+    min-height: 100vh;
+    font-family: "Segoe UI", Roboto, sans-serif;
 }
 
-/* --- BOOK-ADMIN-PANEL BLOCK --- */
-.book-admin-panel {
-    /* Thay thế p-4 */
-    padding: 1rem;
-    background-color: #f0f2f5; /* Nền nhẹ nhàng cho Admin panel */
+/* Tiêu đề */
+.book-management h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 16px;
 }
 
-/* --- HEADER ELEMENT --- */
-.book-admin-panel__header {
-    /* Thay thế flex justify-between items-center mb-4 */
+/* Thanh tiêu đề + nút thêm */
+.book-management .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem; /* mb-4 */
-    padding: 0.5rem 0;
+    margin-bottom: 20px;
 }
 
-.book-admin-panel__title {
-    /* Thay thế text-2xl font-bold */
-    font-size: 1.5rem; /* text-2xl */
-    font-weight: 700; /* font-bold */
-    color: var(--color-text-dark);
-    margin: 0;
+/* Bảng danh sách */
+.ant-table {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-/* --- TABLE WRAPPER --- */
-.book-admin-panel__table-wrapper {
-    background-color: white;
-    border-radius: 0.5rem;
-    overflow: hidden; /* Quan trọng để giữ bo góc cho bảng Ant Design */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+/* Hình ảnh sách trong bảng */
+.ant-table img {
+    border-radius: 6px;
+    border: 1px solid #eee;
 }
 
-/* --- TABLE IMAGE ELEMENT --- */
-.book-admin-panel__table-image {
-    /* Thay thế style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '4px' }} */
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 4px;
-    border: 1px solid #f0f0f0;
+/* Các nút hành động */
+.book-management .ant-btn {
+    border-radius: 6px;
 }
 
-/* --- ACTION BUTTONS ELEMENT --- */
-.book-admin-panel__action-buttons {
-    /* Thay thế flex gap-2 */
-    display: flex;
-    gap: 0.5rem;
+/* Nút thêm sách */
+.book-management .ant-btn-primary {
+    background-color: #1677ff;
+    border-color: #1677ff;
 }
 
-/* --- FORM ELEMENTS (Cho InputNumber trong BookForm) --- */
-.book-admin-panel__full-width-input {
-    /* Thay thế className="w-full" */
-    width: 100% !important;
+.book-management .ant-btn-primary:hover {
+    background-color: #0056d8;
+    border-color: #0056d8;
 }
 
-/* --- UPLOAD FORM ITEM --- */
-/* Đảm bảo Form Item của Upload không bị dãn rộng không cần thiết */
-.book-admin-panel__form-upload .ant-form-item-control-input-content {
-    /* Dùng flex để giữ input gọn gàng */
-    display: flex; 
-    flex-direction: column;
-    align-items: flex-start;
+/* Modal form */
+.ant-modal-content {
+    border-radius: 10px;
 }
 
-/* --- MODAL CUSTOMIZATION (Không cần nhiều, chủ yếu dùng AntD class) --- */
-.book-admin-panel__modal .ant-modal-header {
-    border-bottom: 1px solid #f0f0f0;
+.ant-form-item-label > label {
+    font-weight: 500;
 }
-/* --- TABLE IMAGE WRAPPER (THÊM MỚI) --- */
 
-.book-image-weapper {
+/* Input và Select trong form */
+.ant-input,
+.ant-input-number,
+.ant-select-selector,
+.ant-upload {
+    border-radius: 6px !important;
+}
+
+/* Textarea */
+.ant-input-textarea {
+    border-radius: 6px;
+}
+
+/* Khoảng cách trong form */
+.ant-form-item {
+    margin-bottom: 16px;
+}
+
+/* Loading overlay (nếu có) */
+.book-management .ant-spin {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 80px;
-    height: 80px;
-    overflow: hidden;
-    border-radius: 4px;
-    background-color: #fafafa;
 }
-
-/* --- TABLE IMAGE (CẬP NHẬT NHẸ) --- */
-.book-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Cắt ảnh cho vừa khung, không bị méo hoặc phóng to */
-    border-radius: 4px;
-    transition: transform 0.2s ease-in-out;
-}
-
-.book-image-weapper:hover {
-    transform: scale(1.05);
-}
-

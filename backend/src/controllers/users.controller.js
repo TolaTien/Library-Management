@@ -112,22 +112,14 @@ class ControllerUser {
             const { id } = req.user;
             const findUser = await User.findOne({ where: { id } });
             if (!findUser) return res.status(401).json({ message: "Tài khoản không tồn tại" });
-            // Lấy dữ liệu user cần gửi mà không gửi password
-            const userData = {
-                ...findUser.dataValues,   // giữ nguyên các field khác
-                password: undefined,       // loại bỏ password
-                cardStatus: findUser.cardStatus || 'not_requested',
-                idStudent: findUser.idStudent || null,
-            };
-            // Nếu muốn có trạng thái thẻ rõ ràng
-            const encrypt = CryptoJS.AES.encrypt(JSON.stringify(userData), process.env.SECRET_CRYPTO).toString();
+
+            const encrypt = CryptoJS.AES.encrypt(JSON.stringify(findUser), process.env.SECRET_CRYPTO).toString();
             return res.status(200).json({ status: 'success', message: 'success', data: encrypt });
         } catch (err) {
             console.error(err);
-            return res.status(500).json({ message: 'Lỗi server' });   
+            return res.status(500).json({ message: 'Lỗi server' });
         }
     }
-
 
     // Refresh Token
     async refreshToken(req, res) {
@@ -196,33 +188,35 @@ class ControllerUser {
         return res.status(200).json({ status: 'success', message: 'Xóa người dùng thành công' });
     }
 
-    // Request ID sinh vien
+    // Request ID
     async requestIdStudent(req, res) {
         const { id } = req.user;
         const user = await User.findOne({ where: { id } });
         if (!user) return res.status(404).json({ message: 'Người dùng không tồn tại' });
-        if (user.cardStatus === 'pending') {
+
+        if (user.idStudent !== null && user.idStudent === '0') {
             return res.status(400).json({ message: 'Vui lòng chờ xác nhận ID sinh viên' });
         }
-        user.idStudent = null;
-        user.cardStatus = 'pending';   // ⭐ Ghi trạng thái chờ duyệt
+
+        user.idStudent = '0';
         await user.save();
+
         return res.status(200).json({ status: 'success', message: 'Yêu cầu thành công' });
     }
-    // Xác nhận ID sinh viên
+
     async confirmIdStudent(req, res) {
         const { idStudent, userId } = req.body;
-        if (!idStudent || idStudent === '0')
-            return res.status(400).json({ message: 'Vui lòng nhập ID sinh viên hợp lệ' });
+        if (!idStudent || idStudent === '0') return res.status(400).json({ message: 'Vui lòng nhập ID sinh viên hợp lệ' });
+
         const user = await User.findOne({ where: { id: userId } });
         if (!user) return res.status(404).json({ message: 'Người dùng không tồn tại' });
+
         user.idStudent = idStudent;
         user.cardStatus = 'active';   // ⭐ Ghi trạng thái đã duyệt
         await user.save();
         return res.status(200).json({ status: 'success', message: 'Xác nhận thành công' });
 
     }
-
 
     // Biểu đồ thống kê
     async getStatistics(req, res) {

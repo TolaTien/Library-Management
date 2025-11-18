@@ -1,101 +1,37 @@
-/* 
-   ====================== 1. GLOBAL =========================
-*/
-
-:root {
-    --color-text-dark: #1f2937;
-    --color-bg: #f0f2f5;
-    --color-border: #e5e7eb;
-}
-
-/*
-   ====================== 2. LAYOUT WRAPPER =================
-*/
-
+/* Container chính */
 .loan-request-container {
-    padding: 1.5rem;
-    background-color: var(--color-bg);
-    min-height: 100vh;
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-/*
-   ====================== 3. PAGE HEADER ====================
-*/
-
-.loan-title {
-    font-size: 1.6rem;
+/* Tiêu đề */
+.loan-request-container h2 {
+    font-size: 22px;
     font-weight: 700;
-    color: var(--color-text-dark);
-    margin-bottom: 1.2rem;
+    color: #333;
+    margin-bottom: 20px;
 }
 
-/*
-   ===================== 4. TABLE CUSTOM =====================
-*/
-
-/* Bo góc + bỏ overflow table */
-.ant-table {
-    background: white !important;
-    border-radius: 8px !important;
-    overflow: hidden;
-}
-
-/* Header đẹp hơn */
-.ant-table-thead > tr > th {
-    background-color: #fafafa !important;
-    font-weight: 600 !important;
-    color: #374151 !important;
-}
-
-/* Hàng */
-.ant-table-tbody > tr > td {
-    vertical-align: middle !important;
-    padding: 12px 16px !important;
-}
-
-/*
-   ===================== 5. ẢNH SÁCH =========================
-*/
-
-.loan-img {
-    width: 90px;
-    height: 120px;
-    object-fit: cover;
+/* Ảnh sách trong bảng */
+.loan-request-container img {
     border-radius: 6px;
-    border: 1px solid var(--color-border);
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px;
-    transition: 0.2s;
+    border: 1px solid #ddd;
+    transition: transform 0.2s ease;
 }
 
-.loan-img:hover {
+.loan-request-container img:hover {
     transform: scale(1.05);
 }
 
-/*
-   ===================== 6. ACTION BUTTONS ====================
-*/
-
-/* Flex + gap bạn xử lý bằng class utility nhưng tôi làm cho đẹp hơn */
-.flex {
-    display: flex;
+/* Căn chỉnh các nút hành động */
+.loan-request-container .ant-btn {
+    margin-right: 8px;
 }
 
-.gap-2 {
-    gap: 0.5rem;
-}
-
-/* Button trông đẹp hơn */
-.ant-btn {
-    border-radius: 6px !important;
-    font-weight: 500;
-}
-
-/*
-   ===================== 7. STATUS TAG =======================
-*/
-
-.ant-tag {
-    padding: 4px 10px !important;
-    font-size: 0.85rem !important;
-    border-radius: 6px !important;
+/* Căn bảng cho gọn gàng */
+.loan-request-container .ant-table {
+    border-radius: 8px;
+    overflow: hidden;
 }

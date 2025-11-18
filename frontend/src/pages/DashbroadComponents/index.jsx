@@ -7,7 +7,7 @@ import LoanRequestManagement from './LoanRequestManagement';
 import CardIssuanceManagement from './CardIssuanceManagement';
 import BookManagement from './BookManagement';
 import Statistics from './Statistics';
-import './index.css';
+import './IndexDashBroad.css';
 
 
 const { Header, Content, Sider, Footer } = Layout;
@@ -15,7 +15,7 @@ const { Header, Content, Sider, Footer } = Layout;
 const components = {
     stats: <Statistics />,
     user: <UserManagement />,
-    loan: <LoanRequestManagement />,        
+    loan: <LoanRequestManagement />,
     card: <CardIssuanceManagement />,
     book: <BookManagement />,
 };

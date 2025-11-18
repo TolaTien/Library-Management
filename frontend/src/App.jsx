@@ -78,20 +78,15 @@ function App() {
 
         return dataProduct.filter(product => {
             
-            // 1. Lọc theo Từ khóa
-            const matchesKeyword = keyword === '' || 
-                product.nameProduct?.toLowerCase().includes(keyword.toLowerCase()) ||
-                product.publisher?.toLowerCase().includes(keyword.toLowerCase());
-
-            // 2. Lọc theo Loại bìa
+            // 1. Lọc theo Loại bìa
             const matchesCoverType = coverType === 'all' || 
                 product.covertType?.toLowerCase() === coverType;
             
-            // 3. Lọc theo Ngôn ngữ
+            // 2. Lọc theo Ngôn ngữ
             const matchesLanguage = language === 'all' || 
                 product.language?.toLowerCase() === language;
             
-            return matchesKeyword && matchesCoverType && matchesLanguage;
+            return  matchesCoverType && matchesLanguage;
         });
     }, [dataProduct, filterState]); // Chạy lại khi data gốc hoặc state lọc thay đổi
 
@@ -111,19 +106,6 @@ function App() {
                 {/* KHUNG BỘ LỌC BẮT ĐẦU */}
                 <div className='main-page__filter'>
                     
-                    {/* Phần tử lọc theo tên sách/tác giả */}
-                    <div className="filter-group">
-                        <label htmlFor="search-input" className="filter-label">Tìm kiếm:</label>
-                        <input
-                            type="text"
-                            id="search-input"
-                            name="keyword"
-                            value={filterState.keyword}
-                            onChange={handleChange}
-                            placeholder="Tên sách, tác giả..."
-                            className="filter-input"
-                        />
-                    </div>
 
                     {/* Phần tử lọc theo Loại bìa */}
                     <div className="filter-group">

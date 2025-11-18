@@ -6,7 +6,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { requestRegister } from '../config/request';
 import { toast } from 'react-toastify';
-import imagesLogin from '../assets/images/login.jpg';
+import imagesLogin from '../assets/images/login.webp';
 // Import file CSS riêng
 import './RegisterUser.css';
 
@@ -58,7 +58,7 @@ function RegisterUser() {
                         <div className="register-page__image-column">
                             <div className="register-page__image-wrapper">
                                 <img
-                                    src={`${import.meta.env.VITE_API_URL_IMAGE}/${imagesLogin}`}
+                                    src={imagesLogin}
                                     alt="Đăng ký"
                                     className="register-page__image"
                                 />

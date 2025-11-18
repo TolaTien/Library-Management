@@ -86,18 +86,6 @@ const CardIssuanceManagement = () => {
 
   const columns = [
     { title: 'ID', dataIndex: 'id', key: 'id', render: (text) => <span>{text.slice(0, 10)}</span> },
-    {
-      title: 'Ảnh đại diện',
-      dataIndex: 'avatar',
-      key: 'avatar',
-      render: (text) => (
-        <img
-          style={{ width: '70px', height: '70px', borderRadius: '50%', objectFit: 'cover' }}
-          src={`${import.meta.env.VITE_API_URL_IMAGE}/${text}`}
-          alt="avatar"
-        />
-      ),
-    },
     { title: 'Họ và tên', dataIndex: 'fullName', key: 'fullName' },
     { title: 'Email', dataIndex: 'email', key: 'email' },
     { title: 'Số điện thoại', dataIndex: 'phone', key: 'phone' },

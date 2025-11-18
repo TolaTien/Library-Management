@@ -60,7 +60,7 @@ const BorrowingHistory = () => {
                         const statusInfo = statusConfig[item.status] || { text: item.status, color: 'default' };
                         return (
                             <List.Item key={item.id} className="!p-0 mb-4">
-                                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                                <div className="borrow-history__item">
                                     <div className="flex flex-col sm:flex-row gap-4">
                                         <Image
                                             width={100}

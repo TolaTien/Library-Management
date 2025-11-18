@@ -2,7 +2,7 @@ const modelProduct = require('../models/product.model');
 const { Op } = require('sequelize');
 
 class controllerProduct {
-    // [POST] /api/products/upload
+    // upload ảnh sách
     async uploadImage(req, res) {
         try {
             const { file } = req;
@@ -26,7 +26,7 @@ class controllerProduct {
         }
     }
 
-    // [POST] /api/products/create
+    // Tạo lịch sử mượn
     async createProduct(req, res) {
         try {
             const {
@@ -99,7 +99,7 @@ class controllerProduct {
         }
     }
 
-    // [GET] /api/products/one?id=...
+    // xem chi tiết 1 sản phẩm 
     async getOneProduct(req, res) {
         try {
             const { id } = req.query;
@@ -123,7 +123,7 @@ class controllerProduct {
         }
     }
 
-    // [GET] /api/products/search?keyword=...
+    // Api tìm kiếm sách
     async searchProduct(req, res) {
         try {
             const { keyword } = req.query;
@@ -150,7 +150,7 @@ class controllerProduct {
         }
     }
 
-    // [PUT] /api/products/update?id=...
+    // update sách
     async updateProduct(req, res) {
         try {
             const { id } = req.query;
@@ -173,7 +173,7 @@ class controllerProduct {
         }
     }
 
-    // [DELETE] /api/products/delete
+    // Xóa sách
     async deleteProduct(req, res) {
         try {
             const { id } = req.body;

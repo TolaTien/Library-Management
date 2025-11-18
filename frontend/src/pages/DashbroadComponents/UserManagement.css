@@ -1,58 +1,41 @@
-/* --- CSS Variables --- */
-:root {
-    --color-text-dark: #1f2937;         /* gray-800 */
-    --color-primary-blue: #3b82f6;      /* blue-500 */
+/* Tổng thể trang quản lý người dùng */
+.user-management {
+    background: #fff;
+    padding: 24px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-/* --- USER-ADMIN-PANEL BLOCK --- */
-.user-admin-panel {
-    padding: 0;
+/* Tiêu đề */
+.user-management h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 16px;
 }
 
-/* --- HEADER ELEMENT --- */
-.user-admin-panel__header {
-    /* Thay thế flex justify-between mb-4 */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem; /* mb-4 */
+/* Thanh tìm kiếm */
+.user-management .ant-input-search {
+    margin-bottom: 16px;
 }
 
-.user-admin-panel__title {
-    /* Thay thế text-2xl font-bold */
-    font-size: 1.5rem; /* text-2xl */
-    font-weight: 700; /* font-bold */
-    color: var(--color-text-dark);
-    margin: 0;
+/* Bảng dữ liệu */
+.user-management .ant-table {
+    border-radius: 8px;
+    overflow: hidden;
 }
 
-/* --- SEARCH ELEMENT --- */
-.user-admin-panel__search {
-    /* Thay thế style={{ width: 300, marginBottom: 16 }} */
-    width: 300px;
-    margin-bottom: 1rem !important; /* marginBottom: 16 */
-    /* Đảm bảo Ant Design Search không bị lỗi style */
-    display: block; 
+/* Nút hành động trong bảng */
+.user-management .ant-btn {
+    border-radius: 6px;
 }
 
-/* --- TABLE WRAPPER --- */
-.user-admin-panel__table-wrapper {
-    background-color: white;
-    border-radius: 0.5rem;
-    overflow: hidden; 
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+/* Khoảng cách giữa 2 nút Sửa và Xóa */
+.user-management .ant-btn + .ant-btn {
+    margin-left: 8px;
 }
 
-/* --- ACTION BUTTONS ELEMENT --- */
-.user-admin-panel__action-buttons {
-    /* Thay thế span bọc buttons và style={{ marginLeft: 8 }} */
-    display: flex;
-    gap: 0.5rem; /* Khoảng cách giữa các nút */
-}
-
-/* --- CUSTOM ID RENDERING --- */
-.user-admin-panel__id {
-    font-size: 0.85rem;
-    font-family: monospace;
-    color: #999;
+/* Modal chỉnh sửa và xóa người dùng */
+.user-management .ant-modal {
+    border-radius: 10px;
 }

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Tag, Modal, Form, Input, message } from 'antd';
 import './CardIssuanceManagement.css';
-import { requestGetRequestLoan, requestConfirmIdStudent } from '../../config/request';
+import { requestGetRequestLoan, requestConfirmIdStudent, cancelRequestIdStudent} from '../../config/request';
+
 
 const CardIssuanceManagement = () => {
   const [data, setData] = useState([]);
@@ -71,13 +72,12 @@ const CardIssuanceManagement = () => {
   const handleCancelOk = async () => {
     setLoading(true);
     try {
-      // TODO: Nếu BE có API hủy yêu cầu, gọi ở đây
-      // await requestCancelIdStudent({ userId: selectedUser.id });
+      await cancelRequestIdStudent({ userId: selectedUser.id });
 
-      message.info(`Đã hủy yêu cầu cấp thẻ cho ${selectedUser.fullName}`);
+      message.success(`Đã hủy yêu cầu cấp thẻ của ${selectedUser.fullName}`);
       handleCancelCancel();
-      fetchData();
-    } catch {
+      fetchData(); // Tải lại danh sách
+    } catch (error) {
       message.error('Hủy yêu cầu thất bại');
     } finally {
       setLoading(false);
@@ -91,13 +91,11 @@ const CardIssuanceManagement = () => {
       dataIndex: 'avatar',
       key: 'avatar',
       render: (text) => (
-        <div className="avatar-wrapper">
-          <img
-            className="avatar-img"
-            src={`${import.meta.env.VITE_API_URL_IMAGE}/${text}`}
-            alt="avatar"
-          />
-        </div>
+        <img
+          style={{ width: '70px', height: '70px', borderRadius: '50%', objectFit: 'cover' }}
+          src={`${import.meta.env.VITE_API_URL_IMAGE}/${text}`}
+          alt="avatar"
+        />
       ),
     },
     { title: 'Họ và tên', dataIndex: 'fullName', key: 'fullName' },
@@ -105,31 +103,20 @@ const CardIssuanceManagement = () => {
     { title: 'Số điện thoại', dataIndex: 'phone', key: 'phone' },
     {
       title: 'Trạng thái',
-      key: 'cardStatus',
-      render: (_, record) => (
-        <Tag
-          color={
-            record.cardStatus === 'pending'
-              ? 'blue'
-              : record.cardStatus === 'active'
-              ? 'green'
-              : 'red'
-          }
-        >
-          {record.cardStatus === 'pending'
-            ? 'Chờ cấp'
-            : record.cardStatus === 'active'
-            ? 'Đã cấp'
-            : 'Đã hủy'}
+      dataIndex: 'idStudent',
+      key: 'idStudent',
+      render: (idStudent) => (
+        <Tag color={idStudent === '0' ? 'blue' : 'green'}>
+          {idStudent === '0' ? 'Chờ cấp' : 'Đã cấp'}
         </Tag>
       ),
     },
     {
       title: 'Hành động',
       key: 'action',
-      render: (_, record) => (
+      render: (text, record) => (
         <div className="flex gap-2">
-          {record.cardStatus === 'pending' ? (
+          {record.idStudent === '0' ? (
             <>
               <Button type="primary" onClick={() => showIssueModal(record)}>
                 Cấp thẻ

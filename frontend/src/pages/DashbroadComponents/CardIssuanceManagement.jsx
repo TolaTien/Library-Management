@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Tag, Modal, Form, Input, message } from 'antd';
 import './CardIssuanceManagement.css';
-import { requestGetRequestLoan, requestConfirmIdStudent } from '../../config/request';
+import { requestGetRequestLoan, requestConfirmIdStudent, cancelRequestIdStudent} from '../../config/request';
+
 
 const CardIssuanceManagement = () => {
   const [data, setData] = useState([]);
@@ -69,11 +70,18 @@ const CardIssuanceManagement = () => {
   };
 
   const handleCancelOk = async () => {
-    
-      message.info(`Đã hủy yêu cầu cấp thẻ cho ${selectedUser.fullName}`);
+    setLoading(true);
+    try {
+      await cancelRequestIdStudent({ userId: selectedUser.id });
+
+      message.success(`Đã hủy yêu cầu cấp thẻ của ${selectedUser.fullName}`);
       handleCancelCancel();
-      fetchData();
-    
+      fetchData(); // Tải lại danh sách
+    } catch (error) {
+      message.error('Hủy yêu cầu thất bại');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const columns = [
@@ -174,3 +182,4 @@ const CardIssuanceManagement = () => {
 };
 
 export default CardIssuanceManagement;
+

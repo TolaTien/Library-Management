@@ -1,0 +1,159 @@
+/* --- Global Variables (Đồng bộ với Header: Xanh Dương Sáng) --- */
+:root {
+    /* Sử dụng các biến màu từ Header để đồng bộ phong cách */
+    --color-primary: #1e88e5;       /* Xanh Dương Sáng */
+    --color-primary-hover: #1565c0; /* Xanh Đậm hơn */
+    --color-accent: #00bcd4;        /* Xanh Mint/Cyan */
+    
+    /* Màu nền tối cho Footer */
+    --color-dark-bg: #1f2937;       /* gray-800 */
+    --color-dark-text: #ffffff;
+    
+    /* Màu chữ (Đã điều chỉnh để phù hợp với nền tối) */
+    --color-text-light: #b0bec5;    /* Light Gray (mềm mại hơn trên nền tối) */
+    --color-text-lighter: #90a4ae;  /* Gray trung tính (copyright) */
+    
+    --color-border-dark: #374151;   /* gray-700 (Border Divider) */
+    
+    --padding-base: 1rem; /* Đơn vị padding cơ bản */
+}
+
+/* --- LIBRARY-FOOTER BLOCK --- */
+.library-footer {
+    background-color: var(--color-dark-bg);
+    color: var(--color-dark-text);
+    margin-top: auto;
+    width: 100%;
+    /* Đồng bộ Shadow với Header */
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15); 
+}
+
+.library-footer__container {
+    max-width: 72rem;
+    margin-left: auto;
+    margin-right: auto;
+    /* Sử dụng biến padding cơ bản */
+    padding-left: var(--padding-base);
+    padding-right: var(--padding-base);
+    
+    padding-top: 2rem; 
+    padding-bottom: 2rem; 
+}
+
+.library-footer__sections {
+    display: grid;
+    /* FIX: Mặc định là 1 cột cho mobile */
+    grid-template-columns: 1fr; 
+    gap: 2rem; 
+}
+
+@media (min-width: 768px) {
+    .library-footer__sections {
+        /* Chuyển sang 3 cột trên tablet/desktop */
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* --- HEADING ELEMENT --- */
+.library-footer__heading {
+    font-size: 1.2rem;
+    font-weight: 700; 
+    margin-bottom: 1rem;
+    color: var(--color-dark-text);
+    /* Accent Line Match Header */
+    border-left: 3px solid var(--color-primary); 
+    padding-left: 0.75rem;
+}
+
+.library-footer__heading--logo {
+    display: flex;
+    align-items: center;
+    color: var(--color-primary); 
+    border: none;
+    padding-left: 0;
+}
+
+/* --- LOGO IMAGE --- */
+.footer-library-image {
+    width: 2.5rem; 
+    height: 2.5rem;
+    margin-right: 0.5rem;
+    object-fit: cover;
+    border-radius: 4px; 
+}
+
+/* --- TEXT ELEMENT --- */
+.library-footer__text {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.library-footer__text--about {
+    line-height: 1.625;
+}
+
+/* --- LINK LIST ELEMENT --- */
+.library-footer__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+}
+
+.library-footer__link {
+    color: var(--color-text-light);
+    text-decoration: none;
+    transition: color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: inline-block;
+    padding: 0.1rem 0;
+}
+
+.library-footer__link:hover {
+    color: var(--color-primary);
+    text-shadow: 0 0 8px rgba(30, 136, 229, 0.6); 
+}
+
+/* --- CONTACT INFO ELEMENT --- */
+.library-footer__contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+/* --- COPYRIGHT ELEMENT --- */
+.library-footer__copyright {
+    border-top: 1px solid var(--color-border-dark);
+    margin-top: 2rem; 
+    padding-top: 1.5rem;
+    text-align: center;
+}
+
+.library-footer__copyright-text {
+    color: var(--color-text-lighter);
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+/* ================================================= */
+/* MOBILE SPECIFIC ADJUSTMENTS (< 768px)             */
+/* ================================================= */
+
+@media (max-width: 767px) {
+    .library-footer__container {
+        /* FIX: Sử dụng đơn vị responsive cho padding ngang */
+        padding-left: 5vw;
+        padding-right: 5vw;
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+    
+    .library-footer__sections {
+        /* Tăng gap giữa các section trên mobile để dễ đọc */
+        gap: 2.5rem;
+    }
+}

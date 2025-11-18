@@ -1,0 +1,37 @@
+/* Toàn bộ phần thống kê */
+.statistics-container {
+    background: #fff;
+    padding: 24px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Tiêu đề chính */
+.statistics-container h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Khoảng cách giữa các card */
+.statistics-container .ant-card {
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Card biểu đồ */
+.statistics-container .ant-card-head-title {
+    font-weight: 600;
+    color: #444;
+}
+
+/* Chỉnh layout biểu đồ cho đẹp */
+.statistics-container .ant-card-body {
+    padding: 20px;
+}
+
+/* Khoảng cách giữa hàng các thống kê */
+.statistics-container .ant-row.mb-6 {
+    margin-bottom: 24px;
+}

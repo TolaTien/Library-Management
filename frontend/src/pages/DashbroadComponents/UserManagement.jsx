@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Input, Modal, Form, Select } from 'antd';
 import './UserManagement.css';
-import { requestDeleteUser, requestGetAllUsers, requestUpdateUser, requestUpdateUserAdmin } from '../../config/request';
+import { requestDeleteUser, requestGetAllUsers, requestUpdateUserAdmin } from '../../config/request';
 
 const { Search } = Input;
 
@@ -93,8 +93,8 @@ const UserManagement = () => {
             <Search placeholder="Tìm kiếm người dùng" onSearch={() => {}} style={{ width: 300, marginBottom: 16 }} />
             <Table columns={columns} dataSource={data} rowKey="id" />
 
-//             {/* Edit User Modal */}
-//             <Modal
+             {/* Edit User Modal */}
+             <Modal
                 title="Sửa thông tin người dùng"
                 visible={isEditModalVisible}
                 onOk={handleUpdateUser}

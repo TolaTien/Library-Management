@@ -1,4 +1,3 @@
-import React from 'react';
 import { Menu } from 'antd';
 import './Sidebar.css';
 import { UserOutlined, HistoryOutlined, LogoutOutlined } from '@ant-design/icons';
@@ -18,7 +17,6 @@ const Sidebar = ({ setActiveComponent, activeComponent }) => {
         catch (error) {
             console.error('Logout failed:', error);
         }
-        // Thêm logic đăng xuất ở đây, ví dụ: xóa token, redirect về trang đăng nhập
     };
 
     const items = [

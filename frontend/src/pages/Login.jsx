@@ -6,7 +6,7 @@ import Footer from '../components/Footer';
 import { Link, useNavigate } from 'react-router-dom';
 import { requestLogin } from '../config/request';
 import { toast } from 'react-toastify';
-import imagesLogin from '../assets/images/login.jpg';
+import imagesLogin from '../assets/images/login.webp';
 // Import file CSS riêng
 import './Login.css';
 

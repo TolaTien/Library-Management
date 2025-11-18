@@ -46,36 +46,6 @@ const PersonalInfo = () => {
         }
     };
 
-    const handleBeforeUpload = async (file) => {
-        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-        if (!isJpgOrPng) {
-            message.error('Bạn chỉ có thể tải lên file JPG/PNG!');
-            return false;
-        }
-        const isLt2M = file.size / 1024 / 1024 < 2;
-        if (!isLt2M) {
-            message.error('Hình ảnh phải nhỏ hơn 2MB!');
-            return false;
-        }
-
-        if (isJpgOrPng && isLt2M) {
-            const formData = new FormData();
-            formData.append('image', file);
-            
-            try {
-                setLoading(true);
-                await requestUploadImage(formData);
-                message.success('Đổi ảnh thành công!');
-                window.location.reload(); 
-            } catch (error) {
-                console.error(error);
-                message.error('Tải ảnh thất bại.');
-            } finally {
-                setLoading(false);
-            }
-        }
-        return false;
-    };
 
     // Kiểm tra dataUser trước khi sử dụng để tránh lỗi
     const safeDataUser = dataUser || {};
@@ -120,16 +90,7 @@ const PersonalInfo = () => {
                         icon={<UserOutlined />}
                         className="personal-info-card__avatar"
                     />
-                    {isEditing && (
-                        <Upload 
-                            name="avatar" 
-                            showUploadList={false} 
-                            beforeUpload={handleBeforeUpload}
-                            className="personal-info-card__avatar-upload"
-                        >
-                            <Button icon={<UploadOutlined />}>Đổi ảnh</Button>
-                        </Upload>
-                    )}
+
                 </div>
                 
                 {/* BEM: personal-info-card__details-section */}

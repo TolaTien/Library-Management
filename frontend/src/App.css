@@ -16,9 +16,9 @@
     background-color: var(--color-page-bg);
 }
 
-/* ================================================= */
+
 /* 1. BỐ CỤC 2 CỘT (Filter + Grid) & CONTAINER */
-/* ================================================= */
+
 
 .main-page__infor-container {
     width: 100%;
@@ -68,9 +68,9 @@
        và minmax(180px, 1fr) của grid-template-columns. */
 }
 
-/* ================================================= */
+
 /* 2. STYLE FILTER CONTROLS */
-/* ================================================= */
+
 
 .filter-group {
     display: flex;

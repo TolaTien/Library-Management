@@ -28,11 +28,7 @@ function Footer() {
                                     Trang chủ
                                 </a>
                             </li>
-                            <li>
-                                <a href="#" className="library-footer__link">
-                                    Danh mục sách
-                                </a>
-                            </li>
+
                             <li>
                                 <a href="#" className="library-footer__link">
                                     Quy định mượn sách
@@ -50,9 +46,9 @@ function Footer() {
                     <div className="library-footer__section library-footer__section--contact">
                         <h3 className="library-footer__heading">Liên hệ</h3>
                         <div className="library-footer__contact-info">
-                            <p className="library-footer__text">📍 123 Đường ABC, Quận 1, TP.HCM</p>
+                            <p className="library-footer__text">📍 Trần Phú, Hà Đông Hà Nội</p>
                             <p className="library-footer__text">📞 (09) 1234 5678</p>
-                            <p className="library-footer__text">✉️ info@thuvien.edu.vn</p>
+                            <p className="library-footer__text">✉️ thuvienquocgia@gmail.com</p>
                             <p className="library-footer__text">🕒 Thứ 2 - Chủ nhật: 8:00 - 20:00</p>
                         </div>
                     </div>

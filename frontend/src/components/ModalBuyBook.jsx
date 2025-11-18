@@ -129,7 +129,7 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                 {bookData && (
                     <Card className="modal-borrow__card modal-borrow__card--book">
                         <Title level={4} className="modal-borrow__section-title">
-                            📚 Thông tin sách
+                            Thông tin sách
                         </Title>
                         <Row gutter={16} align="middle">
                             {/* BEM: modal-borrow__book-image-col */}
@@ -297,7 +297,7 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                                 className="modal-borrow__button modal-borrow__button--submit"
                                 disabled={isSubmitDisabled}
                             >
-                                {loading ? 'Đang xử lý...' : '📚 Xác nhận mượn'}
+                                {loading ? 'Đang xử lý...' : ' Xác nhận mượn'}
                             </Button>
                         </div>
                     </Form>

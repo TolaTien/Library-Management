@@ -1,22 +1,3 @@
--- MySQL dump 10.13  Distrib 8.0.42, for macos15 (x86_64)
---
--- Host: localhost   
--- ------------------------------------------------------
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
-
-
 --
 -- Table structure for table `historyBooks`
 --
@@ -39,21 +20,19 @@ CREATE TABLE `historyBooks` (
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `historyBooks`
 --
 
 LOCK TABLES `historyBooks` WRITE;
-/*!40000 ALTER TABLE `historyBooks` DISABLE KEYS */;
-/*!40000 ALTER TABLE `historyBooks` ENABLE KEYS */;
+
 UNLOCK TABLES;
 
 
 DROP TABLE IF EXISTS `products`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `products` (
   `id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `image` varchar(255) NOT NULL,
@@ -70,14 +49,14 @@ CREATE TABLE `products` (
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `products`
 --
 
 LOCK TABLES `products` WRITE;
-/*!40000 ALTER TABLE `products` DISABLE KEYS */;
+
 INSERT INTO `products` VALUES ('24e96aa4-57b5-4077-9827-a9543fd83d12','uploads/products/1753791873669.jpg','LỮ KHÁCH VEN ĐƯỜNG - Tâm An','Cuốn sách giúp bạn tìm thấy bình yên trong tâm hồn giữa dòng đời hối hả.',50,'soft',2021,260,'Tiếng Việt','Tâm An','NXB Trẻ',NOW(),NOW()),
 ('9a3c4f9d-6b42-4c7e-b8a1-1d93d5d8c101','uploads/products/1753791873670.jpg','Bí Mật Của May Mắn','Câu chuyện truyền cảm hứng về việc tạo ra vận may bằng chính nỗ lực của bản thân.',80,'hard',2019,220,'Tiếng Việt','Alex Rovira','NXB Lao Động',NOW(),NOW()),
 ('a45b9d12-03cf-4c22-9e67-2bb20f4a6123','uploads/products/1753791873671.jpg','Đắc Nhân Tâm','Tác phẩm kinh điển về nghệ thuật giao tiếp và thấu hiểu con người.',100,'hard',2018,320,'Tiếng Việt','Dale Carnegie','NXB Trẻ',NOW(),NOW()),
@@ -91,7 +70,6 @@ INSERT INTO `products` VALUES ('24e96aa4-57b5-4077-9827-a9543fd83d12','uploads/p
 ('4b9a13fd-ec4c-4d26-9d7c-0e2b37f618e1','uploads/products/1753791873681.jpg','Thép Đã Tôi Thế Đấy','Cuốn tiểu thuyết về ý chí kiên cường và lý tưởng sống cao đẹp.',95,'hard',2017,360,'Tiếng Việt','Nikolai Ostrovsky','NXB Văn Học',NOW(),NOW()),
 ('5d8ce6b1-7185-4b74-bb27-4f12e0a991d2','uploads/products/1753791873682.jpg','Người Giàu Có Nhất Thành Babylon','Bí quyết tài chính trường tồn qua thời gian.',100,'soft',2019,240,'Tiếng Việt','George S. Clason','NXB Lao Động',NOW(),NOW());
 
-/*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -99,8 +77,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `users` (
   `id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `avatar` varchar(255) DEFAULT NULL,
@@ -115,24 +92,12 @@ CREATE TABLE `users` (
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `users`
 --
 
 LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+
 UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2025-07-29 19:36:50

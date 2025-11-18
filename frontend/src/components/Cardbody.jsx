@@ -43,7 +43,7 @@ function CardBody({ data }) {
                                     : 'book-card__badge--out-of-stock'
                             }`}
                         >
-                            {data.stock > 0 ? `✨ Còn ${data.stock} quyển` : '❌ Hết hàng'}
+                            {data.stock > 0 ? ` Còn ${data.stock} quyển` : ' Hết hàng'}
                         </span>
                     </div>
                     
@@ -56,7 +56,7 @@ function CardBody({ data }) {
                                     : 'book-card__badge--soft-cover'
                             }`}
                         >
-                            {data.covertType === 'hard' ? '📘 Bìa cứng' : '📙 Bìa mềm'}
+                            {data.covertType === 'hard' ? ' Bìa cứng' : ' Bìa mềm'}
                         </span>
                     </div>
                 </div>
@@ -121,7 +121,7 @@ function CardBody({ data }) {
                                 : 'book-card__button--disabled'
                         }`}
                     >
-                        {data.stock > 0 ? '📚 Mượn ngay' : '❌ Hết hàng'}
+                        {data.stock > 0 ? ' Mượn ngay' : ' Hết hàng'}
                     </button>
                 </div>
             </div>

@@ -10,7 +10,7 @@ import {
     requestUploadImageProduct,
 } from '../../config/request';
 
-const { Search } = Input;
+
 const { Option } = Select;
 
 // Component Form sách để tái sử dụng

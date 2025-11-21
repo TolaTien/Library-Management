@@ -55,15 +55,15 @@ const BookForm = ({ form, onFinish, initialValues, isEdit = false }) => {
                     defaultFileList={
                         isEdit && initialValues?.image
                             ? [
-                                  {
-                                      uid: '-1',
-                                      name: 'current-image',
-                                      status: 'done',
-                                      url: initialValues.image.startsWith('http')
-                                          ? initialValues.image
-                                          : `${import.meta.env.VITE_API_URL}/${initialValues.image}`,
-                                  },
-                              ]
+                                    {
+                                        uid: '-1',
+                                        name: 'current-image',
+                                        status: 'done',
+                                        url: initialValues.image.startsWith('http')
+                                            ? initialValues.image
+                                            : `${import.meta.env.VITE_API_URL}/${initialValues.image}`,
+                                    },
+                                ]
                             : []
                     }
                 >

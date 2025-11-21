@@ -21,8 +21,9 @@ function CardBody({ data }) {
     // Block: book-card
     return (
         <div className="book-card">
-            {/* Decorative gradient overlay */}
-            <div className="book-card__overlay"></div>
+            <div className="book-card__overlay">
+                <ModalBuyBook visible={visible} onCancel={onCancel} bookData={bookData} />
+            </div>
             
             {/* 1. KHỐI HÌNH ẢNH (Bao gồm Stock và Bìa) */}
             <Link to={`/product/${data.id}`} className="book-card__link">
@@ -33,29 +34,16 @@ function CardBody({ data }) {
                         className="book-card__image"
                         alt={data.nameProduct}
                     />
-                    
                     {/* Stock badge */}
                     <div className="book-card__badge-position book-card__badge-position--top-right">
-                        <span
-                            className={`book-card__badge book-card__badge--stock ${
-                                data.stock > 0
-                                    ? 'book-card__badge--in-stock'
-                                    : 'book-card__badge--out-of-stock'
-                            }`}
-                        >
+                        <span className={`book-card__badge book-card__badge--stock ${data.stock > 0? 'book-card__badge--in-stock':'book-card__badge--out-of-stock'}`}>
                             {data.stock > 0 ? `✨ Còn ${data.stock} quyển` : '❌ Hết hàng'}
                         </span>
                     </div>
-                    
+
                     {/* Cover type badge */}
                     <div className="book-card__badge-position book-card__badge-position--top-left">
-                        <span
-                            className={`book-card__badge book-card__badge--cover ${
-                                data.covertType === 'hard'
-                                    ? 'book-card__badge--hard-cover'
-                                    : 'book-card__badge--soft-cover'
-                            }`}
-                        >
+                        <span className={`book-card__badge book-card__badge--cover ${data.covertType === 'hard'? 'book-card__badge--hard-cover': 'book-card__badge--soft-cover'}`}>
                             {data.covertType === 'hard' ? '📘 Bìa cứng' : '📙 Bìa mềm'}
                         </span>
                     </div>
@@ -64,7 +52,7 @@ function CardBody({ data }) {
 
             {/* Nội dung chi tiết */}
             <div className="book-card__body">
-                
+            
                 {/* 2. TITLE (Tên sách) */}
                 <Link to={`/product/${data.id}`} className="book-card__title-link">
                     <h6 className="book-card__title">
@@ -112,21 +100,11 @@ function CardBody({ data }) {
 
                 {/* 4. Nút hành động */}
                 <div className="book-card__action">
-                    <button
-                        onClick={() => showModal(data)}
-                        disabled={data.stock <= 0}
-                        className={`book-card__button ${
-                            data.stock > 0
-                                ? 'book-card__button--borrow'
-                                : 'book-card__button--disabled'
-                        }`}
-                    >
+                    <button onClick={() => showModal(data)} disabled={data.stock <= 0} className={`book-card__button ${data.stock > 0? 'book-card__button--borrow':'book-card__button--disabled'}`}>
                         {data.stock > 0 ? '📚 Mượn ngay' : '❌ Hết hàng'}
                     </button>
                 </div>
             </div>
-            
-            <ModalBuyBook visible={visible} onCancel={onCancel} bookData={bookData} />
         </div>
     );
 }

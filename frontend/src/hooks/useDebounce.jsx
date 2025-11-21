@@ -9,7 +9,7 @@ function useDebounce(value, delay) {
         const handler = setTimeout(() => setDebounceValue(value), delay); // xét thời gian gọi API
         return () => clearTimeout(handler); // clear timeout
     }, [value]); // xét lại value, nếu thay đổi thì set code useeffect
-    return debounceValue; // trả về value để gọi api
+    return debounceValue;
 }
 
 export default useDebounce; // export hook

@@ -14,7 +14,7 @@ function App() {
     const [filterState, setFilterState] = useState({
         keyword: '',
         coverType: 'all', 
-        language: 'all', // Đã chuyển mặc định về 'all' (chữ thường)
+        language: 'all', 
     });
 
     const extractLanguages = (products) => {
@@ -78,10 +78,10 @@ function App() {
 
         return dataProduct.filter(product => {
             
-            // 1. Lọc theo Từ khóa
-            const matchesKeyword = keyword === '' || 
-                product.nameProduct?.toLowerCase().includes(keyword.toLowerCase()) ||
-                product.publisher?.toLowerCase().includes(keyword.toLowerCase());
+            // // 1. Lọc theo Từ khóa
+            // const matchesKeyword = keyword === '' || 
+            //     product.nameProduct?.toLowerCase().includes(keyword.toLowerCase()) ||
+            //     product.publisher?.toLowerCase().includes(keyword.toLowerCase());
 
             // 2. Lọc theo Loại bìa
             const matchesCoverType = coverType === 'all' || 
@@ -91,7 +91,7 @@ function App() {
             const matchesLanguage = language === 'all' || 
                 product.language?.toLowerCase() === language;
             
-            return matchesKeyword && matchesCoverType && matchesLanguage;
+            return matchesCoverType && matchesLanguage;
         });
     }, [dataProduct, filterState]); // Chạy lại khi data gốc hoặc state lọc thay đổi
 
@@ -112,7 +112,7 @@ function App() {
                 <div className='main-page__filter'>
                     
                     {/* Phần tử lọc theo tên sách/tác giả */}
-                    <div className="filter-group">
+                    {/* <div className="filter-group">
                         <label htmlFor="search-input" className="filter-label">Tìm kiếm:</label>
                         <input
                             type="text"
@@ -123,7 +123,7 @@ function App() {
                             placeholder="Tên sách, tác giả..."
                             className="filter-input"
                         />
-                    </div>
+                    </div> */}
 
                     {/* Phần tử lọc theo Loại bìa */}
                     <div className="filter-group">

@@ -19,24 +19,17 @@ import { useEffect, useState } from 'react';
 import { useStore } from '../hooks/useStore';
 import { requestCreateHistoryBook } from '../config/request';
 import { toast } from 'react-toastify';
-
-// Import file CSS riêng
 import './ModalBuyBook.css';
 
-const { Title, Text } = Typography;
 
-// Constants for date calculations
+const { Title, Text } = Typography; 
 const BORROW_DURATION_MAX_DAYS = 30;
 
-/**
- * A modal component for users to register to borrow a book.
- * The component's filename is `ModalBuyBook`, but its functionality is for borrowing.
- */
-function ModalBuyBook({ visible, onCancel, bookData }) {
-    const [form] = Form.useForm();
-    const [loading, setLoading] = useState(false);
-    const { dataUser } = useStore();
 
+function ModalBuyBook({ visible, onCancel, bookData }) {
+    const [form] = Form.useForm(); // form mượn sách
+    const [loading, setLoading] = useState(false);  // trạng thái loading khi submit form
+    const { dataUser } = useStore(); // Lấy thông tin user từ store
     const today = dayjs();
     const minReturnDate = today.add(1, 'day');
     const maxReturnDate = today.add(BORROW_DURATION_MAX_DAYS, 'day');
@@ -49,7 +42,7 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                 fullName: dataUser?.fullName || '',
                 address: dataUser?.address || '',
                 phoneNumber: dataUser?.phoneNumber || '',
-                // studentId: dataUser?.idStudent || '',
+                studentId: dataUser?.idStudent || '',
                 returnDate: minReturnDate, // Default return date
             });
         }
@@ -58,10 +51,7 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
     const handleSubmit = async (values) => {
         setLoading(true);
         try {
-            const borrowData = {
-                ...values,
-                bookId: bookData?.id,
-                borrowDate: today.format('YYYY-MM-DD'),
+            const borrowData = {...values, bookId: bookData?.id, borrowDate: today.format('YYYY-MM-DD'),
                 returnDate: values.returnDate.format('YYYY-MM-DD'),
             };
 
@@ -102,7 +92,7 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
         return Promise.resolve();
     };
 
-    const isSubmitDisabled = !bookData || bookData.stock <= 0 || loading;
+    const isSubmitDisabled = !bookData || bookData.stock <= 0 || loading; // Vô hiệu hóa nút submit nếu không có dữ liệu sách hoặc hết hàng hoặc đang loading
 
     return (
         <Modal
@@ -132,23 +122,21 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                             📚 Thông tin sách
                         </Title>
                         <Row gutter={16} align="middle">
-                            {/* BEM: modal-borrow__book-image-col */}
-                            <Col xs={24} sm={8} className="modal-borrow__book-image-col">
+                            <Col xs={24} sm={8} className="modal-borrow__book-image-col">  {/** cột hình ảnh sách */}
                                 <Image
                                     src={`${import.meta.env.VITE_API_URL}/${bookData.image}`}
                                     alt={bookData.nameProduct}
                                     width={120}
                                     height={160}
                                     className="modal-borrow__book-image"
-                                    preview={false}
+                                    preview={true} // cho xem ảnh lớn hơn khi click vào
                                 />
                             </Col>
-                            <Col xs={24} sm={16}>
+                            <Col xs={24} sm={16}>  {/** cột thông tin sách */}
                                 <Space direction="vertical" size="small" className="w-full">
                                     <Title level={5} className="modal-borrow__book-name">
                                         {bookData.nameProduct}
                                     </Title>
-                                    {/* BEM: modal-borrow__book-details */}
                                     <div className="modal-borrow__book-details">
                                         <span>
                                             Nhà xuất bản: <Text strong>{bookData.publisher}</Text>
@@ -161,7 +149,6 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                                         </span>
                                         <span>
                                             Còn lại:{' '}
-                                            {/* BEM: modal-borrow__stock-count */}
                                             <Text strong className="modal-borrow__stock-count">
                                                 {bookData.stock} quyển
                                             </Text>
@@ -175,22 +162,15 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
 
                 <Divider className="modal-borrow__divider" />
 
-                {/* Borrower Information Form */}
+                {/* form đăng kí mượn sách*/}  
                 <Card className="modal-borrow__card modal-borrow__card--borrower">
                     <Title level={4} className="modal-borrow__section-title">
                         👤 Thông tin người mượn
                     </Title>
                     <Form form={form} layout="vertical" onFinish={handleSubmit} requiredMark={false} preserve={false}>
-                        <Row gutter={16}>
+                        <Row gutter={16}>  {/** hàng đầu tiên trong form */}
                             <Col xs={24} sm={12}>
-                                <Form.Item
-                                    name="fullName"
-                                    label="Họ và tên"
-                                    rules={[
-                                        { required: true, message: 'Vui lòng nhập họ và tên!' },
-                                        { min: 2, message: 'Họ tên phải có ít nhất 2 ký tự!' },
-                                    ]}
-                                >
+                                <Form.Item name="fullName" label="Họ và tên" rules={[{ required: true, message: 'Vui lòng nhập họ và tên!' },{ min: 2, message: 'Họ tên phải có ít nhất 2 ký tự!' },]}>
                                     {/* BEM: modal-borrow__input */}
                                     <Input
                                         prefix={<UserOutlined />}
@@ -199,14 +179,14 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                                     />
                                 </Form.Item>
                             </Col>
-                            <Col xs={24} sm={12}>
+                            <Col xs={24} sm={12}> 
                                 <Form.Item name="address" label="Địa chỉ">
                                     <Input prefix={<IdcardOutlined />} placeholder="Nhập địa chỉ" className="modal-borrow__input" />
                                 </Form.Item>
                             </Col>
                         </Row>
 
-                        <Row gutter={16}>
+                        <Row gutter={16}>  {/** hàng thứ 2 trong form */}
                             <Col xs={24} sm={12}>
                                 <Form.Item
                                     name="phoneNumber"
@@ -250,7 +230,7 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                             📅 Thời gian mượn
                         </Title>
 
-                        <Row gutter={16}>
+                        <Row gutter={16}>  {/** hàng thứ 3 trong form */}
                             <Col xs={24} sm={12}>
                                 <Form.Item label="Ngày mượn">
                                     {/* BEM: modal-borrow__input--disabled */}
@@ -273,11 +253,10 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                                         className="modal-borrow__datepicker"
                                         placeholder="Chọn ngày trả"
                                         format="DD/MM/YYYY"
-                                        showToday={false}
+                                        showNow={false}
                                         disabledDate={(current) =>
                                             current &&
-                                            (current.isBefore(minReturnDate, 'day') ||
-                                                current.isAfter(maxReturnDate, 'day'))
+                                            (current.isBefore(minReturnDate, 'day') || current.isAfter(maxReturnDate, 'day'))
                                         }
                                     />
                                 </Form.Item>

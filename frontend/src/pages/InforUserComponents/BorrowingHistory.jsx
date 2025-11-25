@@ -25,7 +25,7 @@ const BorrowingHistory = () => {
             const res = await requestGetHistoryUser();
             setBorrowedBooks(res.data);
         } catch (error) {
-            // FIX: Xử lý response.data.message nếu tồn tại
+
             toast.error(error.response?.data?.message || 'Lỗi tải lịch sử mượn sách');
         } finally {
             setLoading(false);
@@ -37,7 +37,6 @@ const BorrowingHistory = () => {
     }, []);
 
     if (loading) {
-        // BEM: borrow-history__loading
         return (
             <div className="borrow-history__loading">
                 <Spin size="large" />
@@ -50,17 +49,15 @@ const BorrowingHistory = () => {
             await requestCancelBook({ idHistory });
             toast.success('Huỷ mượn sách thành công');
             // Tải lại dữ liệu sau khi hủy thành công
-            fetchData(); 
+            fetchData();
         } catch (error) {
             toast.error(error.response?.data?.message || 'Hủy mượn sách thất bại');
         }
     };
 
     return (
-        // BEM: borrow-history (Card chính)
-        <Card title="Lịch sử mượn sách" bordered={false} className="borrow-history">
+        <Card title="Lịch sử mượn sách" className="borrow-history">
             {borrowedBooks.length > 0 ? (
-                // BEM: borrow-history__list
                 <List
                     itemLayout="vertical"
                     dataSource={borrowedBooks}
@@ -68,13 +65,10 @@ const BorrowingHistory = () => {
                     renderItem={(item) => {
                         const statusInfo = statusConfig[item.status] || { text: item.status, color: 'default' };
                         return (
-                            // BEM: borrow-history__list-item
+                    
                             <List.Item key={item.id} className="borrow-history__list-item">
-                                {/* BEM: borrow-history__item-wrapper */}
                                 <div className="borrow-history__item-wrapper">
-                                    {/* BEM: borrow-history__item-content */}
                                     <div className="borrow-history__item-content">
-                                        {/* Image */}
                                         <Image
                                             width={100}
                                             className="borrow-history__image"
@@ -87,34 +81,19 @@ const BorrowingHistory = () => {
                                             <Title level={5} className="borrow-history__book-title">
                                                 {item.product.nameProduct}
                                             </Title>
-                                            {/* BEM: borrow-history__details-list */}
                                             <Space direction="vertical" size="small" className="borrow-history__details-list">
                                                 <Text type="secondary">Số lượng: {item.quantity}</Text>
-                                                <Text type="secondary">
-                                                    Ngày mượn: {dayjs(item.borrowDate).format('DD/MM/YYYY')}
-                                                </Text>
-                                                <Text type="secondary">
-                                                    Ngày trả: {dayjs(item.returnDate).format('DD/MM/YYYY')}
-                                                </Text>
+                                                <Text type="secondary">Ngày mượn: {dayjs(item.borrowDate).format('DD/MM/YYYY')}</Text>
+                                                <Text type="secondary">Ngày trả: {dayjs(item.returnDate).format('DD/MM/YYYY')}</Text>
                                                 {item.status === 'success' && (
-                                                    // BEM: borrow-history__days-remaining
-                                                    <p className="borrow-history__days-remaining">
-                                                        Số ngày còn lại : {dayjs(item.returnDate).diff(dayjs(), 'day')}{' '}
-                                                        ngày
-                                                    </p>
+                                                    <p className="borrow-history__days-remaining">Số ngày còn lại : {dayjs(item.returnDate).diff(dayjs(), 'day')}{' '}ngày</p>
                                                 )}
                                             </Space>
                                         </div>
-                                        {/* Actions/Status Column */}
-                                        {/* BEM: borrow-history__action-column */}
+
                                         <div className="borrow-history__action-column">
-                                            <Tag color={statusInfo.color} className="borrow-history__status-tag">
-                                                {statusInfo.text}
-                                            </Tag>
-                                            {/* BEM: borrow-history__id-text */}
-                                            <Text type="secondary" className="borrow-history__id-text">
-                                                Mã mượn: {item.id.substring(0, 8)}
-                                            </Text>
+                                            <Tag color={statusInfo.color} className="borrow-history__status-tag">{statusInfo.text}</Tag>
+                                            <Text type="secondary" className="borrow-history__id-text">  Mã mượn: {item.id.substring(0, 8)}</Text>
                                             {item.status === 'pending' && (
                                                 <Button danger type="primary" onClick={() => handleCancelBook(item.id)}>
                                                     Huỷ mượn

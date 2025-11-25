@@ -7,18 +7,14 @@ import { useStore } from '../../hooks/useStore';
 import "./PersonalInfor.css";
 
 const PersonalInfo = () => {
-    // FIX: Đặt loading thành false sau khi dataUser được load lần đầu,
-    // hoặc quản lý loading qua store nếu cần, ở đây tôi giữ logic ban đầu nhưng setFieldsValue sẽ dừng loading.
     const [loading, setLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
     const [form] = Form.useForm();
-
     const {dataUser, setDataUser} = useStore();
 
     useEffect(() => {
         if (dataUser) {
             form.setFieldsValue(dataUser);
-            // Giả sử dataUser đã được fetch xong, ta dừng loading ban đầu
             setLoading(false);
         }
     }, [dataUser, form]);
@@ -46,37 +42,6 @@ const PersonalInfo = () => {
         }
     };
 
-    const handleBeforeUpload = async (file) => {
-        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-        if (!isJpgOrPng) {
-            message.error('Bạn chỉ có thể tải lên file JPG/PNG!');
-            return false;
-        }
-        const isLt2M = file.size / 1024 / 1024 < 2;
-        if (!isLt2M) {
-            message.error('Hình ảnh phải nhỏ hơn 2MB!');
-            return false;
-        }
-
-        if (isJpgOrPng && isLt2M) {
-            const formData = new FormData();
-            formData.append('image', file);
-            
-            try {
-                setLoading(true);
-                await requestUploadImage(formData);
-                message.success('Đổi ảnh thành công!');
-                window.location.reload(); 
-            } catch (error) {
-                console.error(error);
-                message.error('Tải ảnh thất bại.');
-            } finally {
-                setLoading(false);
-            }
-        }
-        return false;
-    };
-
     // Kiểm tra dataUser trước khi sử dụng để tránh lỗi
     const safeDataUser = dataUser || {};
 
@@ -100,36 +65,16 @@ const PersonalInfo = () => {
     return (
         <Card
             title="Thông tin cá nhân"
-            bordered={false}
             className="personal-info-card"
-            extra={
-                !isEditing && (
-                    <Button icon={<EditOutlined />} onClick={() => setIsEditing(true)} loading={loading}>
-                        Chỉnh sửa
-                    </Button>
-                )
-            }
-        >
-            {/* BEM: personal-info-card__content */}
+            extra={ !isEditing && (<Button icon={<EditOutlined/>} onClick={() => setIsEditing(true)} loading={loading}>Chỉnh sửa</Button>)}>
             <div className="personal-info-card__content">
-                {/* BEM: personal-info-card__avatar-section */}
                 <div className="personal-info-card__avatar-section">
                     <Avatar
                         size={100}
-                        src={`${import.meta.env.VITE_API_URL}/${safeDataUser.avatar}`}
+                        // src={`${import.meta.env.VITE_API_URL}/${safeDataUser.avatar}`}
                         icon={<UserOutlined />}
                         className="personal-info-card__avatar"
                     />
-                    {isEditing && (
-                        <Upload 
-                            name="avatar" 
-                            showUploadList={false} 
-                            beforeUpload={handleBeforeUpload}
-                            className="personal-info-card__avatar-upload"
-                        >
-                            <Button icon={<UploadOutlined />}>Đổi ảnh</Button>
-                        </Upload>
-                    )}
                 </div>
                 
                 {/* BEM: personal-info-card__details-section */}
@@ -142,13 +87,12 @@ const PersonalInfo = () => {
                                 rules={[{ required: true, message: 'Vui lòng nhập họ tên!' }]}>
                                 <Input />
                             </Form.Item>
-                            <Form.Item name="phone" label="Số điện thoại">
+                            <Form.Item name="phone" label="Số điện thoại" rules={[{required: true , message : "vui lòng nhập số điện thoại!"}]}>
                                 <Input />
                             </Form.Item>
                             <Form.Item name="address" label="Địa chỉ">
                                 <Input />
                             </Form.Item>
-                            {/* BEM: personal-info-card__form-actions */}
                             <Form.Item className="personal-info-card__form-actions">
                                 <Button type="primary" htmlType="submit" className="personal-info-card__button--save" loading={loading}>
                                     Lưu thay đổi

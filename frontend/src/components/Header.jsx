@@ -134,7 +134,7 @@ function Header() {
                                         },
                                         {
                                             key: 'settings2',
-                                            icon: <SendOutlined />,
+                                            icon: <SendOutlined/>,
                                             label: 'Gửi yêu cầu cấp mã sinh viên',
                                             onClick: () => navigate('/infoUser'),
                                         },
@@ -143,7 +143,7 @@ function Header() {
                                         },
                                         {
                                             key: 'logout',
-                                            icon: <LogoutOutlined />,
+                                            icon: <LogoutOutlined/>,
                                             label: 'Đăng xuất',
                                             danger: true,
                                             onClick: () => handleLogout(),
@@ -172,7 +172,6 @@ function Header() {
                             // Login/Register Buttons
                             <div className="library-header__auth-buttons">
                                 <Link to={'/login'}>
-                                    {/* Sử dụng component Ant Design, giữ nguyên cách đặt tên */}
                                     <Button className="library-header__button library-header__button--login">
                                         Đăng nhập
                                     </Button>

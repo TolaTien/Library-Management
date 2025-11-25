@@ -6,24 +6,22 @@ import { useState } from 'react';
 import './Cardbody.css'; 
 
 function CardBody({ data }) {
-    const [visible, setVisible] = useState(false);
-    const [bookData, setBookData] = useState({});
+    const [visible, setVisible] = useState(false); // trạng thái hiện thị form mượn sách
+    const [bookData, setBookData] = useState({});  // dữ liệu sách được hiển thị
 
-    const showModal = async (data) => {
+    const showModal = async (data) => { // hiện thị form mượn sách
         setBookData(data);
         setVisible(true);
     };
 
-    const onCancel = () => {
-        setVisible(false);
+    const onCancel = () => {  // ẩn form mượn sách
+        setVisible(false); 
     };
 
-    // Block: book-card
+
     return (
         <div className="book-card">
-            <div className="book-card__overlay">
-                <ModalBuyBook visible={visible} onCancel={onCancel} bookData={bookData} />
-            </div>
+            
             
             {/* 1. KHỐI HÌNH ẢNH (Bao gồm Stock và Bìa) */}
             <Link to={`/product/${data.id}`} className="book-card__link">
@@ -104,6 +102,10 @@ function CardBody({ data }) {
                         {data.stock > 0 ? '📚 Mượn ngay' : '❌ Hết hàng'}
                     </button>
                 </div>
+            </div>
+            
+            <div className="book-card__overlay">  
+                <ModalBuyBook visible={visible} onCancel={onCancel} bookData={bookData} />  {/* nhận props từ cha CardBody */}
             </div>
         </div>
     );

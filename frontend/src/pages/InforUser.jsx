@@ -17,11 +17,11 @@ function InforUser() {
     const renderComponent = () => {
         switch (activeComponent) {
             case 'info':
-                return <PersonalInfo />;
+                return <PersonalInfo/>;
             case 'history':
-                return <BorrowingHistory />;
+                return <BorrowingHistory/>;
             default:
-                return <PersonalInfo />;
+                return <PersonalInfo/>;
         }
     };
 
@@ -29,19 +29,15 @@ function InforUser() {
         // BEM: user-profile-layout
         <Layout className="user-profile-layout">
             <header>
-                <Header />
+                <Header/>
             </header>
             
-            {/* BEM: user-profile__container */}
             <Layout className="user-profile__container">
-                {/* BEM: user-profile__sidebar */}
                 <Sider width={250} theme="light" className="user-profile__sidebar">
                     <Sidebar activeComponent={activeComponent} setActiveComponent={setActiveComponent} />
                 </Sider>
                 
-                {/* BEM: user-profile__content */}
                 <Content className="user-profile__content">
-                    {/* BEM: user-profile__active-view */}
                     <div className="user-profile__active-view">{renderComponent()}</div>
                 </Content>
             </Layout>

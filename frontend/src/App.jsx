@@ -11,11 +11,7 @@ function App() {
     const [loading, setLoading] = useState(true);
     const [availableLanguages, setAvailableLanguages] = useState([]);
     
-    const [filterState, setFilterState] = useState({
-        keyword: '',
-        coverType: 'all', 
-        language: 'all', 
-    });
+    const [filterState, setFilterState] = useState({coverType: 'all', language: 'all'});
 
     const extractLanguages = (products) => {
         if (!products || products.length === 0) return [];
@@ -62,14 +58,13 @@ function App() {
         }));
     };
 
-    // Logic Lọc Sách đã sửa
     const filteredProducts = useMemo(() => {
         if (!dataProduct || dataProduct.length === 0) return [];
         
-        const { keyword, coverType, language } = filterState;
+        const {coverType, language } = filterState;
 
         // KIỂM TRA ĐIỀU KIỆN LỌC ĐÃ ĐƯỢC KÍCH HOẠT CHƯA
-        const isFilteringActive = keyword !== '' || coverType !== 'all' || language !== 'all';
+        const isFilteringActive = coverType !== 'all' || language !== 'all';
         
         // Nếu không có bộ lọc nào được áp dụng, trả về toàn bộ dữ liệu gốc
         if (!isFilteringActive) {
@@ -77,19 +72,10 @@ function App() {
         }
 
         return dataProduct.filter(product => {
-            
-            // // 1. Lọc theo Từ khóa
-            // const matchesKeyword = keyword === '' || 
-            //     product.nameProduct?.toLowerCase().includes(keyword.toLowerCase()) ||
-            //     product.publisher?.toLowerCase().includes(keyword.toLowerCase());
-
             // 2. Lọc theo Loại bìa
-            const matchesCoverType = coverType === 'all' || 
-                product.covertType?.toLowerCase() === coverType;
-            
+            const matchesCoverType = coverType === 'all' || product.covertType?.toLowerCase() === coverType;
             // 3. Lọc theo Ngôn ngữ
-            const matchesLanguage = language === 'all' || 
-                product.language?.toLowerCase() === language;
+            const matchesLanguage = language === 'all' || product.language?.toLowerCase() === language;
             
             return matchesCoverType && matchesLanguage;
         });
@@ -99,10 +85,10 @@ function App() {
         // BEM: main-page-layout
         <div className="main-page-layout">
             <header>
-                <Header />
+                <Header/>
             </header>
             <div>
-                <Coverpage />
+                <Coverpage/>
             </div>
 
             {/* BEM: main-page__infor-container */}
@@ -110,21 +96,6 @@ function App() {
                 
                 {/* KHUNG BỘ LỌC BẮT ĐẦU */}
                 <div className='main-page__filter'>
-                    
-                    {/* Phần tử lọc theo tên sách/tác giả */}
-                    {/* <div className="filter-group">
-                        <label htmlFor="search-input" className="filter-label">Tìm kiếm:</label>
-                        <input
-                            type="text"
-                            id="search-input"
-                            name="keyword"
-                            value={filterState.keyword}
-                            onChange={handleChange}
-                            placeholder="Tên sách, tác giả..."
-                            className="filter-input"
-                        />
-                    </div> */}
-
                     {/* Phần tử lọc theo Loại bìa */}
                     <div className="filter-group">
                         <label htmlFor="cover-type-select" className="filter-label">Loại bìa:</label>
@@ -165,15 +136,7 @@ function App() {
                 
                 {/* BEM: main-page__product-grid */}
                 <main className="main-page__product-grid">
-                    {loading ? (
-                        <p className="main-page__loading-text">Đang tải sách...</p>
-                    ) : filteredProducts.length > 0 ? (
-                        filteredProducts.map((item) => (
-                            <CardBody key={item.id} data={item} />
-                        ))
-                    ) : (
-                        <p className="main-page__no-results">Không tìm thấy sách nào phù hợp.</p>
-                    )}
+                    {loading ? (<p className="main-page__loading-text">Đang tải sách...</p>) : filteredProducts.length > 0 ? (filteredProducts.map((item) => (<CardBody key={item.id} data={item} />))) : (<p className="main-page__no-results">Không tìm thấy sách nào phù hợp.</p>)}
                 </main>
             </div>
 

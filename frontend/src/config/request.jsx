@@ -1,9 +1,7 @@
 import axios from 'axios';
+import { apiClient } from './axiosClient'; // client có interceptor
 
-import { apiClient } from './axiosClient';
-
-const request = axios.create({baseURL: import.meta.env.VITE_API_URL, withCredentials: true,});
-
+const request = axios.create({baseURL: import.meta.env.VITE_API_URL, withCredentials: true,}); // client này không có interceptor
 const apiUser = '/api/user';
 
 export const requestRegister = async (data) => {

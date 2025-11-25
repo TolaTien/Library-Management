@@ -1,37 +1,19 @@
 /* --- Global Variables --- */
-
 :root {
-
     --color-page-bg: #f9fafb;
-
     --color-text-medium: #6b7280;
-
     --color-white: #ffffff;
-
     --color-border: #e0e0e0;
-
     --color-primary: #1e88e5;
-
     --color-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
-
 }
-
-
-
 /* --- MAIN-PAGE-LAYOUT BLOCK --- */
 
 .main-page-layout {
-
     min-height: 100vh;
-
     display: flex;
-
     flex-direction: column;
-
     background-color: var(--color-page-bg);
-
-
-
 }
 
 
@@ -43,39 +25,18 @@
 /* ================================================= */
 
 
-
 .main-page__infor-container {
-
     width: 100%;
-
     max-width: 1400px;
-
     margin-left: auto;
-
     margin-right: auto;
-
     padding: 0 0.5rem;
-
     margin-block: 1.5rem;
-
-   
-
-    /* FIX: Thiết lập bố cục 2 cột cho Desktop/Tablet */
-
     display: grid;
-
-    /* Cột 1 (Filter): Fixed width (280px) | Cột 2 (Grid): Chiếm phần còn lại */
-
     grid-template-columns: 350px 1fr;
-
-    gap: 2rem; /* Khoảng cách giữa Filter và Grid */
-
+    gap: 2rem; 
 }
-
-
-
 /* --- FILTER ELEMENT (Cột Trái) --- */
-
 .main-page__filter {
     flex-shrink: 0;
     padding: 1rem;
@@ -89,23 +50,12 @@
     flex-direction: column; /* Xếp các filter-group theo chiều dọc */
     gap: 1rem;
     border: 1px solid var(--color-border);
-
 }
-
 /* --- PRODUCT-GRID ELEMENT (Cột Phải) --- */
-
 .main-page__product-grid {
-    /* Đây là khu vực sản phẩm. Nó sẽ chiếm cột thứ hai của main-page__infor-container */
-    /* Thiết lập grid cho các CardBody bên trong */
     display: grid;
     gap: 1rem;
-    /* Responsive Columns: Sử dụng minmax để tạo số lượng cột linh hoạt */
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    /* FIX: Để đảm bảo bố cục không co khi không có sản phẩm,
-
-    chúng ta dựa vào min-height của .main-page__infor-container
-
-       và minmax(180px, 1fr) của grid-template-columns. */
 }
 
 /* ================================================= */
@@ -119,18 +69,13 @@
     flex-direction: column;
     width: 100%;
 }
-
 .filter-label {
     font-weight: 600;
     margin-bottom: 0.5rem;
     color: var(--color-text-dark, #1f2937);
     font-size: 0.9rem;
 }
-
-
-
 .filter-input,
-
 .filter-select {
     padding: 0.5rem 0.75rem;
     border: 1px solid var(--color-border);
@@ -139,28 +84,21 @@
     background-color: var(--color-white);
     font-size: 1rem;
 }
-
 .filter-input:focus,
 .filter-select:focus {
     border-color: var(--color-primary);
     outline: none;
 }
-
-
-
 .filter-range {
     width: 100%;
     margin-top: 0.5rem;
 }
-
-
 
 .filter-group span {
     font-size: 0.85rem;
     color: var(--color-text-medium);
     margin-top: 0.5rem;
 }
-
 .main-page__loading-text,
 .main-page__no-results {
     /* Bắt buộc thông báo chiếm toàn bộ chiều rộng của cột Grid */
@@ -176,13 +114,11 @@
     border-radius: 0.5rem;
     background-color: var(--color-white);
 }
-
 .main-page__no-results::before {
     content: "⚠️";
     font-size: 1.5rem;
     margin-right: 1rem;
 }
-
 /* ================================================= */
 
 /* 4. MOBILE RESPONSIVENESS (< 768px) */
@@ -191,7 +127,6 @@
 
 
 @media (max-width: 768px) {
-
     .main-page__infor-container {
         /* Chuyển sang bố cục 1 cột (xếp chồng) */
         grid-template-columns: 1fr;
@@ -205,7 +140,5 @@
     .main-page__product-grid {
         /* Giảm số cột sản phẩm trên mobile */
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-
     }
-
 }

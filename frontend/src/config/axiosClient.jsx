@@ -10,7 +10,7 @@ export class ApiClient {
         this.failedQueue = [];
         this.setupInterceptors();
     }
-
+    // xử lí lỗi 401 (authentication)
     setupInterceptors() {
         // Request interceptor ( bộ chặn yêu cầu ) 
         this.axiosInstance.interceptors.request.use(
@@ -51,7 +51,6 @@ export class ApiClient {
                         this.isRefreshing = false;
                     }
                 }
-
                 return Promise.reject(error);
             },
         );
@@ -122,5 +121,4 @@ export class ApiClient {
     }
 }
 
-// Export instance
 export const apiClient = new ApiClient();

@@ -53,7 +53,8 @@ const historyBook = connect.define(
         }
     },
     {
-        freezeTableName: false,
+        freezeTableName: true,
+        timestamps: true
     }
 )
 

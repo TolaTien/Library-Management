@@ -37,7 +37,7 @@ CREATE TABLE `products` (
   `language` varchar(255) NOT NULL,
   `publisher` varchar(255) NOT NULL,
   `publishingCompany` varchar(255) NOT NULL,
-  `category` VARCHAR(255) DEFAULT NULL, 
+  `category` VARCHAR(255) NOT NULL, 
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)

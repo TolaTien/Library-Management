@@ -24,11 +24,6 @@ const product = connect.define('products', {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    covertType: {
-        // Loại bìa
-        type: DataTypes.ENUM('hard', 'soft'),
-        allowNull: false,
-    },
     publishYear: {
         // Năm xuất bản
         type: DataTypes.INTEGER,
@@ -54,7 +49,18 @@ const product = connect.define('products', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    category: {
+        type: DataTypes.STRING,
+        allowNull: false
+    }
 
-});
+},
+{
+   freezeTableName: true,
+   timestamps: true
+}
+);
+
+
 
 module.exports = product;

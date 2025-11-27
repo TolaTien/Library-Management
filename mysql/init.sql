@@ -57,7 +57,7 @@ CREATE TABLE `users` (
   `phone` varchar(255) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
-  `password` varchar(255) DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
   `role` enum('admin','user') NOT NULL DEFAULT 'user',
   `idStudent` varchar(255) DEFAULT NULL,
   `borrowed` INT NOT NULL DEFAULT 0,

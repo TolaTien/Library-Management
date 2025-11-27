@@ -87,7 +87,9 @@ class controllerProduct {
     // [GET] /api/products
     async getAllProduct(req, res) {
         try {
-            const products = await modelProduct.findAll();
+            const products = await modelProduct.findAll({
+            order: [['stock', 'ASC']], // sắp xếp stock giảm dần
+        });
             res.status(200).json({
                 success: true,
                 message: 'Lấy danh sách sản phẩm thành công',
@@ -134,7 +136,7 @@ class controllerProduct {
                     message: 'Từ khóa tìm kiếm không hợp lệ',
                 });
             }
-
+ 
             const products = await modelProduct.findAll({
                 where: { nameProduct: { [Op.like]: `%${keyword}%` } },
             });

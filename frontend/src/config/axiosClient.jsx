@@ -98,7 +98,7 @@ export class ApiClient {
 
     async logout() {
         try {
-            await this.axiosInstance.get('/api/users/logout');
+            await this.axiosInstance.get('/api/user/logout');
         } catch (error) {
             console.error('Logout error:', error);
         }

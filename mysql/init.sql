@@ -16,6 +16,7 @@ CREATE TABLE `historyBooks` (
   `quantity` int NOT NULL DEFAULT '1',
   `fine` DECIMAL(10,2) DEFAULT 0,
   `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 

@@ -10,7 +10,7 @@ const historyBook = connect.define(
             primaryKey: true,
         },
         userId: {
-            type: DataTypes.STRING,
+            type: DataTypes.UUID,
             allowNull: false,
         },
         fullName: {
@@ -26,7 +26,7 @@ const historyBook = connect.define(
             allowNull: true,
         },
         bookId: {
-            type: DataTypes.STRING,
+            type: DataTypes.UUID,
             allowNull: false,
         },
         borrowDate: {
@@ -35,10 +35,10 @@ const historyBook = connect.define(
         }, 
         returnDate: {
             type: DataTypes.DATE,
-            allowNull: false,
+            allowNull: true,
         },
         status: {
-            type: DataTypes.ENUM('pending','success', 'cancel'),
+            type: DataTypes.ENUM('pending','success', 'cancel','returned'),
             allowNull: false,
             defaultValue: 'pending'
         },
@@ -46,10 +46,14 @@ const historyBook = connect.define(
             type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 1,
+        },
+        fine: {
+            type: DataTypes.DECIMAL(10,2),
+            defaultValue: 0
         }
     },
     {
-        freezeTableName: true,
+        freezeTableName: false,
     }
 )
 

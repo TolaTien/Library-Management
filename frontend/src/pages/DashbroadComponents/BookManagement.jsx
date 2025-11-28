@@ -100,7 +100,7 @@ const BookForm = ({ form, onFinish, initialValues, isEdit = false }) => {
                 <Input.TextArea />
             </Form.Item>
             <Form.Item
-                name="covertType"
+                name="category"
                 label="Thể loại"
                 rules={[{ required: true, message: 'Vui lòng chọn thể loại!' }]}
             >
@@ -165,7 +165,8 @@ const BookManagement = () => {
     // dữ liệu đã lọc
     const filteredData = data.filter((item) => {
         if (filterCategory === 'all') return true;
-        return item.covertType === filterCategory;
+        return item.category === filterCategory;
+;
     });
 
     // --- Xử lý cho Modal Thêm Sách ---

@@ -42,10 +42,6 @@ const User = connect.define(
             type: DataTypes.STRING,
             allowNull: true,
         },
-        cardStatus: {
-            type: DataTypes.ENUM('not_requested', 'pending', 'active', 'cancelled'),
-            defaultValue: 'not_requested',
-        },
     },
     {
         freezeTableName: true,

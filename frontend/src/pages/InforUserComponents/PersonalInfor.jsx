@@ -103,7 +103,7 @@ const PersonalInfo = () => {
                     ) : (
                         <>
                             <Descriptions bordered layout="vertical" items={viewItems} className="personal-info-card__descriptions" />
-                            {!safeDataUser.idStudent && ( 
+                            {!safeDataUser.idStudent  && ( // Hiển thị nếu MSSV chưa có
                                 <Button type="primary" onClick={handleRequestStudentId} className="personal-info-card__button--request">
                                     Gửi yêu cầu cấp mã sinh viên
                                 </Button>

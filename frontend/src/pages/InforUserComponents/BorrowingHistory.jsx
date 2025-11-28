@@ -65,10 +65,9 @@ const BorrowingHistory = () => {
                     renderItem={(item) => {
                         const statusInfo = statusConfig[item.status] || { text: item.status, color: 'default' };
                         return (
-                    
-                            <List.Item key={item.id} className="borrow-history__list-item">
-                                <div className="borrow-history__item-wrapper">
-                                    <div className="borrow-history__item-content">
+                            <List.Item key={item.id} className="!p-0 mb-4">
+                                <div className="borrow-history__item">
+                                    <div className="flex flex-col sm:flex-row gap-4">
                                         <Image
                                             width={100}
                                             className="borrow-history__image"

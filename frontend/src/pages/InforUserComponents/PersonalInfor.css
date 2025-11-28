@@ -34,8 +34,7 @@
 }
 
 /* --- AVATAR SECTION ELEMENT --- */
-.personal-info-card__avatar-section {
-   
+.personal-info-card__avatar-section { 
     display: flex;
     flex-direction: column;
     align-items: center;

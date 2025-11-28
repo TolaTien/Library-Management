@@ -278,7 +278,7 @@ class ControllerUser {
     async getListRequest(req, res) {
         const requestList = await User.findAll({
             // where: { idStudent: '0' },
-            where: { idStudent: { [Op.ne]: null } },
+             where: { idStudent: { [Op.ne]: null } },
             attributes: ['id', 'fullName', 'email', 'phone', 'idStudent', 'createdAt'],
             order: [['createdAt', 'DESC']],
         });

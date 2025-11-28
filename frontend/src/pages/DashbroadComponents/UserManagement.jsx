@@ -94,7 +94,7 @@ const UserManagement = () => {
             <Table columns={columns} dataSource={data} rowKey="id" />
 
              {/* Edit User Modal */}
-            <Modal
+             <Modal
                 title="Sửa thông tin người dùng"
                 visible={isEditModalVisible}
                 onOk={handleUpdateUser}

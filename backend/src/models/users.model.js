@@ -9,10 +9,6 @@ const User = connect.define(
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
-        avatar: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
         fullName: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -33,6 +29,10 @@ const User = connect.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        borrowed: { 
+            type: DataTypes.INTEGER,
+            defaultValue: 0 },
+        returned: { type: DataTypes.INTEGER, defaultValue: 0 },
         role: {
             type: DataTypes.ENUM('admin', 'user'),
             allowNull: false,

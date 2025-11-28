@@ -25,8 +25,6 @@
 --
 
 DROP TABLE IF EXISTS `historyBooks`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `historyBooks` (
   `id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `userId` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
@@ -36,8 +34,9 @@ CREATE TABLE `historyBooks` (
   `bookId` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `borrowDate` datetime NOT NULL,
   `returnDate` datetime DEFAULT NULL,
-  `status` enum('pending','success','cancel') NOT NULL DEFAULT 'pending',
+  `status` enum('pending','success','cancel','returned') NOT NULL DEFAULT 'pending',
   `quantity` int NOT NULL DEFAULT '1',
+  `fine` DECIMAL(10,2) DEFAULT 0,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
@@ -48,10 +47,8 @@ CREATE TABLE `historyBooks` (
 
 >>>>>>> dd9c04043c22f85e95f576fa16b2550473520713
 
---
--- Dumping data for table `historyBooks`
---
 
+<<<<<<< HEAD
 LOCK TABLES `historyBooks` WRITE;
 <<<<<<< HEAD
 /*!40000 ALTER TABLE `historyBooks` DISABLE KEYS */;
@@ -60,6 +57,8 @@ LOCK TABLES `historyBooks` WRITE;
 
 >>>>>>> dd9c04043c22f85e95f576fa16b2550473520713
 UNLOCK TABLES;
+=======
+>>>>>>> 0fbe177a07428abaf62f2690336d6389e6121a04
 
 
 DROP TABLE IF EXISTS `products`;
@@ -75,12 +74,12 @@ CREATE TABLE `products` (
   `nameProduct` varchar(255) NOT NULL,
   `description` text,
   `stock` int NOT NULL,
-  `covertType` enum('hard','soft') NOT NULL,
   `publishYear` int NOT NULL,
   `pages` int NOT NULL,
   `language` varchar(255) NOT NULL,
   `publisher` varchar(255) NOT NULL,
   `publishingCompany` varchar(255) NOT NULL,
+  `category` VARCHAR(255) NOT NULL, 
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
@@ -91,6 +90,7 @@ CREATE TABLE `products` (
 
 >>>>>>> dd9c04043c22f85e95f576fa16b2550473520713
 
+<<<<<<< HEAD
 --
 -- Dumping data for table `products`
 --
@@ -116,6 +116,9 @@ INSERT INTO `products` VALUES ('24e96aa4-57b5-4077-9827-a9543fd83d12','uploads/p
 
 UNLOCK TABLES;
 
+=======
+INSERT INTO `products` VALUES ('24e96aa4-57b5-4077-9827-a9543fd83d12','uploads/products/1753791873669.jpg','LỮ KHÁCH VEN ĐƯỜNG - Tâm An','Cuốn sách giúp bạn tìm thấy bình yên trong tâm hồn giữa dòng đời hối hả.',50,2021,260,'Tiếng Việt','Tâm An','NXB Trẻ','test',NOW(),NOW());
+>>>>>>> 0fbe177a07428abaf62f2690336d6389e6121a04
 --
 -- Table structure for table `users`
 --
@@ -124,19 +127,21 @@ DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
   `id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `avatar` varchar(255) DEFAULT NULL,
   `fullName` varchar(255) NOT NULL,
   `phone` varchar(255) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
-  `password` varchar(255) DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
   `role` enum('admin','user') NOT NULL DEFAULT 'user',
   `idStudent` varchar(255) DEFAULT NULL,
+  `borrowed` INT NOT NULL DEFAULT 0,
+  `returned` INT NOT NULL DEFAULT 0,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+<<<<<<< HEAD
 --
 -- Dumping data for table `users`
 --
@@ -144,3 +149,6 @@ CREATE TABLE `users` (
 LOCK TABLES `users` WRITE;
 
 UNLOCK TABLES;
+=======
+
+>>>>>>> 0fbe177a07428abaf62f2690336d6389e6121a04

@@ -166,3 +166,8 @@ export const requestReturnBook = async () => {
     const res = await apiClient.get(`${apiUser}/return-book`);
     return res.data;
 };
+
+export const requestSendReminder = async (data) => {
+    const res = await apiClient.post(`/api/user/send-reminder`, data);
+    return res.data;
+};

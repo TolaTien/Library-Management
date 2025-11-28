@@ -117,7 +117,7 @@ export const requestCreateProduct = async (data) => {
     return res.data;
 };
 
-export const requestUpdateProduct = async (id, data) => {
+export const requestUpdateProduct = async (id, data) =>  {
     const res = await apiClient.post(`${apiProduct}/update?id=${id}`, data);
     return res.data;
 };

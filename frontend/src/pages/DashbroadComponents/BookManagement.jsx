@@ -98,9 +98,9 @@ const BookForm = ({ form, onFinish, initialValues, isEdit = false }) => {
                 <Input.TextArea />
             </Form.Item>
             <Form.Item
-                name="covertType"
-                label="Loại bìa"
-                rules={[{ required: true, message: 'Vui lòng chọn loại bìa!' }]}
+                name="category"
+                label="Thể loại"
+                rules={[{ required: true, message: 'Vui lòng chọn thể loại!' }]}
             >
                 <Select placeholder="Chọn loại bìa">
                     <Option value="hard">Bìa cứng</Option>

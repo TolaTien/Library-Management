@@ -34,7 +34,7 @@ class controllerProduct {
                 image,
                 description,
                 stock,
-                covertType,
+                category,
                 publishYear,
                 pages,
                 language,
@@ -47,7 +47,7 @@ class controllerProduct {
                 !image ||
                 !description ||
                 !stock ||
-                !covertType ||
+                !category ||
                 !publishYear ||
                 !pages ||
                 !language ||
@@ -65,7 +65,7 @@ class controllerProduct {
                 image,
                 description,
                 stock,
-                covertType,
+                category,
                 publishYear,
                 pages,
                 language,

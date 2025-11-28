@@ -11,6 +11,8 @@ const UserManagement = () => {
         { title: 'Tên người dùng', dataIndex: 'fullName', key: 'fullName' },
         { title: 'Email', dataIndex: 'email', key: 'email' },
         { title: 'Vai trò', dataIndex: 'role', key: 'role' },
+        { title: 'Đã mượn', dataIndex: 'borrowed', key: 'borrowed' },
+        { title: 'Đã trả', dataIndex: 'returned', key: 'returned' },
         {
             title: 'Hành động',
             key: 'action',

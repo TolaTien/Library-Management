@@ -18,27 +18,10 @@ const Statistics = () => {
     }, []);
 
     // Fake data for charts
-    const bookStatusData = data?.bookStatus;
+
 
     const loanStatusData = data?.booksData;
 
-    const pieConfig = {
-        appendPadding: 10,
-        data: bookStatusData,
-        angleField: 'value',
-        colorField: 'type',
-        radius: 0.8,
-        label: {
-            type: 'inner',
-            offset: '-50%',
-            content: '{value}',
-            style: {
-                textAlign: 'center',
-                fontSize: 14,
-            },
-        },
-        interactions: [{ type: 'element-active' }],
-    };
 
     const columnConfig = {
         data: loanStatusData,

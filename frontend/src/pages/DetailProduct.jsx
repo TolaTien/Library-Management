@@ -4,8 +4,10 @@ import Header from '../components/Header';
 import { Link, useParams } from 'react-router-dom';
 import { requestGetOneProduct } from '../config/request';
 import { useState } from 'react';
+
 import ModalBorrowBook from '../components/ModalBuyBook';
 import { useStore } from '../hooks/useStore';
+// Import file CSS riêng
 import './DetailProduct.css'; 
 
 function DetailProduct() {
@@ -17,7 +19,7 @@ function DetailProduct() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const res = await requestGetOneProduct(id); // lấy thông tin chi tiết sản phẩm theo ID
+            const res = await requestGetOneProduct(id);
             setDataProduct(res.data);
         };
         fetchData();
@@ -32,7 +34,7 @@ function DetailProduct() {
     return (
         // BEM: product-detail-page
         <div className="product-detail-page">
-            <Header/>
+            <Header />
 
             {/* Breadcrumb */}
             <div className="product-detail__breadcrumb-wrapper">
@@ -48,7 +50,9 @@ function DetailProduct() {
 
             {/* Main Content */}
             <main className="product-detail__main">
+                {/* BEM: product-detail__content */}
                 <div className="product-detail__content">
+                    {/* BEM: product-detail__grid */}
                     <div className="product-detail__grid">
                         {/* Book Image */}
                         <div className="product-detail__image-wrapper">

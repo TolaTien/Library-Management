@@ -51,7 +51,10 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
     const handleSubmit = async (values) => {
         setLoading(true);
         try {
-            const borrowData = {...values, bookId: bookData?.id, borrowDate: today.format('YYYY-MM-DD'),
+            const borrowData = {
+                ...values,
+                bookId: bookData?.id,
+                borrowDate: today.format('YYYY-MM-DD'),
                 returnDate: values.returnDate.format('YYYY-MM-DD'),
             };
 
@@ -92,7 +95,7 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
         return Promise.resolve();
     };
 
-    const isSubmitDisabled = !bookData || bookData.stock <= 0 || loading; // Vô hiệu hóa nút submit nếu không có dữ liệu sách hoặc hết hàng hoặc đang loading
+    const isSubmitDisabled = !bookData || bookData.stock <= 0 || loading;
 
     return (
         <Modal
@@ -119,24 +122,26 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                 {bookData && (
                     <Card className="modal-borrow__card modal-borrow__card--book">
                         <Title level={4} className="modal-borrow__section-title">
-                            📚 Thông tin sách
+                            Thông tin sách
                         </Title>
                         <Row gutter={16} align="middle">
-                            <Col xs={24} sm={8} className="modal-borrow__book-image-col">  {/** cột hình ảnh sách */}
+                            {/* BEM: modal-borrow__book-image-col */}
+                            <Col xs={24} sm={8} className="modal-borrow__book-image-col">
                                 <Image
                                     src={`${import.meta.env.VITE_API_URL}/${bookData.image}`}
                                     alt={bookData.nameProduct}
                                     width={120}
                                     height={160}
                                     className="modal-borrow__book-image"
-                                    preview={true} // cho xem ảnh lớn hơn khi click vào
+                                    preview={false}
                                 />
                             </Col>
-                            <Col xs={24} sm={16}>  {/** cột thông tin sách */}
+                            <Col xs={24} sm={16}>
                                 <Space direction="vertical" size="small" className="w-full">
                                     <Title level={5} className="modal-borrow__book-name">
                                         {bookData.nameProduct}
                                     </Title>
+                                    {/* BEM: modal-borrow__book-details */}
                                     <div className="modal-borrow__book-details">
                                         <span>
                                             Nhà xuất bản: <Text strong>{bookData.publisher}</Text>
@@ -149,6 +154,7 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                                         </span>
                                         <span>
                                             Còn lại:{' '}
+                                            {/* BEM: modal-borrow__stock-count */}
                                             <Text strong className="modal-borrow__stock-count">
                                                 {bookData.stock} quyển
                                             </Text>
@@ -162,15 +168,22 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
 
                 <Divider className="modal-borrow__divider" />
 
-                {/* form đăng kí mượn sách*/}  
+                {/* Borrower Information Form */}
                 <Card className="modal-borrow__card modal-borrow__card--borrower">
                     <Title level={4} className="modal-borrow__section-title">
                         👤 Thông tin người mượn
                     </Title>
                     <Form form={form} layout="vertical" onFinish={handleSubmit} requiredMark={false} preserve={false}>
-                        <Row gutter={16}>  {/** hàng đầu tiên trong form */}
+                        <Row gutter={16}>
                             <Col xs={24} sm={12}>
-                                <Form.Item name="fullName" label="Họ và tên" rules={[{ required: true, message: 'Vui lòng nhập họ và tên!' },{ min: 2, message: 'Họ tên phải có ít nhất 2 ký tự!' },]}>
+                                <Form.Item
+                                    name="fullName"
+                                    label="Họ và tên"
+                                    rules={[
+                                        { required: true, message: 'Vui lòng nhập họ và tên!' },
+                                        { min: 2, message: 'Họ tên phải có ít nhất 2 ký tự!' },
+                                    ]}
+                                >
                                     {/* BEM: modal-borrow__input */}
                                     <Input
                                         prefix={<UserOutlined />}
@@ -179,14 +192,14 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                                     />
                                 </Form.Item>
                             </Col>
-                            <Col xs={24} sm={12}> 
+                            <Col xs={24} sm={12}>
                                 <Form.Item name="address" label="Địa chỉ">
                                     <Input prefix={<IdcardOutlined />} placeholder="Nhập địa chỉ" className="modal-borrow__input" />
                                 </Form.Item>
                             </Col>
                         </Row>
 
-                        <Row gutter={16}>  {/** hàng thứ 2 trong form */}
+                        <Row gutter={16}>
                             <Col xs={24} sm={12}>
                                 <Form.Item
                                     name="phoneNumber"
@@ -230,7 +243,7 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                             📅 Thời gian mượn
                         </Title>
 
-                        <Row gutter={16}>  {/** hàng thứ 3 trong form */}
+                        <Row gutter={16}>
                             <Col xs={24} sm={12}>
                                 <Form.Item label="Ngày mượn">
                                     {/* BEM: modal-borrow__input--disabled */}
@@ -253,10 +266,11 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                                         className="modal-borrow__datepicker"
                                         placeholder="Chọn ngày trả"
                                         format="DD/MM/YYYY"
-                                        showNow={false}
+                                        showToday={false}
                                         disabledDate={(current) =>
                                             current &&
-                                            (current.isBefore(minReturnDate, 'day') || current.isAfter(maxReturnDate, 'day'))
+                                            (current.isBefore(minReturnDate, 'day') ||
+                                                current.isAfter(maxReturnDate, 'day'))
                                         }
                                     />
                                 </Form.Item>
@@ -276,7 +290,7 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                                 className="modal-borrow__button modal-borrow__button--submit"
                                 disabled={isSubmitDisabled}
                             >
-                                {loading ? 'Đang xử lý...' : '📚 Xác nhận mượn'}
+                                {loading ? 'Đang xử lý...' : ' Xác nhận mượn'}
                             </Button>
                         </div>
                     </Form>
@@ -286,5 +300,4 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
     );
 }
 
-// Rename export to reflect borrowing, although filename remains ModalBuyBook.jsx
 export default ModalBuyBook;

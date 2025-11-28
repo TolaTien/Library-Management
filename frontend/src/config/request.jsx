@@ -1,7 +1,9 @@
 import axios from 'axios';
-import { apiClient } from './axiosClient'; // client có interceptor
 
-const request = axios.create({baseURL: import.meta.env.VITE_API_URL, withCredentials: true,}); // client này không có interceptor
+import { apiClient } from './axiosClient';
+
+const request = axios.create({baseURL: import.meta.env.VITE_API_URL, withCredentials: true,});
+
 const apiUser = '/api/user';
 
 export const requestRegister = async (data) => {
@@ -50,6 +52,11 @@ export const requestUpdateUserAdmin = async (data) => {
     return res.data;
 };
 
+export const cancelRequestIdStudent = async (data) => {
+    const res = await apiClient.post(`${apiUser}/cancel-request-id`, data);
+    return res.data;
+};
+
 
 
 export const requestIdStudent = async () => {
@@ -81,6 +88,8 @@ export const requestStatistics = async () => {
     const res = await apiClient.get(`${apiUser}/get-statistics`);
     return res.data;
 };
+
+
 
 /// product
 const apiProduct = '/api/product';

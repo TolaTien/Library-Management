@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useStore } from '../hooks/useStore';
 import { Dropdown, Avatar, Button } from 'antd';
-import { UserOutlined, LogoutOutlined, HistoryOutlined, SendOutlined } from '@ant-design/icons';
+import { UserOutlined, LogoutOutlined, SettingOutlined, HistoryOutlined, SendOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import useDebounce from '../hooks/useDebounce';
 import { requestLogout, requestSearchProduct } from '../config/request';
@@ -134,7 +134,7 @@ function Header() {
                                         },
                                         {
                                             key: 'settings2',
-                                            icon: <SendOutlined/>,
+                                            icon: <SendOutlined />,
                                             label: 'Gửi yêu cầu cấp mã sinh viên',
                                             onClick: () => navigate('/infoUser'),
                                         },
@@ -143,7 +143,7 @@ function Header() {
                                         },
                                         {
                                             key: 'logout',
-                                            icon: <LogoutOutlined/>,
+                                            icon: <LogoutOutlined />,
                                             label: 'Đăng xuất',
                                             danger: true,
                                             onClick: () => handleLogout(),

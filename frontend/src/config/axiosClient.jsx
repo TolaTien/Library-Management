@@ -5,22 +5,28 @@ import { requestRefreshToken } from './request';
 export class ApiClient {
     constructor(baseURL) {
         this.baseURL = baseURL || import.meta.env.VITE_API_URL || '';
-        this.axiosInstance = axios.create({baseURL: this.baseURL,timeout: 10000,withCredentials: true,});
+        this.axiosInstance = axios.create({
+            baseURL: this.baseURL,
+            timeout: 10000,
+            withCredentials: true,
+        });
+
         this.isRefreshing = false;
         this.failedQueue = [];
+
         this.setupInterceptors();
     }
-    // xử lí lỗi 401 (authentication)
+
     setupInterceptors() {
-        // Request interceptor ( bộ chặn yêu cầu ) 
+        // Request interceptor
         this.axiosInstance.interceptors.request.use(
             (config) => config,
             (error) => Promise.reject(error),
         );
 
-        // Response interceptor ( bộ chặn phản hồi )
+        // Response interceptor
         this.axiosInstance.interceptors.response.use(
-            (response) => response, 
+            (response) => response,
             async (error) => {
                 const originalRequest = error.config;
                 if (error.response?.status === 401 && !originalRequest._retry) {
@@ -121,4 +127,5 @@ export class ApiClient {
     }
 }
 
+// Export instance
 export const apiClient = new ApiClient();

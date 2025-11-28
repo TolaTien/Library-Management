@@ -251,12 +251,34 @@ class ControllerUser {
         }
         
     }
+    async cancelRequestIdStudent(req, res) {
+    try {
+        const { userId } = req.body;
+
+        const user = await User.findOne({ where: { id: userId } });
+        if (!user) return res.status(404).json({ message: "Người dùng không tồn tại" });
+
+        // Chỉ hủy nếu đang chờ cấp
+        if (user.idStudent !== '0') {
+            return res.status(400).json({ message: "Không thể hủy vì yêu cầu không ở trạng thái chờ" });
+        }
+
+        user.idStudent = null;
+        await user.save();
+
+        return res.status(200).json({ status: "success", message: "Đã hủy yêu cầu cấp thẻ" });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Lỗi server" });
+    }
+}
 
 
     // Danh sách chờ cấp mã
     async getListRequest(req, res) {
         const requestList = await User.findAll({
-            where: { idStudent: '0' },
+            // where: { idStudent: '0' },
+            where: { idStudent: { [Op.ne]: null } },
             attributes: ['id', 'fullName', 'email', 'phone', 'idStudent', 'createdAt'],
             order: [['createdAt', 'DESC']],
         });

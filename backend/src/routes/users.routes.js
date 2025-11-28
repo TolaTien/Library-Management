@@ -19,5 +19,5 @@ router.post('/request-id-student', authUser, check(ControllerUser.requestIdStude
 router.post('/confirm-id-student', check(ControllerUser.confirmIdStudent));
 router.get('/get-request-list', check(ControllerUser.getListRequest));
 router.get('/get-statistics', check(ControllerUser.getStatistics));
-
+router.post('/cancel-request-id', check(ControllerUser.cancelRequestIdStudent));
 module.exports = router;

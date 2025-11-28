@@ -11,7 +11,10 @@ function App() {
     const [loading, setLoading] = useState(true);
     const [availableLanguages, setAvailableLanguages] = useState([]);
     
-    const [filterState, setFilterState] = useState({coverType: 'all', language: 'all'});
+    const [filterState, setFilterState] = useState({
+        coverType: 'all', 
+        language: 'all', // Đã chuyển mặc định về 'all' (chữ thường)
+    });
 
     const extractLanguages = (products) => {
         if (!products || products.length === 0) return [];
@@ -58,13 +61,14 @@ function App() {
         }));
     };
 
+    // Logic Lọc Sách đã sửa
     const filteredProducts = useMemo(() => {
         if (!dataProduct || dataProduct.length === 0) return [];
         
-        const {coverType, language } = filterState;
+        const { keyword, coverType, language } = filterState;
 
         // KIỂM TRA ĐIỀU KIỆN LỌC ĐÃ ĐƯỢC KÍCH HOẠT CHƯA
-        const isFilteringActive = coverType !== 'all' || language !== 'all';
+        const isFilteringActive = keyword !== '' || coverType !== 'all' || language !== 'all';
         
         // Nếu không có bộ lọc nào được áp dụng, trả về toàn bộ dữ liệu gốc
         if (!isFilteringActive) {
@@ -72,12 +76,16 @@ function App() {
         }
 
         return dataProduct.filter(product => {
-            // 2. Lọc theo Loại bìa
-            const matchesCoverType = coverType === 'all' || product.covertType?.toLowerCase() === coverType;
-            // 3. Lọc theo Ngôn ngữ
-            const matchesLanguage = language === 'all' || product.language?.toLowerCase() === language;
             
-            return matchesCoverType && matchesLanguage;
+            // 1. Lọc theo Loại bìa
+            const matchesCoverType = coverType === 'all' || 
+                product.covertType?.toLowerCase() === coverType;
+            
+            // 2. Lọc theo Ngôn ngữ
+            const matchesLanguage = language === 'all' || 
+                product.language?.toLowerCase() === language;
+            
+            return  matchesCoverType && matchesLanguage;
         });
     }, [dataProduct, filterState]); // Chạy lại khi data gốc hoặc state lọc thay đổi
 
@@ -85,10 +93,10 @@ function App() {
         // BEM: main-page-layout
         <div className="main-page-layout">
             <header>
-                <Header/>
+                <Header />
             </header>
             <div>
-                <Coverpage/>
+                <Coverpage />
             </div>
 
             {/* BEM: main-page__infor-container */}
@@ -96,6 +104,8 @@ function App() {
                 
                 {/* KHUNG BỘ LỌC BẮT ĐẦU */}
                 <div className='main-page__filter'>
+                    
+
                     {/* Phần tử lọc theo Loại bìa */}
                     <div className="filter-group">
                         <label htmlFor="cover-type-select" className="filter-label">Loại bìa:</label>
@@ -136,7 +146,15 @@ function App() {
                 
                 {/* BEM: main-page__product-grid */}
                 <main className="main-page__product-grid">
-                    {loading ? (<p className="main-page__loading-text">Đang tải sách...</p>) : filteredProducts.length > 0 ? (filteredProducts.map((item) => (<CardBody key={item.id} data={item} />))) : (<p className="main-page__no-results">Không tìm thấy sách nào phù hợp.</p>)}
+                    {loading ? (
+                        <p className="main-page__loading-text">Đang tải sách...</p>
+                    ) : filteredProducts.length > 0 ? (
+                        filteredProducts.map((item) => (
+                            <CardBody key={item.id} data={item} />
+                        ))
+                    ) : (
+                        <p className="main-page__no-results">Không tìm thấy sách nào phù hợp.</p>
+                    )}
                 </main>
             </div>
 

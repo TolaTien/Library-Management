@@ -1,6 +1,6 @@
 import { Menu } from 'antd';
 import './Sidebar.css';
-import { UserOutlined, HistoryOutlined, LogoutOutlined } from '@ant-design/icons';
+import { UserOutlined, HistoryOutlined, LogoutOutlined,NotificationOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { requestLogout } from '../../config/request'; 
 
@@ -31,6 +31,12 @@ const Sidebar = ({ setActiveComponent, activeComponent }) => {
             icon: <HistoryOutlined />,
             label: 'Lịch sử mượn sách',
             onClick: () => setActiveComponent('history'),
+        },
+        {
+            key: 'notifications',
+            icon: <NotificationOutlined />,
+            label: 'Thông báo',
+            onClick: () => setActiveComponent('notifications'),
         },
         {
             key: 'logout',

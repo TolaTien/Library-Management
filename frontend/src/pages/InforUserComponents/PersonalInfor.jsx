@@ -53,8 +53,8 @@ const PersonalInfo = () => {
     const viewItems = [
         { key: '1', label: 'Họ và tên', children: safeDataUser.fullName },
         { key: '2', label: 'Email', children: safeDataUser.email },
-        { key: '3', label: 'Số điện thoại', children: safeDataUser.phone || 'Chưa cập nhật' },
-        { key: '4', label: 'Địa chỉ', children: safeDataUser.address || 'Chưa cập nhật' },
+        { key: '3', label: 'Số điện thoại', children: safeDataUser.phone },
+        { key: '4', label: 'Địa chỉ', children: safeDataUser.address },
         { key: '5', label: 'Mã sinh viên', children: safeDataUser.idStudent || 'Chưa có' },
     ];
     

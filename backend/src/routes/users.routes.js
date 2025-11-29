@@ -25,5 +25,6 @@ router.post('/get-fine', authUser, check(ControllerUser.calculateFine))
 router.put('/return-book', authUser, check(ControllerUser.returnBoook));
 
 router.post('/send-reminder', check(ControllerUser.sendReminder))
+router.get('/get-reminder', authUser, check(ControllerUser.getReminders))
 module.exports = router;
  

@@ -79,13 +79,15 @@ const LoanRequestManagement = () => {
             key: 'status',
             dataIndex: 'status',
             render: (status) => {
-                let color = status === 'pending' ? 'green' : status === 'success' ? 'geekblue' : 'volcano';
+                let color = status === 'pending' ? 'green' : status === 'success' ? 'geekblue' : status === 'returned'? 'purple': 'volcano';
                 return (
                     <Tag color={color}>
                         {status === 'pending'
                             ? 'Chờ duyệt'
                             : status === 'success'
                                 ? 'Đã duyệt'
+                                : status === 'returned'
+                                ? 'Đã trả'
                                 : 'Từ chối'}
                     </Tag>
                 );

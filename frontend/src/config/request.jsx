@@ -158,16 +158,21 @@ export const requestUpdateStatusBook = async (data) => {
 /// UPDATE
 
 export const requestGetFine = async () => {
-    const res = await apiClient.get(`${apiUser}/get-fine`);
+    const res = await apiClient.post(`${apiUser}/get-fine`);
     return res.data;
 };
 
 export const requestReturnBook = async () => {
-    const res = await apiClient.get(`${apiUser}/return-book`);
+    const res = await apiClient.put(`${apiUser}/return-book`);
     return res.data;
 };
 
 export const requestSendReminder = async (data) => {
-    const res = await apiClient.post(`/api/user/send-reminder`, data);
+    const res = await apiClient.post(`${apiUser}/send-reminder`, data);
     return res.data;
 };
+
+export const requestGetReminder = async (data) => {
+    const res = await apiClient.get(`${apiUser}/get-reminder`, data)
+    return res.data;
+}

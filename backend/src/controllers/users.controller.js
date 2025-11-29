@@ -4,7 +4,7 @@ const History = require('../models/historyBook.model');
 const { createRefreshToken, createToken, verifyToken } = require('../services/tokenServices');
 const bcrypt = require('bcrypt');
 const CryptoJS = require('crypto-js');
-const { Op } = require('sequelize');
+const { Op, where } = require('sequelize');
 require('dotenv').config();
 
 class ControllerUser {
@@ -151,11 +151,11 @@ class ControllerUser {
     async updateInfoUser(req, res) {
         try {
             const { id } = req.user;
-            const { fullName, address, phone, sex } = req.body;
+            const { fullName, address, phone } = req.body;
             const user = await User.findOne({ where: { id } });
             if (!user) return res.status(404).json({ message: 'Không tìm thấy tài khoản' });
 
-            await user.update({ fullName, address, phone, sex });
+            await user.update({ fullName, address, phone });
             return res.status(200).json({ status: 'success', message: 'Cập nhật thông tin thành công' });
         } catch (error) {
             return res.status(500).json({ message: 'Lỗi server' });
@@ -164,7 +164,9 @@ class ControllerUser {
 
     // Danh sách user
     async getUsers(req, res) {
-        const users = await User.findAll();
+        const users = await User.findAll({
+            order: [['borrowed', 'DESC']]
+        });
         return res.status(200).json({ status: 'success', message: 'Lấy thông tin thành công', data: users });
     }
 
@@ -284,6 +286,108 @@ class ControllerUser {
         });
         return res.status(200).json({ status: 'success', message: 'success', data: requestList });
     }
+
+
+    ////////////////////////////UPDATE///////////////////////////////////////////////////////
+
+
+
+
+
+    // Tính tiền phạt khi quá hạn mượn sách
+    async calculateFine(req, res) {
+            try {
+                const { idHistory } = req.body;
+
+                const history = await History.findOne({ where: { id: idHistory } });
+                if (!history) {
+                    return res.status(404).json({ success: false, message: 'Lịch sử mượn không tồn tại' });
+                }
+                const today = new Date();
+                const returnDate = new Date(history.returnDate);
+
+                // Tính số ngày quá hạn
+                const diffDays = Math.floor((today - returnDate) / (1000 * 60 * 60 * 24));
+
+                const fine = 5000; 
+                const totalFine = diffDays > 0 ? diffDays * fine : 0;
+                await history.update({fine: totalFine });
+                res.status(200).json({
+                    success: true,
+                    message: 'Tính tiền phạt thành công',
+                    data: {
+                        daysOverdue: diffDays > 0 ? diffDays : 0,
+                        totalFine,
+                    },
+                });
+            } catch (error) {
+                console.error(error);
+                res.status(500).json({ success: false, message: 'Lỗi server' });
+            }
+        }
+    
+    // User trả sách
+    async returnBoook(req, res) {
+        try{
+        const { id } = req.user;
+        const { bookId, idHistory } = req.body;
+        const findUser = await User.findOne({ where: { id }});
+        const history = await History.findOne({ where: { id: idHistory } });
+        const product = await Product.findOne({ where: { id: bookId }});
+
+        await product.update({
+            stock: product.stock + history.quantity,
+        })
+
+        await findUser.update({
+            returned: findUser.returned + history.quantity,
+        })
+
+        await history.update({
+            status: 'returned',
+            returnDate: new Date()
+        })
+        return res.status(200).json({
+            success: true,
+            message: "Trả sách thành công"
+        });
+        }catch(err){
+        console.error(err);
+        res.status(500).json({ success: false, message: 'Lỗi server' });
+    }
+    }
+
+
+// Nút nhắc User trả sách
+
+async sendReminder(req, res) {
+    try {
+        const { idHistory } = req.body;
+
+        const history = await History.findOne({ where: { id: idHistory } });
+        if (!history) {
+            return res.status(404).json({ success: false, message: 'Lịch sử mượn không tồn tại' });
+        }
+        const user = await User.findOne({ where: {id: history.userId }});
+        const returnDateFormatted = new Date(history.returnDate).toLocaleDateString('vi-VN'); // dd/mm/yyyy
+
+        const message = `Xin chào ${user.fullName}, bạn vui lòng trả sách đã mượn trước ngày ${returnDateFormatted}.`;
+
+
+        return res.status(200).json({
+            success: true,
+            message: 'Đã gửi nhắc nhở thành công',
+            data: { reminderText: message }
+        });
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ success: false, message: 'Lỗi server' });
+    }
+}
+
+
+
 }
 
 module.exports = new ControllerUser();

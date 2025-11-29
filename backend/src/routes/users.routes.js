@@ -20,4 +20,10 @@ router.post('/confirm-id-student', check(ControllerUser.confirmIdStudent));
 router.get('/get-request-list', check(ControllerUser.getListRequest));
 router.get('/get-statistics', check(ControllerUser.getStatistics));
 router.post('/cancel-request-id', check(ControllerUser.cancelRequestIdStudent));
+
+router.post('/get-fine', authUser, check(ControllerUser.calculateFine))
+router.put('/return-book', authUser, check(ControllerUser.returnBoook));
+
+router.get('/get-reminders', authUser, check(ControllerUser.sendReminder))
 module.exports = router;
+ 

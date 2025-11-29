@@ -6,6 +6,7 @@ const request = axios.create({baseURL: import.meta.env.VITE_API_URL, withCredent
 
 const apiUser = '/api/user';
 
+const apiProduct = '/api/product'
 export const requestRegister = async (data) => {
     const res = await request.post(`${apiUser}/register`, data);
     return res;
@@ -90,9 +91,7 @@ export const requestStatistics = async () => {
 };
 
 
-
 /// product
-const apiProduct = '/api/product';
 export const requestGetAllProduct = async () => {
     const res = await request.get(`${apiProduct}/get-all`);
     return res.data;
@@ -118,7 +117,7 @@ export const requestCreateProduct = async (data) => {
     return res.data;
 };
 
-export const requestUpdateProduct = async (id, data) => {
+export const requestUpdateProduct = async (id, data) =>  {
     const res = await apiClient.post(`${apiProduct}/update?id=${id}`, data);
     return res.data;
 };
@@ -128,29 +127,47 @@ export const requestDeleteProduct = async (id) => {
     return res.data;
 };
 
+const apiHistory = '/api/history-book'
 /// history book
-const apiHistoryBook = '/api/history-book';
 export const requestCreateHistoryBook = async (data) => {
-    const res = await apiClient.post(`${apiHistoryBook}/create`, data);
+    const res = await apiClient.post(`${apiHistory}/create`, data);
     return res.data;
 };
 
 export const requestGetHistoryUser = async () => {
-    const res = await apiClient.get(`${apiHistoryBook}/get-history-user`);
+    const res = await apiClient.get(`${apiHistory}/get-history-user`);
     return res.data;
 };
 
 export const requestCancelBook = async (data) => {
-    const res = await apiClient.post(`${apiHistoryBook}/cancel-book`, data);
+    const res = await apiClient.post(`${apiHistory}/cancel-book`, data);
     return res.data;
 };
 
 export const requestGetAllHistoryBook = async () => {
-    const res = await apiClient.get(`${apiHistoryBook}/get-all-history-book`);
+    const res = await apiClient.get(`${apiHistory}/get-all-history-book`);
     return res.data;
 };
 
 export const requestUpdateStatusBook = async (data) => {
-    const res = await apiClient.post(`${apiHistoryBook}/update-status-book`, data);
+    const res = await apiClient.post(`${apiHistory}/update-status-book`, data);
     return res.data;
 };
+
+
+/// UPDATE
+
+export const requestGetFine = async () => {
+    const res = await apiClient.post(`${apiUser}/get-fine`);
+    return res.data;
+};
+
+export const requestReturnBook = async () => {
+    const res = await apiClient.put(`${apiUser}/return-book`);
+    return res.data;
+};
+
+export const requestSendReminder = async () => {
+    const res = await apiClient.get(`${apiUser}/send-reminder`);
+    return res.data;
+}

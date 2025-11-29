@@ -246,7 +246,6 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                         <Row gutter={16}>
                             <Col xs={24} sm={12}>
                                 <Form.Item label="Ngày mượn">
-                                    {/* BEM: modal-borrow__input--disabled */}
                                     <Input
                                         value={today.format('DD/MM/YYYY')}
                                         disabled

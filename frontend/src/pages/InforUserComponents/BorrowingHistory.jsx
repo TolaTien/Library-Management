@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Empty, List, Tag, Image, Typography, Space, Spin, Button } from 'antd';
-import { requestCancelBook, requestGetHistoryUser } from '../../config/request';
+// Đã thêm requestReturnBook
+import { requestCancelBook, requestGetHistoryUser, requestReturnBook } from '../../config/request'; 
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
-// Import file CSS riêng
-import './BorrowingHistory.css'; 
-
+import './BorrowingHistory.css';
 
 const { Text, Title } = Typography;
 
@@ -25,7 +24,6 @@ const BorrowingHistory = () => {
             const res = await requestGetHistoryUser();
             setBorrowedBooks(res.data);
         } catch (error) {
-
             toast.error(error.response?.data?.message || 'Lỗi tải lịch sử mượn sách');
         } finally {
             setLoading(false);
@@ -36,6 +34,32 @@ const BorrowingHistory = () => {
         fetchData();
     }, []);
 
+    const handleCancelBook = async (idHistory) => {
+        try {
+            await requestCancelBook({ idHistory });
+            toast.success('Huỷ mượn sách thành công');
+            // Tải lại danh sách sau khi hủy
+            fetchData();
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Hủy mượn sách thất bại');
+        }
+    }; 
+
+    // hàm trả sách
+    const handleReturnBook = async (idHistory) => {
+        try {
+            // Gọi API trả sách, truyền ID lịch sử mượn
+            await requestReturnBook({ idHistory }); 
+            toast.success('Trả sách thành công!');
+            // Tải lại danh sách để cập nhật trạng thái
+            fetchData(); 
+        } catch (error) {
+            // Hiển thị lỗi nếu API trả về (ví dụ: sách đã quá hạn)
+            toast.error(error.response?.data?.message || 'Trả sách thất bại');
+        }
+    };
+
+
     if (loading) {
         return (
             <div className="borrow-history__loading">
@@ -43,17 +67,6 @@ const BorrowingHistory = () => {
             </div>
         );
     }
-
-    const handleCancelBook = async (idHistory) => {
-        try {
-            await requestCancelBook({ idHistory });
-            toast.success('Huỷ mượn sách thành công');
-            // Tải lại dữ liệu sau khi hủy thành công
-            fetchData();
-        } catch (error) {
-            toast.error(error.response?.data?.message || 'Hủy mượn sách thất bại');
-        }
-    };
 
     return (
         <Card title="Lịch sử mượn sách" className="borrow-history">
@@ -64,10 +77,15 @@ const BorrowingHistory = () => {
                     className="borrow-history__list"
                     renderItem={(item) => {
                         const statusInfo = statusConfig[item.status] || { text: item.status, color: 'default' };
+                        
+                        // ✅ Tính toán số ngày còn lại/quá hạn
+                        const daysLeft = dayjs(item.returnDate).diff(dayjs(), 'day');
+                        const isOverdue = daysLeft < 0 && item.status === 'success';
+
                         return (
-                            <List.Item key={item.id} className="!p-0 mb-4">
-                                <div className="borrow-history__item">
-                                    <div className="flex flex-col sm:flex-row gap-4">
+                            <List.Item key={item.id} className="borrow-history__list-item">
+                                <div className="borrow-history__item-wrapper">
+                                    <div className="borrow-history__item-content">
                                         <Image
                                             width={100}
                                             className="borrow-history__image"
@@ -75,7 +93,6 @@ const BorrowingHistory = () => {
                                             alt={item.product.nameProduct}
                                             preview={false}
                                         />
-                                        {/* Info Column */}
                                         <div className="borrow-history__info-column">
                                             <Title level={5} className="borrow-history__book-title">
                                                 {item.product.nameProduct}
@@ -84,21 +101,47 @@ const BorrowingHistory = () => {
                                                 <Text type="secondary">Số lượng: {item.quantity}</Text>
                                                 <Text type="secondary">Ngày mượn: {dayjs(item.borrowDate).format('DD/MM/YYYY')}</Text>
                                                 <Text type="secondary">Ngày trả: {dayjs(item.returnDate).format('DD/MM/YYYY')}</Text>
+                                                
+                                                {/* HIỂN THỊ SỐ NGÀY CÒN LẠI / QUÁ HẠN */}
                                                 {item.status === 'success' && (
-                                                    <p className="borrow-history__days-remaining">Số ngày còn lại : {dayjs(item.returnDate).diff(dayjs(), 'day')}{' '}ngày</p>
+                                                    <p className="borrow-history__days-info">
+                                                        {isOverdue ? (
+                                                            <Text strong type="danger">
+                                                                ĐÃ QUÁ HẠN: {-daysLeft} ngày
+                                                            </Text>
+                                                        ) : (
+                                                            <Text type="success">
+                                                                Số ngày còn lại: {daysLeft} ngày
+                                                            </Text>
+                                                        )}
+                                                    </p>
                                                 )}
+
+                                                {/* NÚT TRẢ SÁCH (CHỈ CHO TRẠNG THÁI SUCCESS) */}
+                                                {item.status === 'success' && (
+                                                    <Button 
+                                                        type="primary" 
+                                                        onClick={() => handleReturnBook(item.id)}
+                                                        className="borrow-history__return-button"
+                                                    >
+                                                        Trả Sách
+                                                    </Button>
+                                                )}
+                                                
                                             </Space>
                                         </div>
+                                    </div>
 
-                                        <div className="borrow-history__action-column">
-                                            <Tag color={statusInfo.color} className="borrow-history__status-tag">{statusInfo.text}</Tag>
-                                            <Text type="secondary" className="borrow-history__id-text">  Mã mượn: {item.id.substring(0, 8)}</Text>
-                                            {item.status === 'pending' && (
-                                                <Button danger type="primary" onClick={() => handleCancelBook(item.id)}>
-                                                    Huỷ mượn
-                                                </Button>
-                                            )}
-                                        </div>
+                                    <div className="borrow-history__action-column">
+                                        <Tag color={statusInfo.color} className="borrow-history__status-tag">{statusInfo.text}</Tag>
+                                        <Text type="secondary" className="borrow-history__id-text">Mã mượn: {item.id.substring(0, 8)}</Text>
+                                        
+                                        {/* NÚT HỦY MƯỢN (CHỈ CHO TRẠNG THÁI PENDING) */}
+                                        {item.status === 'pending' && (
+                                            <Button danger type="primary" onClick={() => handleCancelBook(item.id)}>
+                                                Huỷ mượn
+                                            </Button>
+                                        )}
                                     </div>
                                 </div>
                             </List.Item>

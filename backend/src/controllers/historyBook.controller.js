@@ -7,7 +7,7 @@ class historyBookController {
     // Tạo lịch sử mượn sách
     async createHistoryBook(req, res) {
         try {
-            const { id } = req.user;
+            const { id } = req.user; 
             const findUser = await User.findOne({ where: { id } });
             if (!findUser)
                 return res.status(400).json({ success: false, message: 'Không tìm thấy người dùng' });
@@ -15,9 +15,12 @@ class historyBookController {
             if (!findUser.idStudent || findUser.idStudent === '0')
                 return res.status(400).json({ success: false, message: 'Bạn cần có ID sinh viên' });
 
-            const { fullName, phoneNumber, address, bookId, borrowDate, returnDate, quantity } = req.body;
-            if (!fullName || !phoneNumber || !address || !bookId || !borrowDate || !returnDate || !quantity) {
+            const { bookId, borrowDate, returnDate, quantity } = req.body;
+            if (!bookId || !borrowDate || !returnDate || !quantity) {
                 return res.status(400).json({ success: false, message: 'Vui lòng nhập đầy đủ thông tin' });
+            }
+            if(findUser.borrowed - findUser.returned + quantity > 5) {
+                return res.status(400).json({ success: false, message: 'Bạn đã mượn quá 5 cuốn sách' });
             }
 
             const findBook = await Product.findOne({ where: { id: bookId } }); 
@@ -27,9 +30,12 @@ class historyBookController {
             if (findBook.stock < quantity)
                 return res.status(400).json({ success: false, message: 'Số lượng sách không đủ' });
 
+            // Lấy thông tin user từ DB
+            const { fullName, phone, address } = findUser;
+
             const historyBook = await History.create({
                 fullName,
-                phone: phoneNumber,
+                phone,
                 address,
                 bookId,
                 borrowDate,
@@ -48,6 +54,7 @@ class historyBookController {
             res.status(500).json({ success: false, message: 'Lỗi server' });
         }
     }
+
 
     // Xem lịch sử mượn sách User
     async getHistoryUser(req, res) {
@@ -82,14 +89,9 @@ class historyBookController {
             if (!findHistory)
                 return res.status(400).json({ success: false, message: 'Lịch sử mượn sách không tồn tại' });
 
-            const findProduct = await Product.findOne({ where: { id: findHistory.bookId } });
 
             await History.update({ status: 'cancel' }, { where: { id: idHistory } }); 
 
-            await Product.update(
-                { stock: findProduct.stock + findHistory.quantity }, 
-                { where: { id: findHistory.bookId } }
-            );
 
             res.status(200).json({ success: true, message: 'Hủy mượn thành công' });
         } catch (err) {
@@ -124,13 +126,36 @@ class historyBookController {
     }
 
     // Trạng thái mượn sách
+
     async updateStatusBook(req, res) {
         try {
-            const { idHistory, status } = req.body;
-
+            const { idHistory, status, userId } = req.body;
+            
+            const findUser = await User.findOne({ where: {id: userId}});
             const findHistory = await History.findOne({ where: { id: idHistory } });
             if (!findHistory) {
                 return res.status(400).json({ success: false, message: 'Lịch sử mượn không tồn tại' });
+            }
+
+            // Nếu admin duyệt và status = 'approved', trừ stock
+            if (status === 'success') {
+                const product = await Product.findOne({ where: { id: findHistory.bookId } });
+                if (!product) {
+                    return res.status(400).json({ success: false, message: 'Sách không tồn tại' });
+                }
+
+                if (product.stock < findHistory.quantity) {
+                    return res.status(400).json({ success: false, message: 'Số lượng sách không đủ để duyệt' });
+                }
+
+                await Product.update(
+                    { stock: product.stock - findHistory.quantity },
+                    { where: { id: findHistory.bookId } }
+                );
+                await User.update(
+                    { borrowed: findUser.borrowed + findHistory.quantity},
+                    { where: { id: findUser.id  }}
+                )
             }
 
             await History.update({ status }, { where: { id: idHistory } });
@@ -141,6 +166,7 @@ class historyBookController {
             res.status(500).json({ success: false, message: 'Lỗi server' }); 
         }
     }
+
 }
 
 module.exports = new historyBookController();

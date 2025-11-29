@@ -7,14 +7,18 @@ import { useStore } from '../../hooks/useStore';
 import "./PersonalInfor.css";
 
 const PersonalInfo = () => {
+    // FIX: Đặt loading thành false sau khi dataUser được load lần đầu,
+    // hoặc quản lý loading qua store nếu cần, ở đây tôi giữ logic ban đầu nhưng setFieldsValue sẽ dừng loading.
     const [loading, setLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
     const [form] = Form.useForm();
+
     const {dataUser, setDataUser} = useStore();
 
     useEffect(() => {
         if (dataUser) {
             form.setFieldsValue(dataUser);
+            // Giả sử dataUser đã được fetch xong, ta dừng loading ban đầu
             setLoading(false);
         }
     }, [dataUser, form]);
@@ -42,6 +46,7 @@ const PersonalInfo = () => {
         }
     };
 
+
     // Kiểm tra dataUser trước khi sử dụng để tránh lỗi
     const safeDataUser = dataUser || {};
 
@@ -65,16 +70,27 @@ const PersonalInfo = () => {
     return (
         <Card
             title="Thông tin cá nhân"
+            variant={false}
             className="personal-info-card"
-            extra={ !isEditing && (<Button icon={<EditOutlined/>} onClick={() => setIsEditing(true)} loading={loading}>Chỉnh sửa</Button>)}>
+            extra={
+                !isEditing && (
+                    <Button icon={<EditOutlined />} onClick={() => setIsEditing(true)} loading={loading}>
+                        Chỉnh sửa
+                    </Button>
+                )
+            }
+        >
+            {/* BEM: personal-info-card__content */}
             <div className="personal-info-card__content">
+                {/* BEM: personal-info-card__avatar-section */}
                 <div className="personal-info-card__avatar-section">
                     <Avatar
                         size={100}
-                        // src={`${import.meta.env.VITE_API_URL}/${safeDataUser.avatar}`}
+                        src={`${import.meta.env.VITE_API_URL}/${safeDataUser.avatar}`}
                         icon={<UserOutlined />}
                         className="personal-info-card__avatar"
                     />
+
                 </div>
                 
                 {/* BEM: personal-info-card__details-section */}
@@ -84,15 +100,17 @@ const PersonalInfo = () => {
                             <Form.Item
                                 name="fullName"
                                 label="Họ và tên"
-                                rules={[{ required: true, message: 'Vui lòng nhập họ tên!' }]}>
+                                rules={[{ required: true, message: 'Vui lòng nhập họ tên!' }]}
+                            >
                                 <Input />
                             </Form.Item>
-                            <Form.Item name="phone" label="Số điện thoại" rules={[{required: true , message : "vui lòng nhập số điện thoại!"}]}>
+                            <Form.Item name="phone" label="Số điện thoại">
                                 <Input />
                             </Form.Item>
                             <Form.Item name="address" label="Địa chỉ">
                                 <Input />
                             </Form.Item>
+                            {/* BEM: personal-info-card__form-actions */}
                             <Form.Item className="personal-info-card__form-actions">
                                 <Button type="primary" htmlType="submit" className="personal-info-card__button--save" loading={loading}>
                                     Lưu thay đổi

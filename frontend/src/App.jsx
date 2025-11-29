@@ -12,6 +12,7 @@ function App() {
     const [availableLanguages, setAvailableLanguages] = useState([]);
     
     const [filterState, setFilterState] = useState({
+        keyword: '',
         coverType: 'all', 
         language: 'all', // Đã chuyển mặc định về 'all' (chữ thường)
     });

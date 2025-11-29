@@ -71,3 +71,10 @@
     background-color: var(--color-red-danger) !important; /* Nếu bị chọn, nền phải là đỏ */
     color: var(--color-white) !important;
 }
+/* --- USER-SIDEBAR BLOCK (Ant Design Menu) --- */
+.user-sidebar.ant-menu {
+    /* Thay thế h-full */
+    height: 100%;
+    /* Thêm style để menu khớp với container (InfoUser.css) */
+    border-right: none;
+}

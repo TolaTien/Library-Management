@@ -19,7 +19,16 @@ class historyBookController {
             if (!bookId || !borrowDate || !returnDate || !quantity) {
                 return res.status(400).json({ success: false, message: 'Vui lòng nhập đầy đủ thông tin' });
             }
-            if(findUser.borrowed - findUser.returned + quantity > 5) {
+
+            const successBorrow = await History.sum('quantity', {
+                where: {
+                    userId: id,
+                    status: 'success'
+                }
+            });
+            const totalSuccessBorrow = successBorrow || 0;
+
+            if( totalSuccessBorrow - findUser.returned + quantity > 5) {
                 return res.status(400).json({ success: false, message: 'Bạn đã mượn quá 5 cuốn sách' });
             }
 

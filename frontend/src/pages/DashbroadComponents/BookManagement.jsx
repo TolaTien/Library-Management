@@ -105,9 +105,9 @@ const BookForm = ({ form, onFinish, initialValues, isEdit = false }) => {
                 rules={[{ required: true, message: 'Vui lòng chọn thể loại!' }]}
             >
                 <Select placeholder="Chọn thể loại">
-                    <Option value="hard">Sách văn</Option>
-                    <Option value="soft">Giáo Trình</Option>
-                    <Option value="magazine">Tạp chí</Option>
+                    <Option value="Sách văn">Sách văn</Option>
+                    <Option value="Giáo trình">Giáo Trình</Option>
+                    <Option value="Tạp chí">Tạp chí</Option>
                 </Select>
             </Form.Item>
             <Form.Item name="pages" label="Số trang" rules={[{ required: true, message: 'Vui lòng nhập số trang!' }]}>
@@ -370,9 +370,9 @@ const BookManagement = () => {
                         style={{ width: 200 }}
                     >
                         <Option value="all">Tất cả thể loại</Option>
-                        <Option value="hard">Sách văn</Option>
-                        <Option value="soft">Giáo Trình</Option>
-                        <Option value="magazine">Tạp chí</Option>
+                        <Option value="Sách văn">Sách văn</Option>
+                        <Option value="Giáo trình">Giáo Trình</Option>
+                        <Option value="Tạp chí">Tạp chí</Option>
                     </Select>
 
                     <Button type="primary" onClick={showAddModal} loading={loading}>

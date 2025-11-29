@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> fd9099ad7966320f661269db9663911e400bc936
 --
 -- Table structure for table `historyBooks`
 --
@@ -45,7 +48,11 @@ CREATE TABLE `products` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
+<<<<<<< HEAD
 INSERT INTO `products` VALUES ('24e96aa4-57b5-4077-9827-a9543fd83d12','uploads/products/1753791873669.jpg','LỮ KHÁCH VEN ĐƯỜNG - Tâm An','Cuốn sách giúp bạn tìm thấy bình yên trong tâm hồn giữa dòng đời hối hả.',50,2021,260,'Tiếng Việt','Tâm An','NXB Trẻ','test',NOW(),NOW());
+=======
+INSERT INTO `products` VALUES ('9a3c4f9d-6b42-4c7e-b8a1-1d93d5d7c202','uploads/products/1753791873672.jpg','Bí Mật Của May Mắn','Câu chuyện truyền cảm hứng về việc tạo ra vận may bằng chính nỗ lực của bản thân.',80,2019,220,'Tiếng Việt','Alex Rovira','NXB Lao Động','test2',NOW(),NOW());
+>>>>>>> fd9099ad7966320f661269db9663911e400bc936
 --
 -- Table structure for table `users`
 --
@@ -67,3 +74,22 @@ CREATE TABLE `users` (
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+<<<<<<< HEAD
+=======
+
+
+-- ---- Table reminder --------- 
+
+DROP TABLE IF EXISTS `reminders`;
+
+CREATE TABLE `reminders` (
+  `id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `userId` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `historyId` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `message` text NOT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+  )
+
+>>>>>>> fd9099ad7966320f661269db9663911e400bc936

@@ -1,15 +1,14 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useStore } from '../hooks/useStore';
+import { useNavigate, Link } from 'react-router-dom';
 import { Dropdown, Avatar, Button } from 'antd';
-import { UserOutlined, LogoutOutlined, SettingOutlined, HistoryOutlined, SendOutlined } from '@ant-design/icons';
+import { UserOutlined, LogoutOutlined, HistoryOutlined, NotificationOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import useDebounce from '../hooks/useDebounce';
 import { requestLogout, requestSearchProduct } from '../config/request';
+import { useStore } from '../hooks/useStore';
 import libraryIcon from '../assets/images/library-icon.png';
-// Import file CSS riêng
-import './Header.css'; 
+import './Header.css';
 
-function Header() {
+function Header({ setActiveComponent }) {
     const { dataUser } = useStore();
     const navigate = useNavigate();
     const [valueSearch, setValueSearch] = useState('');
@@ -21,9 +20,7 @@ function Header() {
         try {
             await requestLogout();
             navigate('/');
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
+            setTimeout(() => window.location.reload(), 1000);
         } catch (error) {
             console.error('Failed to logout:', error);
         }
@@ -49,18 +46,26 @@ function Header() {
         fetchData();
     }, [debounce]);
 
+    // Khi click vào Header, vừa navigate vừa set state
+    const handleSelectInfo = (componentKey) => {
+        navigate('/infoUser', { state: { activeTab: componentKey } });
+        if (setActiveComponent) setActiveComponent(componentKey);
+    };
+
     return (
-        // Block: library-header
         <header className="library-header">
             <div className="library-header__container">
                 <div className="library-header__content">
                     {/* Logo */}
                     <Link to={'/'} className="library-header__logo-link">
                         <div className="library-header__logo">
-                            <h1 className="library-header__title"> <img className="library-icon" src={libraryIcon} alt="library-icon" />Thư Viện</h1>
+                            <h1 className="library-header__title">
+                                <img className="library-icon" src={libraryIcon} alt="library-icon" />
+                                Thư Viện
+                            </h1>
                         </div>
                     </Link>
-                    
+
                     {/* Search Bar */}
                     <div className="library-header__search">
                         <div className="library-header__search-wrapper">
@@ -89,13 +94,13 @@ function Header() {
                                 className="library-header__search-input"
                             />
                         </div>
-                        
+                        {/* Search results */}
                         {isResultVisible && searchResults.length > 0 && (
                             <div className="library-header__search-results">
                                 <ul className="library-header__search-results-list">
                                     {searchResults.map((product) => (
                                         <li key={product.id} className="library-header__search-result-item">
-                                            <Link to={`/product/${product.id}`}className="library-header__search-result-link">
+                                            <Link to={`/product/${product.id}`} className="library-header__search-result-link">
                                                 <img
                                                     src={`${import.meta.env.VITE_API_URL_IMAGE}/${product.image}`}
                                                     alt={product.nameProduct}
@@ -113,40 +118,37 @@ function Header() {
                         )}
                     </div>
 
-                    {/* Auth Buttons / User Info */}
+                    {/* Auth / User Info */}
                     <div className="library-header__user-action">
                         {dataUser && dataUser.id ? (
-                            // User Info Dropdown
                             <Dropdown
                                 menu={{
                                     items: [
                                         {
-                                            key: 'profile',
-                                            icon: <UserOutlined/>,
+                                            key: 'info',
+                                            icon: <UserOutlined />,
                                             label: 'Thông tin cá nhân',
-                                            onClick: () => navigate('/infoUser'),
+                                            onClick: () => handleSelectInfo('info'),
                                         },
                                         {
-                                            key: 'settings',
-                                            icon: <HistoryOutlined/>,
+                                            key: 'history',
+                                            icon: <HistoryOutlined />,
                                             label: 'Lịch sử mượn sách',
-                                            onClick: () => navigate('/infoUser'),
+                                            onClick: () => handleSelectInfo('history'),
                                         },
                                         {
-                                            key: 'settings2',
-                                            icon: <SendOutlined />,
-                                            label: 'Gửi yêu cầu cấp mã sinh viên',
-                                            onClick: () => navigate('/infoUser'),
+                                            key: 'notifications',
+                                            icon: <NotificationOutlined />,
+                                            label: 'Thông báo từ quản trị viên',
+                                            onClick: () => handleSelectInfo('notifications'),
                                         },
-                                        {
-                                            type: 'divider',
-                                        },
+                                        { type: 'divider' },
                                         {
                                             key: 'logout',
                                             icon: <LogoutOutlined />,
                                             label: 'Đăng xuất',
                                             danger: true,
-                                            onClick: () => handleLogout(),
+                                            onClick: handleLogout,
                                         },
                                     ],
                                 }}
@@ -169,10 +171,8 @@ function Header() {
                                 </div>
                             </Dropdown>
                         ) : (
-                            // Login/Register Buttons
                             <div className="library-header__auth-buttons">
                                 <Link to={'/login'}>
-                                    {/* Sử dụng component Ant Design, giữ nguyên cách đặt tên */}
                                     <Button className="library-header__button library-header__button--login">
                                         Đăng nhập
                                     </Button>

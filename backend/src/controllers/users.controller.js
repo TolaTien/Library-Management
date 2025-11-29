@@ -237,7 +237,7 @@ class ControllerUser {
             const rejectedBooks = await History.count({ where: {status: 'cancel' } });
             const expiredDay = new Date();
             expiredDay.setDate(expiredDay.getDate() - 7);
-            const expiredBooks = await History.count({ where: {status: 'success', borrowDate: { [Op.lt]: expiredDay } }} );
+            const expiredBooks = await History.count({ where: {status: 'success', returnDate: { [Op.lt]: expiredDay } }} );
             const  booksData = [
                 { status: 'Đã duyệt', count: aprovedBooks },
                 { status: 'Chờ duyệt', count: pendingRequests },
@@ -371,7 +371,6 @@ class ControllerUser {
                 return res.status(404).json({ success: false, message: 'Lịch sử mượn không tồn tại' });
             }
             const user = await User.findOne({ where: {id: history.userId }});
-            const returnDateFormatted = new Date(history.returnDate).toLocaleDateString('vi-VN'); // dd/mm/yyyy
 
             const message = `Xin chào ${user.fullName}, Bạn đã mượn sách quá hạn thời gian, vui lòng thanh toán phí phạt và trả sách `;
 

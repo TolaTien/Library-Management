@@ -17,7 +17,7 @@ const Statistics = () => {
         fetchData();
     }, []);
 
-    // Fake data for charts
+
 
 
     const loanStatusData = data?.booksData;
@@ -28,7 +28,7 @@ const Statistics = () => {
         xField: 'status',
         yField: 'count',
         label: {
-            position: 'middle',
+            position: 'top',
             style: {
                 fill: '#FFFFFF',
                 opacity: 0.6,

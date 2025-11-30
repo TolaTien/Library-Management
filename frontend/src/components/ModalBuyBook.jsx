@@ -177,58 +177,13 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                         <Row gutter={16}>
                             <Col xs={24} sm={12}>
                                 <Form.Item
-                                    name="fullName"
-                                    label="Họ và tên"
-                                    rules={[
-                                        { required: true, message: 'Vui lòng nhập họ và tên!' },
-                                        { min: 2, message: 'Họ tên phải có ít nhất 2 ký tự!' },
-                                    ]}
-                                >
-                                    {/* BEM: modal-borrow__input */}
-                                    <Input
-                                        prefix={<UserOutlined />}
-                                        placeholder="Nhập họ và tên đầy đủ"
-                                        className="modal-borrow__input"
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col xs={24} sm={12}>
-                                <Form.Item name="address" label="Địa chỉ">
-                                    <Input prefix={<IdcardOutlined />} placeholder="Nhập địa chỉ" className="modal-borrow__input" />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Row gutter={16}>
-                            <Col xs={24} sm={12}>
-                                <Form.Item
-                                    name="phoneNumber"
-                                    label="Số điện thoại"
-                                    rules={[
-                                        { required: true, message: 'Vui lòng nhập số điện thoại!' },
-                                        {
-                                            pattern: /^(0[3|5|7|8|9])+([0-9]{8})$/,
-                                            message: 'Số điện thoại không hợp lệ!',
-                                        },
-                                    ]}
-                                >
-                                    <Input
-                                        prefix={<PhoneOutlined />}
-                                        placeholder="Ví dụ: 0987654321"
-                                        className="modal-borrow__input"
-                                        maxLength={10}
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col xs={24} sm={12}>
-                                <Form.Item
                                     name="quantity"
                                     label="Số lượng"
                                     rules={[{ required: true, message: 'Vui lòng nhập số lượng!' }]}
                                 >
                                     <InputNumber
                                         min={1}
-                                        max={bookData?.stock}
+                                        max={5}
                                         placeholder="Số lượng"
                                         prefix={<BookOutlined />}
                                         className="modal-borrow__input modal-borrow__input--number"

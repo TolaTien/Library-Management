@@ -157,17 +157,22 @@ export const requestUpdateStatusBook = async (data) => {
 
 /// UPDATE
 
-export const requestGetFine = async () => {
-    const res = await apiClient.post(`${apiUser}/get-fine`);
+export const requestGetFine = async (idHistory) => {
+    const res = await apiClient.post(`${apiUser}/get-fine`, {idHistory});
     return res.data;
 };
 
-export const requestReturnBook = async () => {
-    const res = await apiClient.put(`${apiUser}/return-book`);
+export const requestReturnBook = async ({bookId, idHistory}) => {
+    const res = await apiClient.put(`${apiUser}/return-book`, {bookId, idHistory} );
     return res.data;
 };
 
-export const requestSendReminder = async () => {
-    const res = await apiClient.get(`${apiUser}/send-reminder`);
+export const requestSendReminder = async (data) => {
+    const res = await apiClient.post(`${apiUser}/send-reminder`, data);
+    return res.data;
+};
+
+export const requestGetReminder = async (data) => {
+    const res = await apiClient.get(`${apiUser}/get-reminder`, data)
     return res.data;
 }

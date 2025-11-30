@@ -104,11 +104,7 @@ const BookForm = ({ form, onFinish, initialValues, isEdit = false }) => {
                 label="Thể loại"
                 rules={[{ required: true, message: 'Vui lòng chọn thể loại!' }]}
             >
-                <Select placeholder="Chọn thể loại">
-                    <Option value="Sách văn">Sách văn</Option>
-                    <Option value="Giáo trình">Giáo Trình</Option>
-                    <Option value="Tạp chí">Tạp chí</Option>
-                </Select>
+                <Input />
             </Form.Item>
             <Form.Item name="pages" label="Số trang" rules={[{ required: true, message: 'Vui lòng nhập số trang!' }]}>
                 <InputNumber className="w-full" min={1} />
@@ -134,6 +130,8 @@ const BookForm = ({ form, onFinish, initialValues, isEdit = false }) => {
 const BookManagement = () => {
     const [data, setData] = useState([]);
     const [filterCategory, setFilterCategory] = useState('all');
+    const [categories, setCategories] = useState([]);
+
 
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
@@ -161,6 +159,11 @@ const BookManagement = () => {
     useEffect(() => {
         fetchData();
     }, []);
+    useEffect(() => {
+        const uniqueCategories = [...new Set(data.map(item => item.category))];
+        setCategories(uniqueCategories);
+    }, [data]);
+
 
     // dữ liệu đã lọc
     const filteredData = data.filter((item) => {
@@ -370,9 +373,12 @@ const BookManagement = () => {
                         style={{ width: 200 }}
                     >
                         <Option value="all">Tất cả thể loại</Option>
-                        <Option value="Sách văn">Sách văn</Option>
-                        <Option value="Giáo trình">Giáo Trình</Option>
-                        <Option value="Tạp chí">Tạp chí</Option>
+                        {categories.map((category) => (
+                            <Option key={category} value={category}>
+                                {category}
+                            </Option>
+                        ))}
+                        
                     </Select>
 
                     <Button type="primary" onClick={showAddModal} loading={loading}>

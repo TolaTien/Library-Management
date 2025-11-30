@@ -1,7 +1,6 @@
 const User = require('../models/users.model');
 const Product = require('../models/product.model')
 const History = require('../models/historyBook.model');
-const Reminder = require('../models/reminder.model')
 const { createRefreshToken, createToken, verifyToken } = require('../services/tokenServices');
 const bcrypt = require('bcrypt');
 const CryptoJS = require('crypto-js');
@@ -215,10 +214,9 @@ class ControllerUser {
         if (!user) return res.status(404).json({ message: 'Người dùng không tồn tại' });
 
         user.idStudent = idStudent;
-        user.cardStatus = 'active';   // ⭐ Ghi trạng thái đã duyệt
         await user.save();
-        return res.status(200).json({ status: 'success', message: 'Xác nhận thành công' });
 
+        return res.status(200).json({ status: 'success', message: 'Xác nhận thành công' });
     }
 
     // Biểu đồ thống kê
@@ -237,7 +235,7 @@ class ControllerUser {
             const rejectedBooks = await History.count({ where: {status: 'cancel' } });
             const expiredDay = new Date();
             expiredDay.setDate(expiredDay.getDate() - 7);
-            const expiredBooks = await History.count({ where: {status: 'success', returnDate: { [Op.lt]: expiredDay } }} );
+            const expiredBooks = await History.count({ where: {status: 'success', borrowDate: { [Op.lt]: expiredDay } }} );
             const  booksData = [
                 { status: 'Đã duyệt', count: aprovedBooks },
                 { status: 'Chờ duyệt', count: pendingRequests },
@@ -290,7 +288,6 @@ class ControllerUser {
     }
 
 
-    ////////////////////////////UPDATE///////////////////////////////////////////////////////
 
 
 
@@ -360,53 +357,26 @@ class ControllerUser {
     }
 
 
-    // Nút nhắc User trả sách
+// Nút nhắc User trả sách
 
-    async sendReminder(req, res) {
-        try {
-            const { idHistory } = req.body;
-
-            const history = await History.findOne({ where: { id: idHistory } });
-            if (!history) {
-                return res.status(404).json({ success: false, message: 'Lịch sử mượn không tồn tại' });
-            }
-            const user = await User.findOne({ where: {id: history.userId }});
-
-            const message = `Xin chào ${user.fullName}, Bạn đã mượn sách quá hạn thời gian, vui lòng thanh toán phí phạt và trả sách `;
-
-            await Reminder.create({
-                userId: user.id,
-                historyId: history.id,
-                message
-            });
-
-            return res.status(200).json({
-                success: true,
-                message: 'Đã gửi nhắc nhở thành công',
-                data: { reminderText: message }
-            });
-
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({ success: false, message: 'Lỗi server' });
-        }
-    }
-
-
-    // User xem tất cả các lời nhắc nhở đó 
-
-    async getReminders(req, res) {
+async sendReminder(req, res) {
     try {
-        const { id } = req.user; // lấy từ token
+        const { idHistory } = req.body;
 
-        const reminders = await Reminder.findAll({
-            where: { userId: id },
-            order: [['createdAt', 'DESC']]
-        });
+        const history = await History.findOne({ where: { id: idHistory } });
+        if (!history) {
+            return res.status(404).json({ success: false, message: 'Lịch sử mượn không tồn tại' });
+        }
+        const user = await User.findOne({ where: {id: history.userId }});
+        const returnDateFormatted = new Date(history.returnDate).toLocaleDateString('vi-VN'); // dd/mm/yyyy
+
+        const message = `Xin chào ${user.fullName}, bạn vui lòng trả sách đã mượn trước ngày ${returnDateFormatted}.`;
+
 
         return res.status(200).json({
             success: true,
-            data: reminders
+            message: 'Đã gửi nhắc nhở thành công',
+            data: { reminderText: message }
         });
 
     } catch (err) {
@@ -415,6 +385,10 @@ class ControllerUser {
     }
 }
 
-}
 
+
+
+
+
+}
 module.exports = new ControllerUser();

@@ -1,14 +1,12 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Card, Empty, List, Tag, Image, Typography, Space, Spin, Button } from 'antd';
-// Đã thêm requestReturnBook
-import { requestCancelBook, requestGetHistoryUser, requestReturnBook, requestGetFine} from '../../config/request'; 
+import { Card, Empty, List, Tag, Image, Typography, Space, Spin, Button, Modal } from 'antd'; // Nhớ import Modal nếu chưa có
+import { requestCancelBook, requestGetHistoryUser, requestReturnBook, requestGetFine } from '../../config/request'; 
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 import './BorrowingHistory.css';
 
 const { Text, Title } = Typography;
 
-// Mapping for status colors and texts for better readability and maintenance
 const statusConfig = {
     pending: { text: 'Đang chờ duyệt', color: 'gold' },
     success: { text: 'Thành công', color: 'green' },
@@ -34,6 +32,7 @@ const BorrowingHistory = () => {
     useEffect(() => {
         fetchData();
     }, []);
+
     const totalQuantity = useMemo(() => {
         return borrowedBooks.reduce((sum, item) => {
             if (item.status === 'pending' || item.status === 'success') {
@@ -43,7 +42,6 @@ const BorrowingHistory = () => {
         }, 0);
     }, [borrowedBooks]);
 
-    // Số đầu sách đã mượn (Số lượng bản ghi lịch sử)
     const totalBorrowedItems = borrowedBooks.filter(item => 
         item.status === 'pending' || item.status === 'success'
     ).length;
@@ -52,65 +50,62 @@ const BorrowingHistory = () => {
         try {
             await requestCancelBook({ idHistory });
             toast.success('Huỷ mượn sách thành công');
-            // Tải lại danh sách sau khi hủy
             fetchData();
         } catch (error) {
             toast.error(error.response?.data?.message || 'Hủy mượn sách thất bại');
         }
     };
 
-    // hàm trả sách
     const handleReturnBook = async (idHistory, bookId) => {
-    setIsReturning(true); // BẬT LOADING
-    try {
-        await requestReturnBook({ idHistory, bookId }); 
-        setBorrowedBooks(prevBooks => prevBooks.filter(book => book.id !== idHistory));
-        toast.success('Trả sách thành công!');
+        setIsReturning(true);
+        try {
+            await requestReturnBook({ idHistory, bookId }); 
+            setBorrowedBooks(prevBooks => prevBooks.filter(book => book.id !== idHistory));
+            toast.success('Trả sách thành công!');
 
-        // Giữ lại setTimeout để đồng bộ tổng số lượng sách
-        setTimeout(() => {
-            fetchData();
-        }, 500); 
-    } catch (error) {
-        toast.error(error.response?.data?.message || 'Trả sách thất bại');
-    } finally {
-        setIsReturning(false); // TẮT LOADING
-    }
-};
-    //HÀM TÍNH TIỀN PHẠT
-const calculateFine = async (idHistory, bookId) => {
-    try {
-        const fineRes = await requestGetFine(idHistory);
-        const { daysOverdue, totalFine } = fineRes.data;
-
-        if (daysOverdue > 0) {
-            Modal.confirm({
-                title: 'Xác nhận Trả sách Quá Hạn',
-                content: (
-                    <Space direction="vertical">
-                        <Text>Sách đã quá hạn <Text strong type="danger">{daysOverdue} ngày</Text>.</Text>
-                        <Text>Tổng tiền phạt tạm tính: <Text strong type="warning">{totalFine.toLocaleString('vi-VN')} VNĐ</Text>.</Text>
-                        <Text>Bạn có chắc chắn muốn tiến hành trả sách và chấp nhận tiền phạt?</Text>
-                    </Space>
-                ),
-                okText: 'Trả Sách và Chấp Nhận Phạt',
-                cancelText: 'Hủy',
-                onOk: () => handleReturnBook(idHistory, bookId), 
-
-                onCancel: () => setIsReturning(false)
-            });
-            
-        } else {
-            handleReturnBook(idHistory, bookId);
+            setTimeout(() => {
+                fetchData();
+            }, 500); 
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Trả sách thất bại');
+        } finally {
+            setIsReturning(false);
         }
+    };
 
-    } catch (error) {
-        toast.error(error.response?.data?.message || 'Không thể tính toán tiền phạt.');
-    }
-};
+    const calculateFine = async (idHistory, bookId) => {
+        setIsReturning(true); 
+        try {
+            // Gọi API lấy thông tin phạt thực tế
+            const fineRes = await requestGetFine(idHistory);
+            const { daysOverdue, totalFine } = fineRes.data;
+            
+            if (daysOverdue > 0) {
+                Modal.confirm({
+                    title: 'Xác nhận Trả sách Quá Hạn',
+                    content: (
+                        <Space direction="vertical">
+                            <Text>Sách đã quá hạn <Text strong type="danger">{daysOverdue} ngày</Text>.</Text>
+                            <Text>Tổng tiền phạt phải nộp: <Text strong type="warning">{totalFine.toLocaleString('vi-VN')} VNĐ</Text>.</Text>
+                            <Text>Bạn có chắc chắn muốn trả sách và chấp nhận nộp phạt?</Text>
+                        </Space>
+                    ),
+                    okText: 'Đồng ý Trả & Nộp Phạt',
+                    okType: 'danger', // Nút màu đỏ để cảnh báo
+                    cancelText: 'Hủy',
+                    onOk: () => handleReturnBook(idHistory, bookId), 
+                    onCancel: () => setIsReturning(false)
+                });
+            } else {
+                handleReturnBook(idHistory, bookId);
+            }
+
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Không thể tính toán tiền phạt.');
+            setIsReturning(false);
+        }
+    };
         
-
-
     if (loading) {
         return (
             <div className="borrow-history__loading">
@@ -130,7 +125,6 @@ const calculateFine = async (idHistory, bookId) => {
                 </Title>
             </Space>
             
-
             {borrowedBooks.length > 0 ? (
                 <List
                     itemLayout="vertical"
@@ -139,9 +133,16 @@ const calculateFine = async (idHistory, bookId) => {
                     renderItem={(item) => {
                         const statusInfo = statusConfig[item.status] || { text: item.status, color: 'default' };
                         
-                        // Tính toán số ngày còn lại/quá hạn
+                        // Tính toán quá hạn
                         const daysLeft = dayjs(item.returnDate).diff(dayjs(), 'day');
                         const isOverdue = daysLeft < 0 && item.status === 'success';
+
+                        // const daysLeft = -4
+                        // const isOverdue = true  (test form qúa hạn)
+                        
+                        // Tính sơ bộ tiền phạt để hiển thị (Giả sử 5000/ngày, logic này chỉ để hiển thị nhanh)
+                        // Con số chính xác sẽ được tính lại bởi calculateFine khi bấm nút
+                        const estimatedFine = isOverdue ? Math.abs(daysLeft) * 5000 : 0;
 
                         return (
                             <List.Item key={item.id} className="borrow-history__list-item">
@@ -163,31 +164,38 @@ const calculateFine = async (idHistory, bookId) => {
                                                 <Text type="secondary">Ngày mượn: {dayjs(item.borrowDate).format('DD/MM/YYYY')}</Text>
                                                 <Text type="secondary">Ngày trả: {dayjs(item.returnDate).format('DD/MM/YYYY')}</Text>
                                                 
-                                                {/* HIỂN THỊ SỐ NGÀY CÒN LẠI / QUÁ HẠN */}
+                                                {/* HIỂN THỊ TRẠNG THÁI QUÁ HẠN & TIỀN PHẠT */}
                                                 {item.status === 'success' && (
-                                                    <p className="borrow-history__days-info">
+                                                    <div className="borrow-history__days-info">
                                                         {isOverdue ? (
-                                                            <Text strong type="danger">
-                                                                ĐÃ QUÁ HẠN: {-daysLeft} ngày
-                                                            </Text>
+                                                            <Space direction="vertical" size={0}>
+                                                                <Text strong type="danger">
+                                                                    ĐÃ QUÁ HẠN: {-daysLeft} ngày
+                                                                </Text>
+                                                                <Text type="warning" style={{ fontSize: '13px' }}>
+                                                                    (Phạt dự kiến: {estimatedFine.toLocaleString('vi-VN')} VNĐ)
+                                                                </Text>
+                                                            </Space>
                                                         ) : (
                                                             <Text type="success">
                                                                 Số ngày còn lại: {daysLeft} ngày
                                                             </Text>
                                                         )}
-                                                    </p>
+                                                    </div>
                                                 )}
 
-                                                {/* NÚT TRẢ SÁCH (CHỈ CHO TRẠNG THÁI SUCCESS) */}
+                                                {/* NÚT TRẢ SÁCH */}
                                                 {item.status === 'success' && (
                                                     <Button 
-                                                        type="primary" 
+                                                        // Đổi màu nút thành đỏ nếu quá hạn
+                                                        type={isOverdue ? "primary" : "primary"} 
+                                                        danger={isOverdue} // Nút đỏ nếu quá hạn
                                                         onClick={() => calculateFine(item.id, item.bookId)}
                                                         className="borrow-history__return-button"
                                                         disabled={isReturning}
                                                         loading={isReturning}
                                                     >
-                                                        Trả Sách
+                                                        {isOverdue ? 'Trả Sách & Nộp Phạt' : 'Trả Sách'}
                                                     </Button>
                                                 )}
                                                 
@@ -199,7 +207,6 @@ const calculateFine = async (idHistory, bookId) => {
                                         <Tag color={statusInfo.color} className="borrow-history__status-tag">{statusInfo.text}</Tag>
                                         <Text type="secondary" className="borrow-history__id-text">Mã mượn: {item.id.substring(0, 8)}</Text>
                                         
-                                        {/* NÚT HỦY MƯỢN (CHỈ CHO TRẠNG THÁI PENDING) */}
                                         {item.status === 'pending' && (
                                             <Button danger type="primary" onClick={() => handleCancelBook(item.id)}>
                                                 Huỷ mượn

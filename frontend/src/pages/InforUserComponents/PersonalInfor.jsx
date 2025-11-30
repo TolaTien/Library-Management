@@ -70,7 +70,7 @@ const PersonalInfo = () => {
     return (
         <Card
             title="Thông tin cá nhân"
-            bordered={false}
+            variant={false}
             className="personal-info-card"
             extra={
                 !isEditing && (

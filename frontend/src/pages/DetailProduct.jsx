@@ -64,7 +64,6 @@ function DetailProduct() {
                                 />
                             </div>
                         </div>
-
                         {/* Book Details */}
                         <div className="product-detail__info-column">
                             {/* Title and Author */}

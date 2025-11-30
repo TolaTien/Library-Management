@@ -1,3 +1,76 @@
+/* --- Global Variables (Giả định đã có file variables.css chung) --- */
+:root {
+    --color-primary-blue: #1e88e5;       /* Xanh Dương Sáng */
+    --color-primary-hover: #e3f2fd;      /* Nền rất nhẹ khi hover */
+    --color-text-dark: #374151;          /* Text thường */
+    --color-white: #ffffff;
+    --color-red-danger: #ff4d4f;         /* Đỏ cho nút Đăng xuất */
+}
+
+/* --- DASHBROAD-SIDEBAR BLOCK (Ant Design Menu) --- */
+.dashbroad-sidebar.ant-menu {
+    height: 100%;
+    width: 100%;
+    /* Xóa border Ant Design mặc định và thiết lập nền */
+    border-right: none;
+    background-color: var(--color-white);
+    padding: 0;
+    font-size: 0.95rem;
+}
+
+/* --- Tối ưu hóa các mục Menu --- */
+
+.dashbroad-sidebar.ant-menu-inline .ant-menu-item {
+    /* Đệm lớn hơn, bo góc nhẹ nhàng */
+    margin: 0.5rem 0.5rem 0.5rem 0 !important; /* Margin trên, dưới, và trái */
+    padding: 0.75rem 1rem !important;
+    border-radius: 6px; 
+    color: var(--color-text-dark);
+}
+
+/* 1. HIỆU ỨNG HOVER/FOCUS (Visual Hierarchy - Mức 2) */
+.dashbroad-sidebar.ant-menu-inline .ant-menu-item:not(.ant-menu-item-selected):hover,
+.dashbroad-sidebar.ant-menu-inline .ant-menu-item:focus {
+    background-color: var(--color-primary-hover) !important;
+    color: var(--color-primary-blue) !important;
+    transition: background-color 0.2s ease;
+}
+
+
+/* 2. MỤC ĐANG CHỌN (SELECTED) (Visual Hierarchy - Mức 1: Nổi bật nhất) */
+.dashbroad-sidebar.ant-menu-inline .ant-menu-item-selected {
+    /* Màu nền nhấn mạnh */
+    background-color: var(--color-primary-blue) !important; 
+    color: var(--color-white) !important;
+    font-weight: 600; /* Nâng cao trọng số font */
+}
+
+/* Đảm bảo icon của mục đang chọn cũng có màu trắng */
+.dashbroad-sidebar.ant-menu-inline .ant-menu-item-selected .anticon {
+    color: var(--color-white) !important;
+}
+
+
+/* 3. NÚT ĐĂNG XUẤT (Cảnh báo) */
+
+/* Thiết lập màu text và icon mặc định cho nút danger (Đăng xuất) */
+.dashbroad-sidebar.ant-menu-inline .ant-menu-item-danger {
+    color: var(--color-red-danger) !important; 
+}
+.dashbroad-sidebar.ant-menu-inline .ant-menu-item-danger .anticon {
+    color: var(--color-red-danger) !important;
+}
+
+/* Khi hover nút Đăng xuất */
+.dashbroad-sidebar.ant-menu-inline .ant-menu-item-danger:hover {
+    background-color: rgba(255, 77, 79, 0.1) !important; /* Nền đỏ rất nhạt */
+}
+
+/* Ngăn không cho nút Đăng xuất chuyển sang màu xanh khi được chọn (Thường không xảy ra vì nó không phải menu chính) */
+.dashbroad-sidebar.ant-menu-inline .ant-menu-item-danger.ant-menu-item-selected {
+    background-color: var(--color-red-danger) !important; /* Nếu bị chọn, nền phải là đỏ */
+    color: var(--color-white) !important;
+}
 /* --- USER-SIDEBAR BLOCK (Ant Design Menu) --- */
 .user-sidebar.ant-menu {
     /* Thay thế h-full */

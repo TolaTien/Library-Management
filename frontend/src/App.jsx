@@ -10,11 +10,11 @@ function App() {
     const [dataProduct, setDataProduct] = useState([]);
     const [loading, setLoading] = useState(true);
     const [availableLanguages, setAvailableLanguages] = useState([]);
+    const [availableCategory, setAvailableCategory] = useState([]);
     
     const [filterState, setFilterState] = useState({
-        keyword: '',
-        coverType: 'all', 
-        language: 'all', // Đã chuyển mặc định về 'all' (chữ thường)
+        category: 'all', // Đã đồng nhất tên khóa
+        language: 'all',
     });
 
     const extractLanguages = (products) => {
@@ -28,6 +28,21 @@ function App() {
         });
         return Array.from(languages).sort();
     };
+    
+    // Lọc theo thể loại và thêm return
+    const extractCategory = (products) => {
+        if (!products || products.length === 0) return [];
+
+        const categories = new Set();
+        products.forEach(p => {
+            // Giả định thuộc tính là 'categories'
+            if (p.category) { 
+                categories.add(p.category.trim());
+            }
+        }) 
+        // ✅ THÊM LỆNH RETURN
+        return Array.from(categories).sort();
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -38,6 +53,8 @@ function App() {
                 
                 setDataProduct(products);
                 setAvailableLanguages(extractLanguages(products));
+                // Phải chạy hàm đã sửa
+                setAvailableCategory(extractCategory(products)); 
             } catch (error) {
                 console.error("Failed to fetch products:", error);
                 setDataProduct([]);
@@ -52,8 +69,9 @@ function App() {
         const { name, value } = e.target;
         
         let processedValue = value;
-        if (name === 'coverType' || name === 'language') {
-            processedValue = value.toLowerCase();
+        if (name === 'category' || name === 'language') {
+            // Đảm bảo cả hai giá trị lọc đều được chuyển về chữ thường
+            processedValue = value.toLowerCase(); 
         }
 
         setFilterState(prev => ({
@@ -66,32 +84,29 @@ function App() {
     const filteredProducts = useMemo(() => {
         if (!dataProduct || dataProduct.length === 0) return [];
         
-        const { keyword, coverType, language } = filterState;
+        const { category, language } = filterState;
 
-        // KIỂM TRA ĐIỀU KIỆN LỌC ĐÃ ĐƯỢC KÍCH HOẠT CHƯA
-        const isFilteringActive = keyword !== '' || coverType !== 'all' || language !== 'all';
+        const isFilteringActive = category !== 'all' || language !== 'all';
         
-        // Nếu không có bộ lọc nào được áp dụng, trả về toàn bộ dữ liệu gốc
         if (!isFilteringActive) {
             return dataProduct;
         }
 
         return dataProduct.filter(product => {
             
-            // 1. Lọc theo Loại bìa
-            const matchesCoverType = coverType === 'all' || 
-                product.covertType?.toLowerCase() === coverType;
+            // 1. Lọc theo Thể loại (sử dụng product.categories)
+            const matchesCategory = category === 'all' || 
+                product.category?.toLowerCase() === category;
             
             // 2. Lọc theo Ngôn ngữ
             const matchesLanguage = language === 'all' || 
                 product.language?.toLowerCase() === language;
             
-            return  matchesCoverType && matchesLanguage;
+            return matchesCategory && matchesLanguage;
         });
-    }, [dataProduct, filterState]); // Chạy lại khi data gốc hoặc state lọc thay đổi
+    }, [dataProduct, filterState]);
 
     return (
-        // BEM: main-page-layout
         <div className="main-page-layout">
             <header>
                 <Header />
@@ -100,26 +115,27 @@ function App() {
                 <Coverpage />
             </div>
 
-            {/* BEM: main-page__infor-container */}
             <div className='main-page__infor-container'>
                 
                 {/* KHUNG BỘ LỌC BẮT ĐẦU */}
                 <div className='main-page__filter'>
                     
-
-                    {/* Phần tử lọc theo Loại bìa */}
+                    {/* Phần tử lọc theo Thể loại */}
                     <div className="filter-group">
-                        <label htmlFor="cover-type-select" className="filter-label">Loại bìa:</label>
+                        <label htmlFor="cover-type-select" className="filter-label">Thể loại:</label>
                         <select
                             id="cover-type-select"
-                            name="coverType"
-                            value={filterState.coverType}
+                            name="category" 
+                            value={filterState.category} 
                             onChange={handleChange}
                             className="filter-select"
                         >
                             <option value="all">Tất cả</option>
-                            <option value="hard">Bìa cứng</option>
-                            <option value="soft">Bìa mềm</option>
+                            {availableCategory.map(cat => (
+                                <option key={cat} value={cat.toLowerCase()}>
+                                    {cat}
+                                </option>
+                            ))}
                         </select>
                     </div>
                     
@@ -134,7 +150,6 @@ function App() {
                             className="filter-select"
                         >
                             <option value="all">Tất cả</option>
-                            {/* Mapping động từ danh sách ngôn ngữ có sẵn */}
                             {availableLanguages.map(lang => (
                                 <option key={lang} value={lang.toLowerCase()}>
                                     {lang}
@@ -145,7 +160,6 @@ function App() {
                 </div>
                 {/* KHUNG BỘ LỌC KẾT THÚC */}
                 
-                {/* BEM: main-page__product-grid */}
                 <main className="main-page__product-grid">
                     {loading ? (
                         <p className="main-page__loading-text">Đang tải sách...</p>

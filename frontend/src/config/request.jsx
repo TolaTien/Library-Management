@@ -157,13 +157,13 @@ export const requestUpdateStatusBook = async (data) => {
 
 /// UPDATE
 
-export const requestGetFine = async () => {
-    const res = await apiClient.post(`${apiUser}/get-fine`);
+export const requestGetFine = async (idHistory) => {
+    const res = await apiClient.post(`${apiUser}/get-fine`, {idHistory});
     return res.data;
 };
 
-export const requestReturnBook = async () => {
-    const res = await apiClient.put(`${apiUser}/return-book`);
+export const requestReturnBook = async ({bookId, idHistory}) => {
+    const res = await apiClient.put(`${apiUser}/return-book`, {bookId, idHistory} );
     return res.data;
 };
 

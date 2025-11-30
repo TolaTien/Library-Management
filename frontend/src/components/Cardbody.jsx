@@ -21,8 +21,6 @@ function CardBody({ data }) {
     // Block: book-card
     return (
         <div className="book-card">
-            {/* Decorative gradient overlay */}
-            <div className="book-card__overlay"></div>
             
             {/* 1. KHỐI HÌNH ẢNH (Bao gồm Stock và Bìa) */}
             <Link to={`/product/${data.id}`} className="book-card__link">
@@ -43,20 +41,15 @@ function CardBody({ data }) {
                                     : 'book-card__badge--out-of-stock'
                             }`}
                         >
-                            {data.stock > 0 ? `✨ Còn ${data.stock} quyển` : '❌ Hết hàng'}
+                            {data.stock > 0 ? ` Còn ${data.stock} quyển` : ' Hết hàng'}
                         </span>
                     </div>
                     
                     {/* Cover type badge */}
                     <div className="book-card__badge-position book-card__badge-position--top-left">
                         <span
-                            className={`book-card__badge book-card__badge--cover ${
-                                data.covertType === 'hard'
-                                    ? 'book-card__badge--hard-cover'
-                                    : 'book-card__badge--soft-cover'
-                            }`}
-                        >
-                            {data.covertType === 'hard' ? '📘 Bìa cứng' : '📙 Bìa mềm'}
+                            className={"book-card__badge book-card__badge--cover"}>
+                            {data.category}
                         </span>
                     </div>
                 </div>
@@ -121,12 +114,14 @@ function CardBody({ data }) {
                                 : 'book-card__button--disabled'
                         }`}
                     >
-                        {data.stock > 0 ? '📚 Mượn ngay' : '❌ Hết hàng'}
+                        {data.stock > 0 ? ' Mượn ngay' : ' Hết hàng'}
                     </button>
                 </div>
             </div>
-            
-            <ModalBuyBook visible={visible} onCancel={onCancel} bookData={bookData} />
+                        
+                    <div className="book-card__overlay">
+                        <ModalBuyBook visible={visible} onCancel={onCancel} bookData={bookData} />
+                    </div>
         </div>
     );
 }

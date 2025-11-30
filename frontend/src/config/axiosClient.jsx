@@ -42,7 +42,6 @@ export class ApiClient {
                             .then(() => this.axiosInstance(originalRequest))
                             .catch((err) => Promise.reject(err));
                     }
-
                     originalRequest._retry = true;
                     this.isRefreshing = true;
 
@@ -58,7 +57,6 @@ export class ApiClient {
                         this.isRefreshing = false;
                     }
                 }
-
                 return Promise.reject(error);
             },
         );

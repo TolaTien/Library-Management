@@ -30,6 +30,7 @@ export class ApiClient {
             async (error) => {
                 const originalRequest = error.config;
                 if (error.response?.status === 401 && !originalRequest._retry) {
+                    // kiểm tra đăng nhập 
                     if (!this.isLoggedIn()) {
                         this.handleAuthFailure();
                         return Promise.reject(error);
@@ -42,6 +43,7 @@ export class ApiClient {
                             .then(() => this.axiosInstance(originalRequest))
                             .catch((err) => Promise.reject(err));
                     }
+                    // refresh token
                     originalRequest._retry = true;
                     this.isRefreshing = true;
 

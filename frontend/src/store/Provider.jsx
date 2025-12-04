@@ -10,7 +10,6 @@ import ModalBuyBook from '../components/ModalBuyBook';
 
 export function Provider({ children }) {
     const [dataUser, setDataUser] = useState({});
-
     const fetchAuth = async () => {
 
         try {

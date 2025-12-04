@@ -171,7 +171,7 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                 {/* Borrower Information Form */}
                 <Card className="modal-borrow__card modal-borrow__card--borrower">
                     <Title level={4} className="modal-borrow__section-title">
-                        👤 Thông tin người mượn
+                        👤 Thông tin mượn
                     </Title>
                     <Form form={form} layout="vertical" onFinish={handleSubmit} requiredMark={false} preserve={false}>
                         <Row gutter={16}>

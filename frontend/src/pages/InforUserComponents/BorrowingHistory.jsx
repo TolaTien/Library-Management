@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Card, Empty, List, Tag, Image, Typography, Space, Spin, Button, Modal } from 'antd'; // Nhớ import Modal nếu chưa có
+import { Card, Empty, List, Tag, Image, Typography, Space, Spin, Button, Popconfirm } from 'antd'; // ✅ Thêm Popconfirm
 import { requestCancelBook, requestGetHistoryUser, requestReturnBook, requestGetFine } from '../../config/request'; 
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
@@ -35,7 +35,7 @@ const BorrowingHistory = () => {
 
     const totalQuantity = useMemo(() => {
         return borrowedBooks.reduce((sum, item) => {
-            if (item.status === 'pending' || item.status === 'success') {
+            if (item.status === 'success' || item.status == "pending") {
                 return sum + (item.quantity || 0);
             }
             return sum;
@@ -43,7 +43,7 @@ const BorrowingHistory = () => {
     }, [borrowedBooks]);
 
     const totalBorrowedItems = borrowedBooks.filter(item => 
-        item.status === 'pending' || item.status === 'success'
+        item.status === 'success' || item.status === "pending"
     ).length;
 
     const handleCancelBook = async (idHistory) => {
@@ -57,7 +57,9 @@ const BorrowingHistory = () => {
     };
 
     const handleReturnBook = async (idHistory, bookId) => {
-        setIsReturning(true);
+        // Nếu hàm này được gọi trực tiếp (không qua calculateFine), tự bật loading
+        if (!isReturning) setIsReturning(true);
+        
         try {
             await requestReturnBook({ idHistory, bookId }); 
             setBorrowedBooks(prevBooks => prevBooks.filter(book => book.id !== idHistory));
@@ -76,29 +78,8 @@ const BorrowingHistory = () => {
     const calculateFine = async (idHistory, bookId) => {
         setIsReturning(true); 
         try {
-            // Gọi API lấy thông tin phạt thực tế
-            const fineRes = await requestGetFine(idHistory);
-            const { daysOverdue, totalFine } = fineRes.data;
-            
-            if (daysOverdue > 0) {
-                Modal.confirm({
-                    title: 'Xác nhận Trả sách Quá Hạn',
-                    content: (
-                        <Space direction="vertical">
-                            <Text>Sách đã quá hạn <Text strong type="danger">{daysOverdue} ngày</Text>.</Text>
-                            <Text>Tổng tiền phạt phải nộp: <Text strong type="warning">{totalFine.toLocaleString('vi-VN')} VNĐ</Text>.</Text>
-                            <Text>Bạn có chắc chắn muốn trả sách và chấp nhận nộp phạt?</Text>
-                        </Space>
-                    ),
-                    okText: 'Đồng ý Trả & Nộp Phạt',
-                    okType: 'danger', // Nút màu đỏ để cảnh báo
-                    cancelText: 'Hủy',
-                    onOk: () => handleReturnBook(idHistory, bookId), 
-                    onCancel: () => setIsReturning(false)
-                });
-            } else {
-                handleReturnBook(idHistory, bookId);
-            }
+            await requestGetFine(idHistory);
+            await handleReturnBook(idHistory, bookId);
 
         } catch (error) {
             toast.error(error.response?.data?.message || 'Không thể tính toán tiền phạt.');
@@ -133,15 +114,10 @@ const BorrowingHistory = () => {
                     renderItem={(item) => {
                         const statusInfo = statusConfig[item.status] || { text: item.status, color: 'default' };
                         
-                        // Tính toán quá hạn
+                        // Logic tính toán hiển thị (đã mở comment để Popconfirm dùng)
                         const daysLeft = dayjs(item.returnDate).diff(dayjs(), 'day');
                         const isOverdue = daysLeft < 0 && item.status === 'success';
-
-                        // const daysLeft = -4
-                        // const isOverdue = true  (test form qúa hạn)
-                        
-                        // Tính sơ bộ tiền phạt để hiển thị (Giả sử 5000/ngày, logic này chỉ để hiển thị nhanh)
-                        // Con số chính xác sẽ được tính lại bởi calculateFine khi bấm nút
+                        // Tính tiền phạt dự kiến để hiển thị trong Popconfirm
                         const estimatedFine = isOverdue ? Math.abs(daysLeft) * 5000 : 0;
 
                         return (
@@ -164,7 +140,7 @@ const BorrowingHistory = () => {
                                                 <Text type="secondary">Ngày mượn: {dayjs(item.borrowDate).format('DD/MM/YYYY')}</Text>
                                                 <Text type="secondary">Ngày trả: {dayjs(item.returnDate).format('DD/MM/YYYY')}</Text>
                                                 
-                                                {/* HIỂN THỊ TRẠNG THÁI QUÁ HẠN & TIỀN PHẠT */}
+                                                {/* HIỂN THỊ TRẠNG THÁI QUÁ HẠN */}
                                                 {item.status === 'success' && (
                                                     <div className="borrow-history__days-info">
                                                         {isOverdue ? (
@@ -184,19 +160,45 @@ const BorrowingHistory = () => {
                                                     </div>
                                                 )}
 
-                                                {/* NÚT TRẢ SÁCH */}
+                                                {/* LOGIC NÚT TRẢ SÁCH VỚI POPCONFIRM */}
                                                 {item.status === 'success' && (
-                                                    <Button 
-                                                        // Đổi màu nút thành đỏ nếu quá hạn
-                                                        type={isOverdue ? "primary" : "primary"} 
-                                                        danger={isOverdue} // Nút đỏ nếu quá hạn
-                                                        onClick={() => handleReturnBook(item.id, item.bookId)}
-                                                        className="borrow-history__return-button"
-                                                        disabled={isReturning}
-                                                        loading={isReturning}
-                                                    >
-                                                        {isOverdue ? 'Trả Sách & Nộp Phạt' : 'Trả Sách'}
-                                                    </Button>
+                                                    isOverdue ? (
+                                                        // TRƯỜNG HỢP 1: QUÁ HẠN -> Dùng Popconfirm
+                                                        <Popconfirm
+                                                            title="Xác nhận trả sách quá hạn"
+                                                            description={
+                                                                <div>
+                                                                    <p>Sách đã quá hạn <Text type="danger" strong>{-daysLeft} ngày</Text>.</p>
+                                                                    <p>Số tiền phạt cần đóng: <Text type="danger" strong>{estimatedFine.toLocaleString()} VNĐ</Text></p>
+                                                                    <p>Bạn có chắc chắn muốn trả sách?</p>
+                                                                </div>
+                                                            }
+                                                            onConfirm={() => calculateFine(item.id, item.bookId)}
+                                                            okText="Đồng ý & Trả"
+                                                            cancelText="Hủy"
+                                                            okButtonProps={{ danger: true, loading: isReturning }}
+                                                        >
+                                                            <Button 
+                                                                type="primary" 
+                                                                danger 
+                                                                className="borrow-history__return-button"
+                                                                disabled={isReturning}
+                                                            >
+                                                                Trả Sách & Nộp Phạt
+                                                            </Button>
+                                                        </Popconfirm>
+                                                    ) : (
+                                                        // TRƯỜNG HỢP 2: BÌNH THƯỜNG -> Nút bấm trực tiếp
+                                                        <Button 
+                                                            type="primary" 
+                                                            onClick={() => handleReturnBook(item.id, item.bookId)}
+                                                            className="borrow-history__return-button"
+                                                            disabled={isReturning}
+                                                            loading={isReturning}
+                                                        >
+                                                            Trả Sách
+                                                        </Button>
+                                                    )
                                                 )}
                                                 
                                             </Space>

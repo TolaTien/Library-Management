@@ -5,8 +5,8 @@ import { apiClient } from './axiosClient';
 const request = axios.create({baseURL: import.meta.env.VITE_API_URL, withCredentials: true,});
 
 const apiUser = '/api/user';
-
 const apiProduct = '/api/product'
+
 export const requestRegister = async (data) => {
     const res = await request.post(`${apiUser}/register`, data);
     return res;

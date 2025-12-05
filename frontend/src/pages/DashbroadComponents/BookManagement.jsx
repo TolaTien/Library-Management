@@ -40,7 +40,7 @@ const BookForm = ({ form, onFinish, initialValues, isEdit = false }) => {
             // Nếu không có initialValues thì reset form (tránh giữ giá trị cũ)
             form.resetFields();
         }
-    }, [initialValues, form, isEdit]);
+    }, [initialValues, form, isEdit]);//tự động chạy lại khi initialValues thay đổi
 
     return (
         <Form form={form} layout="vertical" onFinish={onFinish} initialValues={initialValues}>
@@ -52,9 +52,9 @@ const BookForm = ({ form, onFinish, initialValues, isEdit = false }) => {
                 <Upload
                     name="image"
                     listType="picture"
-                    beforeUpload={() => false}
+                    beforeUpload={() => false}//không up lên hẳn server ngay chỉ lưu trong fileList
                     maxCount={1}
-                    defaultFileList={
+                    defaultFileList={//nếu là edit thì hiển thị ảnh cũ
                         isEdit && initialValues?.image
                             ? [
                                   {
@@ -142,12 +142,14 @@ const BookManagement = () => {
 
     const [addForm] = Form.useForm();
     const [editForm] = Form.useForm();
+    const [sortedInfo, setSortedInfo] = useState({});
 
-    const fetchData = async () => {
+
+    const fetchData = async () => {//lấy data từ server
         try {
             setLoading(true);
             const res = await requestGetAllProduct();
-            setData(res.data);
+            setData(res.data);//kt tồn tại truoc khi set
         } catch (error) {
             console.error('Failed to fetch books:', error);
             message.error('Không thể tải dữ liệu sách');
@@ -156,11 +158,11 @@ const BookManagement = () => {
         }
     };
 
-    useEffect(() => {
+    useEffect(() => {//fetch data ban đầu
         fetchData();
     }, []);
-    useEffect(() => {
-        const uniqueCategories = [...new Set(data.map(item => item.category))];
+    useEffect(() => {//lấy danh sách thể loại từ data
+        const uniqueCategories = Array.from(new Set(data.map(i => i.category).filter(Boolean))).sort();
         setCategories(uniqueCategories);
     }, [data]);
 
@@ -193,18 +195,18 @@ const BookManagement = () => {
             if (!values.image?.fileList || values.image.fileList.length === 0) {
                 message.error('Vui lòng chọn ảnh bìa');
                 return;
-            }
+            }//kt có ảnh chưa
 
             const formData = new FormData();
             formData.append('image', values.image.fileList[0].originFileObj);
 
-            const urlImage = await requestUploadImageProduct(formData);
-            const payload = {
+            const urlImage = await requestUploadImageProduct(formData);//upload ảnh lên server
+            const payload = {//gửi link ảnh sau khi upload
                 ...values,
                 image: urlImage.data,
             };
 
-            await requestCreateProduct(payload);
+            await requestCreateProduct(payload);//gọi api tạo sách
             message.success('Thêm sách thành công');
             handleAddCancel();
             fetchData();
@@ -225,11 +227,11 @@ const BookManagement = () => {
         // editForm.setFieldsValue(record); // BookForm useEffect cũng đã set
     };
 
-    const handleEditOk = () => {
+    const handleEditOk = () => {//submit khi ok
         editForm.submit();
     };
 
-    const handleEditCancel = () => {
+    const handleEditCancel = () => {//đóng và cập nhật dữ liệu mới
         setIsEditModalVisible(false);
         setEditingBook(null);
         editForm.resetFields();
@@ -271,7 +273,7 @@ const BookManagement = () => {
     };
 
     // --- Xử lý cho Modal Xóa Sách ---
-    const showDeleteModal = (record) => {
+    const showDeleteModal = (record) => {//chọn sách để xóa
         setDeletingBook(record);
         setIsDeleteModalVisible(true);
     };
@@ -295,7 +297,7 @@ const BookManagement = () => {
         setIsDeleteModalVisible(false);
         setDeletingBook(null);
     };
-
+    //khai bao các cột cho bảng
     const columns = [
         {
             title: 'Ảnh',
@@ -338,8 +340,11 @@ const BookManagement = () => {
             dataIndex: 'stock',
             key: 'stock',
             width: 100,
+            sorter: (a, b) => a.stock - b.stock,
+            sortOrder:sortedInfo.columnKey === 'stock' ? sortedInfo.order : null,
+            
         },
-        {
+        {//nút sửa và xóa
             title: 'Hành động',
             key: 'action',
             width: 150,
@@ -368,7 +373,7 @@ const BookManagement = () => {
                 <h2>Quản lý sách</h2>
                 <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
                     <Select
-                        value={filterCategory}
+                        value={filterCategory}//bôc lọc theo thể loại
                         onChange={(value) => setFilterCategory(value)}
                         style={{ width: 200 }}
                     >
@@ -378,26 +383,27 @@ const BookManagement = () => {
                                 {category}
                             </Option>
                         ))}
-                        
                     </Select>
-
                     <Button type="primary" onClick={showAddModal} loading={loading}>
                         Thêm sách
                     </Button>
                 </div>
             </div>
-
+            
             <Table
                 columns={columns}
                 dataSource={filteredData}
                 rowKey="id"
                 loading={loading}
+                onChange={(pagination, filters, sorter) => {
+                    setSortedInfo(sorter);
+                }}
                 pagination={{
                     pageSize: 10,
                     showSizeChanger: true,
                     showQuickJumper: true,
                     showTotal: (total, range) => `${range[0]}-${range[1]} của ${total} sách`,
-                }}
+                }}//bảng hiển thị sach
             />
 
             {/* Modal Thêm Sách */}

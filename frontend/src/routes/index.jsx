@@ -6,8 +6,7 @@ import Admin from '../pages/DashbroadComponents/index';
 import InforUser from '../pages/InforUser';
 import ForgotPassword from '../pages/ForgotPassword';
 import BorrowingHistory from '../pages/InforUserComponents/BorrowingHistory';
-import AdminNotifications
- from '../pages/InforUserComponents/AdminNotifications';
+import AdminNotifications from '../pages/InforUserComponents/AdminNotifications';
 export const routes = [
     {
         path: '/',
@@ -19,7 +18,7 @@ export const routes = [
     },
     {
         path: '/notifications',
-        component: <DetailProduct />,
+        component: <AdminNotifications/>,
     },
     {
         path: '/borrowingHistory',
@@ -38,8 +37,8 @@ export const routes = [
         component: <Admin />,
     },
     {
-        path: '/infoUser',
-        component: <InforUser />,
+        path: '/inforUser',
+        component: <InforUser/>,
     },
     {
         path: '/forgot-password',

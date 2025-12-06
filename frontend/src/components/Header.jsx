@@ -151,11 +151,14 @@ function Header({ setActiveComponent }) {
                                 {/* Menu Dropdown */}
                                 {isMenuOpen && (
                                     <div className="custom-dropdown-menu">
-                                        <div className="dropdown-item" onClick={() => {navigate('/infoUser', { state: { tab: 'info' } }); setIsMenuOpen(false);}}>
+                                        <div className="dropdown-item" onClick={() => {navigate('/inforUser', { state: { tab: 'info' } }); setIsMenuOpen(false);}}>
                                             <span className="dropdown-icon">👤</span> Thông tin cá nhân
                                         </div>
-                                        <div className="dropdown-item" onClick={() => {navigate('/infoUser', { state: { tab: 'history' } }); setIsMenuOpen(false);}}>
+                                        <div className="dropdown-item" onClick={() => {navigate('/inforUser', { state: { tab: 'history' } }); setIsMenuOpen(false);}}>
                                             <span className="dropdown-icon">📖</span> Lịch sử mượn sách
+                                        </div>
+                                        <div className="dropdown-item" onClick={() => {navigate('/inforUser', { state: { tab: 'noti' } }); setIsMenuOpen(false);}}>
+                                            <span className="dropdown-icon">🔔</span> Thông Báo
                                         </div>
                                         <div className="dropdown-divider"></div>
                                         <div className="dropdown-item danger" onClick={handleLogout}>

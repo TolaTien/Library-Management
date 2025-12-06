@@ -33,10 +33,10 @@ const Sidebar = ({ setActiveComponent, activeComponent }) => {
             onClick: () => setActiveComponent('history'),
         },
         {
-            key: 'notifications',
+            key: 'noti',
             icon: "🔔",
             label: 'Thông báo',
-            onClick: () => setActiveComponent('notifications'),
+            onClick: () => setActiveComponent('noti'),
         },
         {
             key: 'logout',

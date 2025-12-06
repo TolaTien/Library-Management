@@ -25,7 +25,7 @@ function InforUser() {
                 return <PersonalInfo />;
             case 'history':
                 return <BorrowingHistory />;
-            case 'notifications':
+            case 'noti':
                 return <AdminNotifications />;
             default:
                 return <PersonalInfo />;

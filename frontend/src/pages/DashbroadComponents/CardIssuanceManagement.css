@@ -1,62 +1,107 @@
-/* CardIssuanceManagement.css */
-
-/* Toàn trang */
 .card-issuance-container {
-    background-color: #fafafa;
     padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    min-height: 100vh;
 }
 
-/* Tiêu đề */
-.card-issuance-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
+.header {
+    margin-bottom: 20px;
 }
 
-.card-issuance-header h2 {
-    font-size: 22px;
-    font-weight: 700;
-    color: #333;
-    margin: 0;
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
 }
 
-/* Bảng */
-.ant-table {
-    background-color: #fff;
-    border-radius: 8px;
-    overflow: hidden;
+.custom-table th,
+.custom-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
 }
 
-/* Nút hành động */
-.ant-btn {
-    border-radius: 8px !important;
+.custom-table th {
+    background: #f5f5f5;
+    font-weight: bold;
 }
 
-.ant-btn-primary {
-    background-color: #1677ff;
+.loading-row,
+.empty-row {
+    text-align: center;
+    padding: 20px;
+    font-style: italic;
+    color: gray;
+}
+
+/* Tags */
+.tag {
+    padding: 4px 10px;
+    border-radius: 6px;
+    color: white;
+    font-size: 13px;
+}
+
+.tag-blue {
+    background: #3b82f6;
+}
+
+.tag-green {
+    background: #22c55e;
+}
+
+/* Buttons */
+.btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
     border: none;
+    margin-right: 6px;
 }
 
-.ant-btn-primary:hover {
-    background-color: #4096ff;
+.btn-primary {
+    background: #3b82f6;
+    color: white;
+}
+
+.btn-danger {
+    background: #ef4444;
+    color: white;
+}
+
+.btn-secondary {
+    background: #6b7280;
+    color: white;
 }
 
 /* Modal */
-.ant-modal-content {
-    border-radius: 10px !important;
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.ant-modal-title {
-    font-weight: 600;
-    color: #333;
+.modal {
+    width: 380px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
 }
 
-/* Form */
-.ant-form-item-label > label {
-    font-weight: 500;
-    color: #444;
+.modal input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 6px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.modal-actions {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.modal-actions button {
+    margin-left: 10px;
 }

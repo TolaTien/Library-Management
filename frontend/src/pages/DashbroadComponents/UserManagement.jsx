@@ -1,55 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { Table, Button, Input, Modal, Form, Select } from 'antd';
-import './UserManagement.css';
-import { requestDeleteUser, requestGetAllUsers, requestUpdateUserAdmin } from '../../config/request';
-
-const { Search } = Input;
+import React, { useEffect, useState } from "react";
+import {
+    requestDeleteUser,
+    requestGetAllUsers,
+    requestUpdateUserAdmin
+} from "../../config/request";
+import "./UserManagement.css";
 
 const UserManagement = () => {
-    const columns = [
-        { title: 'ID', dataIndex: 'id', key: 'id' },
-        { title: 'Tên người dùng', dataIndex: 'fullName', key: 'fullName' },
-        { title: 'Email', dataIndex: 'email', key: 'email' },
-        { title: 'Vai trò', dataIndex: 'role', key: 'role' },
-        { title: 'Đã mượn', dataIndex: 'borrowed', key: 'borrowed' },
-        { title: 'Đã trả', dataIndex: 'returned', key: 'returned' },
-        {
-            title: 'Hành động',
-            key: 'action',
-            render: (text, record) => (
-                <span>
-                    <Button
-                        type="primary"
-                        onClick={() => {
-                            setEditingUser(record);
-                            form.setFieldsValue(record);
-                            setIsEditModalVisible(true);
-                        }}
-                    >
-                        Sửa
-                    </Button>
-                    <Button
-                        type="primary"
-                        danger
-                        onClick={() => {
-                            setDeletingUser(record);
-                            setIsDeleteModalVisible(true);
-                        }}
-                        style={{ marginLeft: 8 }}
-                    >
-                        Xóa
-                    </Button>
-                </span>
-            ),
-        },
-    ];
-
     const [data, setData] = useState([]);
-    const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-    const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+
+    // Modal
+    const [showEdit, setShowEdit] = useState(false);
+    const [showDelete, setShowDelete] = useState(false);
+
     const [editingUser, setEditingUser] = useState(null);
     const [deletingUser, setDeletingUser] = useState(null);
-    const [form] = Form.useForm();
+
+    const [form, setForm] = useState({
+        fullName: "",
+        email: "",
+        role: "user",
+    });
 
     const fetchData = async () => {
         const res = await requestGetAllUsers();
@@ -60,92 +31,169 @@ const UserManagement = () => {
         fetchData();
     }, []);
 
+    const openEdit = (record) => {
+        setEditingUser(record);
+        setForm({
+            fullName: record.fullName,
+            email: record.email,
+            role: record.role,
+        });
+        setShowEdit(true);
+    };
+
+    const openDelete = (record) => {
+        setDeletingUser(record);
+        setShowDelete(true);
+    };
+
     const handleUpdateUser = async () => {
-        try {
-            const data = {
-                userId: editingUser.id,
-                ...form.getFieldsValue(),
-            };
-            await requestUpdateUserAdmin(data);
-            setIsEditModalVisible(false);
-            fetchData();
-        } catch (error) {
-            console.log(error);
-        }
+        const body = {
+            userId: editingUser.id,
+            ...form,
+        };
+
+        await requestUpdateUserAdmin(body);
+        setShowEdit(false);
+        fetchData();
     };
 
     const handleDeleteUser = async () => {
-        try {
-            const data = {
-                userId: deletingUser.id,
-            };
-            await requestDeleteUser(data);
-            setIsDeleteModalVisible(false);
-            fetchData();
-        } catch (error) {
-            console.log(error);
-        }
+        await requestDeleteUser({ userId: deletingUser.id });
+        setShowDelete(false);
+        fetchData();
     };
 
     return (
         <div className="user-management">
-            <div className="flex justify-between mb-4">
-                <h2 className="text-2xl font-bold">Quản lý người dùng</h2>
+            <h2 className="title">Quản lý người dùng</h2>
+
+            {/* TABLE */}
+            <div className="table-wrapper">
+                <table className="custom-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên người dùng</th>
+                            <th>Email</th>
+                            <th>Vai trò</th>
+                            <th>Đã mượn</th>
+                            <th>Đã trả</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {data.map((u) => (
+                            <tr key={u.id}>
+                                <td>{u.id}</td>
+                                <td>{u.fullName}</td>
+                                <td>{u.email}</td>
+                                <td>
+                                    <span className={`role-tag ${u.role}`}>
+                                        {u.role === "admin" ? "Admin" : "Người dùng"}
+                                    </span>
+                                </td>
+                                <td>{u.borrowed}</td>
+                                <td>{u.returned}</td>
+                                <td>
+                                    <div className="action-buttons">
+                                        <button
+                                            className="btn-small btn-primary"
+                                            onClick={() => openEdit(u)}
+                                        >
+                                            Sửa
+                                        </button>
+
+                                        <button
+                                            className="btn-small btn-danger"
+                                            onClick={() => openDelete(u)}
+                                        >
+                                            Xóa
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
-            
-            <Table columns={columns} dataSource={data} rowKey="id" />
 
-             {/* Edit User Modal */}
-             <Modal
-                title="Sửa thông tin người dùng"
-                visible={isEditModalVisible}
-                onOk={handleUpdateUser}
-                onCancel={() => {
-                    setIsEditModalVisible(false);
-                }}
-                okText="Lưu"
-                cancelText="Hủy"
-            >
-                <Form form={form} layout="vertical" name="edit_user_form">
-                    <Form.Item
-                        name="fullName"
-                        label="Tên người dùng"
-                        rules={[{ required: true, message: 'Vui lòng nhập tên người dùng!' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name="email" label="Email" rules={[{ required: true, message: 'Vui lòng nhập email!' }]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        name="role"
-                        label="Vai trò"
-                        rules={[{ required: true, message: 'Vui lòng chọn vai trò!' }]}
-                    >
-                        <Select
-                            options={[
-                                { value: 'user', label: 'Người dùng' },
-                                { value: 'admin', label: 'Quản trị viên' },
-                            ]}
+            {/* ===== EDIT MODAL ===== */}
+            {showEdit && (
+                <div className="modal-backdrop">
+                    <div className="modal-box">
+                        <h3 className="modal-title">Sửa người dùng</h3>
+
+                        <label className="input-label">Tên người dùng</label>
+                        <input
+                            className="input"
+                            value={form.fullName}
+                            onChange={(e) =>
+                                setForm({ ...form, fullName: e.target.value })
+                            }
                         />
-                    </Form.Item>
-                </Form>
-            </Modal>
 
-            {/* Delete User Modal */}
-            <Modal
-                title="Xóa người dùng"
-                visible={isDeleteModalVisible}
-                onOk={handleDeleteUser}
-                onCancel={() => {
-                    setIsDeleteModalVisible(false);
-                }}
-                okText="Xóa"
-                cancelText="Hủy"
-                okButtonProps={{ danger: true }}
-            >
-                <p>Bạn có chắc chắn muốn xóa người dùng "{deletingUser?.fullName}" không?</p>
-            </Modal>
+                        <label className="input-label">Email</label>
+                        <input
+                            className="input"
+                            value={form.email}
+                            onChange={(e) =>
+                                setForm({ ...form, email: e.target.value })
+                            }
+                        />
+
+                        <label className="input-label">Vai trò</label>
+                        <select
+                            className="select"
+                            value={form.role}
+                            onChange={(e) =>
+                                setForm({ ...form, role: e.target.value })
+                            }
+                        >
+                            <option value="user">Người dùng</option>
+                            <option value="admin">Quản trị viên</option>
+                        </select>
+
+                        <div className="modal-actions">
+                            <button
+                                className="btn-primary"
+                                onClick={handleUpdateUser}
+                            >
+                                Lưu
+                            </button>
+                            <button className="btn-outline" onClick={() => setShowEdit(false)}>
+                                Hủy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* ===== DELETE MODAL ===== */}
+            {showDelete && (
+                <div className="modal-backdrop">
+                    <div className="modal-box">
+                        <h3 className="modal-title">Xóa người dùng</h3>
+
+                        <p>
+                            Bạn có chắc chắn muốn xóa người dùng{" "}
+                            <b>{deletingUser.fullName}</b> không?
+                        </p>
+
+                        <div className="modal-actions">
+                            <button
+                                className="btn-danger"
+                                onClick={handleDeleteUser}
+                            >
+                                Xóa
+                            </button>
+                            <button className="btn-outline" onClick={() => setShowDelete(false)}>
+                                Hủy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

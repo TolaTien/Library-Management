@@ -1,37 +1,124 @@
-/* Container chính */
-.loan-request-container {
-    background: #ffffff;
+.loan-container {
+    background: #fff;
     padding: 24px;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
-/* Tiêu đề */
-.loan-request-container h2 {
+.title {
     font-size: 22px;
     font-weight: 700;
-    color: #333;
     margin-bottom: 20px;
+    color: #1f2937;
 }
 
-/* Ảnh sách trong bảng */
-.loan-request-container img {
-    border-radius: 6px;
-    border: 1px solid #ddd;
-    transition: transform 0.2s ease;
+.top-buttons {
+    margin-bottom: 18px;
+    display: flex;
+    gap: 10px;
 }
 
-.loan-request-container img:hover {
-    transform: scale(1.05);
-}
-
-/* Căn chỉnh các nút hành động */
-.loan-request-container .ant-btn {
-    margin-right: 8px;
-}
-
-/* Căn bảng cho gọn gàng */
-.loan-request-container .ant-table {
+.btn-primary {
+    background: #2563eb;
+    padding: 8px 16px;
     border-radius: 8px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+}
+
+.btn-outline {
+    background: transparent;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid #2563eb;
+    color: #2563eb;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.btn-outline:hover {
+    background: #2563eb;
+    color: #fff;
+}
+
+/* TABLE */
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.custom-table thead {
+    background: #f3f4f6;
+}
+
+.custom-table th {
+    padding: 12px;
+    font-weight: bold;
+    text-align: left;
+    color: #374151;
+}
+
+.custom-table td {
+    padding: 12px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.loading-text {
+    text-align: center;
+    padding: 20px;
+}
+
+.book-img {
+    width: 70px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+.book-name {
+    font-weight: 500;
+    max-width: 160px;
+    white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.id-col {
+    font-weight: bold;
+    color: #4b5563;
+}
+
+.overdue {
+    color: red;
+    font-weight: bold;
+}
+
+/* STATUS TAG */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-block;
+    text-align: center;
+}
+
+.status-badge.pending {
+    background: #bfdbfe;
+    color: #1e40af;
+}
+
+.status-badge.success {
 }

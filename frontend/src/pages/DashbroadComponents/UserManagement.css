@@ -1,41 +1,156 @@
-/* Tổng thể trang quản lý người dùng */
 .user-management {
     background: #fff;
     padding: 24px;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
 }
 
-/* Tiêu đề */
-.user-management h2 {
+.title {
     font-size: 22px;
     font-weight: 700;
-    color: #333;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
 }
 
-/* Thanh tìm kiếm */
-.user-management .ant-input-search {
-    margin-bottom: 16px;
+/* TABLE */
+.table-wrapper {
+    overflow-x: auto;
 }
 
-/* Bảng dữ liệu */
-.user-management .ant-table {
-    border-radius: 8px;
-    overflow: hidden;
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-/* Nút hành động trong bảng */
-.user-management .ant-btn {
+.custom-table th {
+    background: #f3f4f6;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #374151;
+}
+
+.custom-table td {
+    padding: 12px;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* BUTTONS */
+.btn-small {
+    padding: 6px 10px;
+    font-size: 14px;
     border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    transition: 0.25s;
 }
 
-/* Khoảng cách giữa 2 nút Sửa và Xóa */
-.user-management .ant-btn + .ant-btn {
-    margin-left: 8px;
+.btn-primary {
+    background: #2563eb;
+    color: white;
 }
 
-/* Modal chỉnh sửa và xóa người dùng */
-.user-management .ant-modal {
-    border-radius: 10px;
+.btn-primary:hover {
+    background: #1d4ed8;
+}
+
+.btn-danger {
+    background: #ef4444;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+}
+
+.btn-outline {
+    background: white;
+    border: 2px solid #9ca3af;
+    color: #374151;
+}
+
+.btn-outline:hover {
+    background: #f3f4f6;
+}
+
+/* ROLE TAG */
+.role-tag {
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.role-tag.admin {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.role-tag.user {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+/* MODAL */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(2px);
+}
+
+.modal-box {
+    background: white;
+    padding: 24px;
+    width: 400px;
+    border-radius: 12px;
+    animation: fadeIn 0.25s ease;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.input-label {
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+.input,
+.select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    margin-top: 4px;
+    margin-bottom: 10px;
+}
+
+.input:focus,
+.select:focus {
+    border-color: #2563eb;
+    outline: none;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

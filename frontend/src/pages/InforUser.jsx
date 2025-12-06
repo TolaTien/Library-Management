@@ -1,51 +1,56 @@
-import React, { useState } from 'react';
-import { Layout } from 'antd';
+import React, { useState, useEffect } from 'react'; // Nhớ thêm useEffect
+import { useLocation } from 'react-router-dom'; 
 import Sidebar from "./InforUserComponents/Sidebar.jsx";
 import PersonalInfo from "./InforUserComponents/PersonalInfor.jsx";
 import BorrowingHistory from "./InforUserComponents/BorrowingHistory.jsx";
-
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-// Import file CSS riêng
 import './InforUser.css';
-
-const { Sider, Content } = Layout;
 
 function InforUser() {
     const [activeComponent, setActiveComponent] = useState('info'); 
+    const location = useLocation(); // Hook để lấy dữ liệu gửi từ navigate
+
+    // Thêm đoạn này để bắt sự kiện từ Header
+    useEffect(() => {
+        if (location.state && location.state.tab) {
+            setActiveComponent(location.state.tab);
+        }
+    }, [location]);
 
     const renderComponent = () => {
         switch (activeComponent) {
             case 'info':
                 return <PersonalInfo />;
             case 'history':
-                return <BorrowingHistory />;
+                return <BorrowingHistory/>;
             default:
-                return <PersonalInfo />;
+                return <PersonalInfo/>;
         }
     };
 
     return (
-        // BEM: user-profile-layout
-        <Layout className="user-profile-layout">
+        <div className="user-profile-layout">
             <header>
                 <Header />
             </header>
             
-            <Layout className="user-profile__container">
-                <Sider width={250} theme="light" className="user-profile__sidebar">
+            <div className="user-profile__container">
+                <aside className="user-profile__sidebar">
                     <Sidebar activeComponent={activeComponent} setActiveComponent={setActiveComponent} />
-                </Sider>
+                </aside>
                 
-                <Content className="user-profile__content">
-                    <div className="user-profile__active-view">{renderComponent()}</div>
-                </Content>
-            </Layout>
+                <main className="user-profile__content">
+                    <div className="user-profile__active-view">
+                        {renderComponent()}
+                    </div>
+                </main>
+            </div>
             
             <footer>
                 <Footer />
             </footer>
-        </Layout>
+        </div>
     );
 }
 

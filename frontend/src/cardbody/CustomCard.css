@@ -1,0 +1,86 @@
+
+/* Khung bao ngoài */
+.custom-card-wrapper {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+  line-height: 1.5715;
+  list-style: none;
+  background: #fff;
+  border-radius: 2px;
+  position: relative;
+  transition: all 0.3s;
+}
+
+/* Class style border (mặc định có viền) */
+.custom-card-bordered {
+  border: 1px solid #f0f0f0;
+}
+
+/* Phần Header (Chứa Title và Extra) */
+.custom-card-head {
+  min-height: 48px;
+  margin-bottom: -1px;
+  padding: 0 24px;
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 500;
+  font-size: 16px;
+  background: transparent;
+  border-bottom: 1px solid #f0f0f0;
+  border-radius: 2px 2px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Wrapper bên trong Header để canh chỉnh */
+.custom-card-head-wrapper {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+}
+
+.custom-card-head-title {
+  display: inline-block;
+  flex: 1;
+  padding: 16px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.custom-card-extra {
+  float: right;
+  margin-left: auto;
+  padding: 16px 0;
+  color: #1890ff;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+/* Phần Body (Nội dung chính) */
+.custom-card-body {
+  padding: 24px;
+  border-radius: 0 0 2px 2px;
+}
+.custom-card-body::before,
+.custom-card-body::after {
+  display: table;
+  content: '';
+}
+.custom-card-body::after {
+  clear: both;
+}
+
+/* Responsive cho mobile */
+@media (max-width: 576px) {
+  .custom-card-head {
+    padding: 0 16px;
+  }
+  .custom-card-body {
+    padding: 16px;
+  }
+}

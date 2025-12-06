@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 import { apiClient } from './axiosClient';
 
 const request = axios.create({baseURL: import.meta.env.VITE_API_URL, withCredentials: true,});
@@ -156,7 +155,6 @@ export const requestUpdateStatusBook = async (data) => {
 
 
 /// UPDATE
-
 export const requestGetFine = async (idHistory) => {
     const res = await apiClient.post(`${apiUser}/get-fine`, {idHistory});
     return res.data;

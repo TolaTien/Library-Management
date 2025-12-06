@@ -1,32 +1,8 @@
-<<<<<<< HEAD
--- MySQL dump 10.13  Distrib 8.0.42, for macos15 (x86_64)
---
--- Host: localhost   
--- ------------------------------------------------------
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
-
-
-=======
->>>>>>> b49bea79d218f114dd9bec2d28adf137d120a4f2
 --
 -- Table structure for table `historyBooks`
 --
 
 DROP TABLE IF EXISTS `historyBooks`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `historyBooks` (
   `id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `userId` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
@@ -36,34 +12,34 @@ CREATE TABLE `historyBooks` (
   `bookId` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `borrowDate` datetime NOT NULL,
   `returnDate` datetime DEFAULT NULL,
-  `status` enum('pending','success','cancel') NOT NULL DEFAULT 'pending',
+  `status` enum('pending','success','cancel','returned') NOT NULL DEFAULT 'pending',
   `quantity` int NOT NULL DEFAULT '1',
+  `fine` DECIMAL(10,2) DEFAULT 0,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Dumping data for table `historyBooks`
---
 
 LOCK TABLES `historyBooks` WRITE;
 UNLOCK TABLES;
 
 
+
 DROP TABLE IF EXISTS `products`;
+
 CREATE TABLE `products` (
   `id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `image` varchar(255) NOT NULL,
   `nameProduct` varchar(255) NOT NULL,
   `description` text,
   `stock` int NOT NULL,
-  `covertType` enum('hard','soft') NOT NULL,
   `publishYear` int NOT NULL,
   `pages` int NOT NULL,
   `language` varchar(255) NOT NULL,
   `publisher` varchar(255) NOT NULL,
   `publishingCompany` varchar(255) NOT NULL,
+  `category` VARCHAR(255) NOT NULL, 
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
@@ -90,21 +66,26 @@ INSERT INTO `products` VALUES ('24e96aa4-57b5-4077-9827-a9543fd83d12','uploads/p
 
 UNLOCK TABLES;
 
+
+
+INSERT INTO `products` VALUES ('9a3c4f9d-6b42-4c7e-b8a1-1d93d5d7c202','uploads/products/1753791873672.jpg','Bí Mật Của May Mắn','Câu chuyện truyền cảm hứng về việc tạo ra vận may bằng chính nỗ lực của bản thân.',80,2019,220,'Tiếng Việt','Alex Rovira','NXB Lao Động','test2',NOW(),NOW());
 --
 -- Table structure for table `users`
 --
 
 DROP TABLE IF EXISTS `users`;
+
 CREATE TABLE `users` (
   `id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `avatar` varchar(255) DEFAULT NULL,
   `fullName` varchar(255) NOT NULL,
   `phone` varchar(255) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
-  `password` varchar(255) DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
   `role` enum('admin','user') NOT NULL DEFAULT 'user',
   `idStudent` varchar(255) DEFAULT NULL,
+  `borrowed` INT NOT NULL DEFAULT 0,
+  `returned` INT NOT NULL DEFAULT 0,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
@@ -117,3 +98,19 @@ CREATE TABLE `users` (
 LOCK TABLES `users` WRITE;
 
 UNLOCK TABLES;
+
+
+-- ---- Table reminder --------- 
+
+DROP TABLE IF EXISTS `reminders`;
+
+CREATE TABLE `reminders` (
+  `id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `userId` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `historyId` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `message` text NOT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+  )
+

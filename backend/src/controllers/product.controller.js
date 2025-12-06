@@ -34,7 +34,7 @@ class controllerProduct {
                 image,
                 description,
                 stock,
-                covertType,
+                category,
                 publishYear,
                 pages,
                 language,
@@ -47,7 +47,7 @@ class controllerProduct {
                 !image ||
                 !description ||
                 !stock ||
-                !covertType ||
+                !category ||
                 !publishYear ||
                 !pages ||
                 !language ||
@@ -65,7 +65,7 @@ class controllerProduct {
                 image,
                 description,
                 stock,
-                covertType,
+                category,
                 publishYear,
                 pages,
                 language,
@@ -79,7 +79,7 @@ class controllerProduct {
                 data: product,
             });
         } catch (error) {
-            console.error('❌ Lỗi tại createProduct:', error);
+            console.error(' Lỗi tại createProduct:', error);
             res.status(500).json({ success: false, message: 'Lỗi server', error: error.message });
         }
     }
@@ -87,14 +87,16 @@ class controllerProduct {
     // [GET] /api/products
     async getAllProduct(req, res) {
         try {
-            const products = await modelProduct.findAll();
+            const products = await modelProduct.findAll({
+            order: [['stock', 'ASC']], // sắp xếp stock giảm dần
+        });
             res.status(200).json({
                 success: true,
                 message: 'Lấy danh sách sản phẩm thành công',
                 data: products,
             });
         } catch (error) {
-            console.error('❌ Lỗi tại getAllProduct:', error);
+            console.error(' Lỗi tại getAllProduct:', error);
             res.status(500).json({ success: false, message: 'Lỗi server', error: error.message });
         }
     }
@@ -134,7 +136,7 @@ class controllerProduct {
                     message: 'Từ khóa tìm kiếm không hợp lệ',
                 });
             }
-
+ 
             const products = await modelProduct.findAll({
                 where: { nameProduct: { [Op.like]: `%${keyword}%` } },
             });

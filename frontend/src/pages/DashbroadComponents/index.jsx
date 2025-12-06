@@ -7,7 +7,7 @@ import LoanRequestManagement from './LoanRequestManagement';
 import CardIssuanceManagement from './CardIssuanceManagement';
 import BookManagement from './BookManagement';
 import Statistics from './Statistics';
-import './IndexDashBroad.css';
+import './Index.css';
 
 
 const { Header, Content, Sider, Footer } = Layout;

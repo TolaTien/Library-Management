@@ -5,6 +5,7 @@ import PersonalInfo from "./InforUserComponents/PersonalInfor.jsx";
 import BorrowingHistory from "./InforUserComponents/BorrowingHistory.jsx";
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import AdminNotifications from './InforUserComponents/AdminNotifications.jsx';
 import './InforUser.css';
 
 function InforUser() {
@@ -23,9 +24,11 @@ function InforUser() {
             case 'info':
                 return <PersonalInfo />;
             case 'history':
-                return <BorrowingHistory/>;
+                return <BorrowingHistory />;
+            case 'notifications':
+                return <AdminNotifications />;
             default:
-                return <PersonalInfo/>;
+                return <PersonalInfo />;
         }
     };
 
@@ -53,5 +56,4 @@ function InforUser() {
         </div>
     );
 }
-
 export default InforUser;

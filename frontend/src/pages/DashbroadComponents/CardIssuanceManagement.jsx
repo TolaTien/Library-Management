@@ -170,4 +170,3 @@ const CardIssuanceManagement = () => {
 };
 
 export default CardIssuanceManagement;
-

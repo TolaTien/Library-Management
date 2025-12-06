@@ -146,18 +146,27 @@ function RegisterUser() {
 
                                     {/* BEM: register-page__optional-fields */}
                                     <div className="register-page__optional-fields">
-                                        <Form.Item name="phone">
+                                        <Form.Item 
+                                            name="phone"
+                                            rules={[
+                                                { required: true, message: 'Vui lòng nhập số điện thoại!' },
+                                            
+                                            ]}
+                                        >
                                             <Input
                                                 prefix={<PhoneOutlined className="register-page__input-prefix" />}
-                                                placeholder="Số điện thoại (không bắt buộc)"
+                                                placeholder="Số điện thoại (bắt buộc)"
                                                 className="register-page__input"
                                             />
                                         </Form.Item>
 
-                                        <Form.Item name="address">
+                                        <Form.Item
+                                            name="address"
+                                            rules={[{ required: true, message: 'Vui lòng nhập địa chỉ!' }]}
+                                        >
                                             <Input
                                                 prefix={<HomeOutlined className="register-page__input-prefix" />}
-                                                placeholder="Địa chỉ (không bắt buộc)"
+                                                placeholder="Địa chỉ (bắt buộc)"
                                                 className="register-page__input"
                                             />
                                         </Form.Item>

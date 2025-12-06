@@ -92,7 +92,7 @@ const UserManagement = () => {
             <div className="flex justify-between mb-4">
                 <h2 className="text-2xl font-bold">Quản lý người dùng</h2>
             </div>
-            <Search placeholder="Tìm kiếm người dùng" onSearch={() => {}} style={{ width: 300, marginBottom: 16 }} />
+            
             <Table columns={columns} dataSource={data} rowKey="id" />
 
              {/* Edit User Modal */}

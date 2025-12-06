@@ -28,7 +28,6 @@ function Footer() {
                                     Trang chủ
                                 </a>
                             </li>
-
                             <li>
                                 <a href="#" className="library-footer__link">
                                     Quy định mượn sách

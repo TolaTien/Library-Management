@@ -33,6 +33,12 @@ const Sidebar = ({ setActiveComponent, activeComponent }) => {
             onClick: () => setActiveComponent('history'),
         },
         {
+            key: 'notifications',
+            icon: "🔔",
+            label: 'Thông báo',
+            onClick: () => setActiveComponent('notifications'),
+        },
+        {
             key: 'logout',
             icon: '🚪', // Có thể thay bằng <FaSignOutAlt />
             label: 'Đăng xuất',

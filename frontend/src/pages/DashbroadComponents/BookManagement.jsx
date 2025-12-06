@@ -10,7 +10,6 @@ import {
     requestUploadImageProduct,
 } from '../../config/request';
 
-
 const { Option } = Select;
 
 // Component Form sách để tái sử dụng
@@ -37,6 +36,9 @@ const BookForm = ({ form, onFinish, initialValues, isEdit = false }) => {
             }
 
             form.setFieldsValue(formValues);
+        } else {
+            // Nếu không có initialValues thì reset form (tránh giữ giá trị cũ)
+            form.resetFields();
         }
     }, [initialValues, form, isEdit]);
 
@@ -98,14 +100,11 @@ const BookForm = ({ form, onFinish, initialValues, isEdit = false }) => {
                 <Input.TextArea />
             </Form.Item>
             <Form.Item
-                name="covertType"
-                label="Loại bìa"
-                rules={[{ required: true, message: 'Vui lòng chọn loại bìa!' }]}
+                name="category"
+                label="Thể loại"
+                rules={[{ required: true, message: 'Vui lòng chọn thể loại!' }]}
             >
-                <Select placeholder="Chọn loại bìa">
-                    <Option value="hard">Bìa cứng</Option>
-                    <Option value="soft">Bìa mềm</Option>
-                </Select>
+                <Input />
             </Form.Item>
             <Form.Item name="pages" label="Số trang" rules={[{ required: true, message: 'Vui lòng nhập số trang!' }]}>
                 <InputNumber className="w-full" min={1} />
@@ -130,6 +129,10 @@ const BookForm = ({ form, onFinish, initialValues, isEdit = false }) => {
 
 const BookManagement = () => {
     const [data, setData] = useState([]);
+    const [filterCategory, setFilterCategory] = useState('all');
+    const [categories, setCategories] = useState([]);
+
+
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
@@ -156,6 +159,18 @@ const BookManagement = () => {
     useEffect(() => {
         fetchData();
     }, []);
+    useEffect(() => {
+        const uniqueCategories = [...new Set(data.map(item => item.category))];
+        setCategories(uniqueCategories);
+    }, [data]);
+
+
+    // dữ liệu đã lọc
+    const filteredData = data.filter((item) => {
+        if (filterCategory === 'all') return true;
+        return item.category === filterCategory;
+;
+    });
 
     // --- Xử lý cho Modal Thêm Sách ---
     const showAddModal = () => {
@@ -184,12 +199,12 @@ const BookManagement = () => {
             formData.append('image', values.image.fileList[0].originFileObj);
 
             const urlImage = await requestUploadImageProduct(formData);
-            const data = {
+            const payload = {
                 ...values,
                 image: urlImage.data,
             };
 
-            await requestCreateProduct(data);
+            await requestCreateProduct(payload);
             message.success('Thêm sách thành công');
             handleAddCancel();
             fetchData();
@@ -205,6 +220,9 @@ const BookManagement = () => {
     const showEditModal = (record) => {
         setEditingBook(record);
         setIsEditModalVisible(true);
+
+        // set giá trị cho form edit (nếu muốn set ngay)
+        // editForm.setFieldsValue(record); // BookForm useEffect cũng đã set
     };
 
     const handleEditOk = () => {
@@ -290,7 +308,7 @@ const BookManagement = () => {
                     src={text?.startsWith('http') ? text : `${import.meta.env.VITE_API_URL_IMAGE}/${text}`}
                     alt="book cover"
                     onError={(e) => {
-                        e.target.src = '/placeholder-book.png'; // Fallback image
+                        e.target.src = '/placeholder-book.png';
                     }}
                 />
             ),
@@ -348,14 +366,30 @@ const BookManagement = () => {
         <div className="book-management">
             <div className="header">
                 <h2>Quản lý sách</h2>
-                <Button type="primary" onClick={showAddModal} loading={loading}>
-                    Thêm sách
-                </Button>
+                <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                    <Select
+                        value={filterCategory}
+                        onChange={(value) => setFilterCategory(value)}
+                        style={{ width: 200 }}
+                    >
+                        <Option value="all">Tất cả thể loại</Option>
+                        {categories.map((category) => (
+                            <Option key={category} value={category}>
+                                {category}
+                            </Option>
+                        ))}
+                        
+                    </Select>
+
+                    <Button type="primary" onClick={showAddModal} loading={loading}>
+                        Thêm sách
+                    </Button>
+                </div>
             </div>
 
             <Table
                 columns={columns}
-                dataSource={data}
+                dataSource={filteredData}
                 rowKey="id"
                 loading={loading}
                 pagination={{

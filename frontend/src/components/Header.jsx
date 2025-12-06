@@ -1,12 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useStore } from '../hooks/useStore';
 import { useEffect, useState, useRef } from 'react';
 import useDebounce from '../hooks/useDebounce';
 import { requestLogout, requestSearchProduct } from '../config/request';
+import { useStore } from '../hooks/useStore';
 import libraryIcon from '../assets/images/library-icon.png';
 import './Header.css';
 
-function Header() {
+function Header({ setActiveComponent }) {
     const { dataUser } = useStore();
     const navigate = useNavigate();
     const [valueSearch, setValueSearch] = useState('');
@@ -22,9 +22,7 @@ function Header() {
         try {
             await requestLogout();
             navigate('/');
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
+            setTimeout(() => window.location.reload(), 1000);
         } catch (error) {
             console.error('Failed to logout:', error);
         }
@@ -64,6 +62,12 @@ function Header() {
         fetchData();
     }, [debounce]);
 
+    // Khi click vào Header, vừa navigate vừa set state
+    const handleSelectInfo = (componentKey) => {
+        navigate('/infoUser', { state: { activeTab: componentKey } });
+        if (setActiveComponent) setActiveComponent(componentKey);
+    };
+
     return (
         <header className="library-header">
             <div className="library-header__container">
@@ -77,7 +81,7 @@ function Header() {
                             </h1>
                         </div>
                     </Link>
-                    
+
                     {/* Search Bar */}
                     <div className="library-header__search">
                         <div className="library-header__search-wrapper">
@@ -96,7 +100,7 @@ function Header() {
                                 className="library-header__search-input"
                             />
                         </div>
-                        
+                        {/* Search results */}
                         {isResultVisible && searchResults.length > 0 && (
                             <div className="library-header__search-results">
                                 <ul className="library-header__search-results-list">
@@ -120,7 +124,7 @@ function Header() {
                         )}
                     </div>
 
-                    {/* Auth Buttons / User Info */}
+                    {/* Auth / User Info */}
                     <div className="library-header__user-action">
                         {dataUser && dataUser.id ? (
                             // --- CUSTOM DROPDOWN ---

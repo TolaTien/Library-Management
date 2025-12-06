@@ -24,6 +24,7 @@ router.post('/cancel-request-id', check(ControllerUser.cancelRequestIdStudent));
 router.post('/get-fine', authUser, check(ControllerUser.calculateFine))
 router.put('/return-book', authUser, check(ControllerUser.returnBoook));
 
-router.get('/get-reminders', authUser, check(ControllerUser.sendReminder))
+router.post('/send-reminder', check(ControllerUser.sendReminder))
+router.get('/get-reminder', authUser, check(ControllerUser.getReminders))
 module.exports = router;
  

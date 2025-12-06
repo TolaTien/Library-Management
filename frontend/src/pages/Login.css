@@ -243,23 +243,6 @@
     to { transform: rotate(360deg); }
 }
 
-/* Forgot Password */
-.login-page__forgot-password {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 1rem;
-}
-
-.login-page__forgot-password-link {
-    color: var(--color-primary-blue);
-    text-decoration: none;
-    font-size: 0.875rem;
-    transition: color 0.2s;
-}
-
-.login-page__forgot-password-link:hover {
-    color: var(--color-primary-blue-hover);
-}
 
 /* Divider */
 .divider {

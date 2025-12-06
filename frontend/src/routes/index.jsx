@@ -4,7 +4,6 @@ import Login from '../pages/Login';
 import RegisterUser from '../pages/RegisterUser';
 import Admin from '../pages/DashbroadComponents/index';
 import InforUser from '../pages/InforUser';
-import ForgotPassword from '../pages/ForgotPassword';
 
 export const routes = [
     {
@@ -30,9 +29,5 @@ export const routes = [
     {
         path: '/infoUser',
         component: <InforUser />,
-    },
-    {
-        path: '/forgot-password',
-        component: <ForgotPassword />,
     },
 ];

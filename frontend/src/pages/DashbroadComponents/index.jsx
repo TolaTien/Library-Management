@@ -29,35 +29,35 @@ const IndexDashBroad = () => {
                         className={selectedKey === "stats" ? "active" : ""}
                         onClick={() => setSelectedKey("stats")}
                     >
-                        📊 Thống kê
+                         Thống kê
                     </li>
 
                     <li
                         className={selectedKey === "book" ? "active" : ""}
                         onClick={() => setSelectedKey("book")}
                     >
-                        📚 Quản lý sách
+                         Quản lý sách
                     </li>
 
                     <li
                         className={selectedKey === "loan" ? "active" : ""}
                         onClick={() => setSelectedKey("loan")}
                     >
-                        📄 Quản lý mượn sách
+                         Quản lý mượn sách
                     </li>
 
                     <li
                         className={selectedKey === "card" ? "active" : ""}
                         onClick={() => setSelectedKey("card")}
                     >
-                        🆔 Quản lý cấp thẻ
+                         Quản lý cấp thẻ
                     </li>
 
                     <li
                         className={selectedKey === "user" ? "active" : ""}
                         onClick={() => setSelectedKey("user")}
                     >
-                        👤 Quản lý người dùng
+                         Quản lý người dùng
                     </li>
                 </ul>
             </aside>

@@ -118,7 +118,7 @@ const UserManagement = () => {
                 </table>
             </div>
 
-            {/* ===== EDIT MODAL ===== */}
+            {/*  EDIT MODAL */}
             {showEdit && (
                 <div className="modal-backdrop">
                     <div className="modal-box">
@@ -169,7 +169,7 @@ const UserManagement = () => {
                 </div>
             )}
 
-            {/* ===== DELETE MODAL ===== */}
+            {/*  DELETE MODAL */}
             {showDelete && (
                 <div className="modal-backdrop">
                     <div className="modal-box">

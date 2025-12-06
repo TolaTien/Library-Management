@@ -3,7 +3,7 @@
     font-family: 'Inter', sans-serif;
 }
 
-/* --- HEADER --- */
+/* -- HEADER --*/
 .header {
     display: flex;
     justify-content: space-between;
@@ -16,7 +16,7 @@
     gap: 10px;
 }
 
-/* --- TABLE --- */
+/* - TABLE - */
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -52,7 +52,7 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-/* --- BUTTONS --- */
+/* - BUTTONS - */
 .btn {
     padding: 7px 14px;
     cursor: pointer;
@@ -99,7 +99,7 @@
     margin-top: 10px;
 }
 
-/* --- FORM --- */
+/* FORM */
 .form {
     display: flex;
     flex-direction: column;
@@ -125,7 +125,7 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-/* --- MODAL --- */
+/*  MODAL */
 .modal {
     position: fixed;
     inset: 0;
@@ -146,7 +146,7 @@
     box-shadow: 0 6px 18px rgba(0,0,0,0.1);
 }
 
-/* --- ANIMATIONS --- */
+/* ANIMATIONS  */
 @keyframes fadeIn {
     from { opacity: 0 }
     to { opacity: 1 }

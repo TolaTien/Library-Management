@@ -1,16 +1,10 @@
 const { Sequelize } = require("sequelize");
 
-
-const connect = new Sequelize(
-    'library',
-    'root',
-    '123456789',
-    {
-        host: 'localhost',
-        dialect: 'mysql',
-        port: '3306',
-    }
-);
+const connect = new Sequelize("library_management", "root", "17032006", {
+  host: "localhost",
+  dialect: "mysql",
+  port: "3306",
+});
 
 const connectDB = async () => {
   try {

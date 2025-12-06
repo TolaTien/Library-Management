@@ -1,159 +1,188 @@
 import { useState } from 'react';
-import { Button, Form, Input, Card, Divider } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 import { Link, useNavigate } from 'react-router-dom';
 import { requestLogin } from '../config/request';
 import { toast } from 'react-toastify';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 import imagesLogin from '../assets/images/login.webp';
-// Import file CSS riêng
 import './Login.css';
 
+// Custom Input Component
+const Input = ({ type = 'text', name, placeholder, value, onChange, icon, error }) => (
+  <div className="input-wrapper">
+    <div className="input-container">
+      {icon && <span className="input-icon">{icon}</span>}
+      <input
+        type={type}
+        name={name}
+        className={`custom-input ${error ? 'input-error' : ''}`}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+      />
+    </div>
+    {error && <span className="error-message">{error}</span>}
+  </div>
+);
+
+// Custom Button Component
+const Button = ({ children, onClick, loading, type = 'button', variant = 'primary', disabled }) => (
+  <button
+    type={type}
+    className={`custom-button custom-button--${variant}`}
+    onClick={onClick}
+    disabled={loading || disabled}
+  >
+    {loading ? <span className="button-spinner"></span> : children}
+  </button>
+);
+
 function LoginUser() {
-    const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-    const onFinish = async (values) => {
-        const { email, password } = values;
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.email) {
+      newErrors.email = 'Vui lòng nhập email!';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Email không hợp lệ!';
+    }
+    
+    if (!formData.password) {
+      newErrors.password = 'Vui lòng nhập mật khẩu!';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-        // ✅ Nếu là tài khoản admin thì bỏ qua backend và chuyển hướng ngay
-        if (email === 'admin@gmail.com' && password === '123456') {
-            toast.success('Đăng nhập admin thành công!');
-            navigate('/admin');
-            return;
-        }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+  };
 
-        // ✅ Các tài khoản khác vẫn gọi API bình thường
-        setLoading(true);
-        try {
-            await requestLogin(values);
-            toast.success('Đăng nhập thành công!');
-            setLoading(false);
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
-            navigate('/');
-        } catch (error) {
-            toast.error(error?.response?.data?.message || 'Đăng nhập thất bại!');
-            setLoading(false);
-        }
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) return;
 
-    return (
-        // BEM: login-page-layout
-        <div className="login-page-layout">
-            <header>
-                <Header />
-            </header>
+    if (formData.email === 'admin@gmail.com' && formData.password === '123456') {
+      toast.success('Đăng nhập admin thành công!');
+      navigate('/admin');
+      return;
+    }
 
-            {/* BEM: login-page__main */}
-            <main className="login-page__main">
-                <div className="login-page__container">
-                    {/* BEM: login-page__content-wrapper */}
-                    <div className="login-page__content-wrapper">
-                        {/* Phần hình ảnh */}
-                        {/* BEM: login-page__image-column */}
-                        <div className="login-page__image-column">
-                            <div className="login-page__image-wrapper">
-                                <img
-                                    src={imagesLogin}
-                                    alt="Tour du lịch"
-                                    className="login-page__image"
-                                />
-                                <div className="login-page__image-overlay"></div>
-                                <div className="login-page__image-text">
-                                    <h2 className="login-page__welcome-title">Chào mừng trở lại</h2>
-                                </div>
-                            </div>
-                        </div>
+    setLoading(true);
+    try {
+      await requestLogin(formData);
+      toast.success('Đăng nhập thành công!');
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+      navigate('/');
+    } catch (error) {
+      toast.error(error?.response?.data?.message || 'Đăng nhập thất bại!');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-                        {/* Phần form đăng nhập */}
-                        {/* BEM: login-page__form-column */}
-                        <div className="login-page__form-column">
-                            <div className="login-page__form-padding">
-                                <div className="login-page__form-header">
-                                    <h1 className="login-page__form-title">Chào mừng trở lại</h1>
-                                    <p className="login-page__form-subtitle">Đăng nhập vào tài khoản của bạn</p>
-                                </div>
+  return (
+    <div className="login-page-layout">
+      <header>
+        <Header />
+      </header>
 
-                                <Form
-                                    name="login_form"
-                                    className="login-form"
-                                    initialValues={{ remember: true }}
-                                    onFinish={onFinish}
-                                    layout="vertical"
-                                    size="large"
-                                >
-                                    <Form.Item
-                                        name="email"
-                                        rules={[{ required: true, message: 'Vui lòng nhập email!' }]}
-                                    >
-                                        {/* BEM: login-page__input-prefix */}
-                                        <Input
-                                            prefix={<UserOutlined className="login-page__input-prefix" />}
-                                            placeholder="Email"
-                                            className="login-page__input"
-                                        />
-                                    </Form.Item>
-
-                                    <Form.Item
-                                        name="password"
-                                        rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
-                                    >
-                                        <Input.Password
-                                            prefix={<LockOutlined className="login-page__input-prefix" />}
-                                            placeholder="Mật khẩu"
-                                            className="login-page__input"
-                                        />
-                                    </Form.Item>
-
-                                    {/* BEM: login-page__forgot-password */}
-                                    <div className="login-page__forgot-password">
-                                        <Link className="login-page__forgot-password-link" to="/forgot-password">
-                                            Quên mật khẩu?
-                                        </Link>
-                                    </div>
-
-                                    <Form.Item>
-                                        <Button
-                                            type="primary"
-                                            htmlType="submit"
-                                            // BEM: login-page__button
-                                            className="login-page__button login-page__button--login"
-                                            loading={loading}
-                                        >
-                                            Đăng nhập
-                                        </Button>
-                                    </Form.Item>
-
-                                    <Divider plain className="login-page__divider">Hoặc</Divider>
-
-                                    {/* BEM: login-page__register-link */}
-                                    <div className="login-page__register-link">
-                                        <Link to="/register">
-                                            <Button className="login-page__button login-page__button--register">Đăng ký</Button>
-                                        </Link>
-                                    </div>
-                                </Form>
-                            </div>
-                        </div>
-                    </div>
+      <main className="login-page__main">
+        <div className="login-page__container">
+          <div className="login-page__content-wrapper">
+            <div className="login-page__image-column">
+              <div className="login-page__image-wrapper">
+                <img
+                  src={imagesLogin}
+                  alt="Tour du lịch"
+                  className="login-page__image"
+                />
+                <div className="login-page__image-overlay"></div>
+                <div className="login-page__image-text">
+                  <h2 className="login-page__welcome-title">Chào mừng trở lại</h2>
                 </div>
-            </main>
+              </div>
+            </div>
 
-            <footer>
-                <Footer />
-            </footer>
-            
-            {/* Style cho text trên ảnh (sẽ chuyển sang CSS file) */}
-            <style jsx>{`
-                .login-page__welcome-title {
-                    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-                }
-            `}</style>
+            <div className="login-page__form-column">
+              <div className="login-page__form-padding">
+                <div className="login-page__form-header">
+                  <h1 className="login-page__form-title">Chào mừng trở lại</h1>
+                  <p className="login-page__form-subtitle">Đăng nhập vào tài khoản của bạn</p>
+                </div>
+
+                <form onSubmit={handleSubmit} className="login-form">
+                  <Input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    error={errors.email}
+                    icon={<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>}
+                  />
+
+                  <Input
+                    type="password"
+                    name="password"
+                    placeholder="Mật khẩu"
+                    value={formData.password}
+                    onChange={handleChange}
+                    error={errors.password}
+                    icon={<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>}
+                  />
+
+                  <Button
+                    type="submit"
+                    loading={loading}
+                    variant="primary"
+                  >
+                    Đăng nhập
+                  </Button>
+
+                  <div className="divider">
+                    <span>Hoặc</span>
+                  </div>
+
+                  <div className="login-page__register-link">
+                    <Link to="/register">
+                      <Button variant="secondary">Đăng ký</Button>
+                    </Link>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
-    );
+      </main>
+
+      <footer>
+        <Footer />
+      </footer>
+    </div>
+  );
 }
 
 export default LoginUser;

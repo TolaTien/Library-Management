@@ -8,7 +8,6 @@ import "./PersonalInfor.css";
 
 const PersonalInfo = () => {
     // FIX: Đặt loading thành false sau khi dataUser được load lần đầu,
-    // hoặc quản lý loading qua store nếu cần, ở đây tôi giữ logic ban đầu nhưng setFieldsValue sẽ dừng loading.
     const [loading, setLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
     const [form] = Form.useForm();

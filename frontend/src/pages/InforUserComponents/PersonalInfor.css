@@ -1,83 +1,185 @@
-/* --- CSS Variables --- */
-:root {
-    --color-border: #e0e0e0;            /* Border mềm */
-    --color-primary: #1e88e5;           /* Xanh Dương Sáng */
-    --color-text-dark: #374151;
+/* PersonalInfor.css */
+
+/* --- Layout chính --- */
+.personal-info-container {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
 }
 
-/* --- PERSONAL-INFO-CARD BLOCK --- */
-.personal-info-card.ant-card {
-    /* Đảm bảo Card base không có border */
-    border: none;
-}
-
-.personal-info-card__loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 200px;
-}
-
-/* --- CONTENT ELEMENT --- */
-.personal-info-card__content {
-    display: flex;
+@media (max-width: 768px) {
+  .personal-info-container {
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem; 
+  }
 }
 
-@media (min-width: 768px) { 
-    .personal-info-card__content {
-        flex-direction: row;
-        align-items: flex-start;
-    }
+/* --- Phần Avatar --- */
+.avatar-section {
+  flex: 0 0 150px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 
-/* --- AVATAR SECTION ELEMENT --- */
-.personal-info-card__avatar-section {
-   
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem; 
-    flex-shrink: 0;
-    min-width: 120px;
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #d9d9d9;
+  background-color: #f0f0f0;
 }
 
-.personal-info-card__avatar {
-    border: 2px solid var(--color-border);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+/* Avatar placeholder khi chưa có ảnh */
+.profile-avatar-placeholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  color: #fff;
+  font-weight: bold;
 }
 
-.personal-info-card__avatar-upload {
-    width: 100%;
-    text-align: center;
+/* --- Phần Chi tiết thông tin --- */
+.details-section {
+  flex: 1;
+  width: 100%;
 }
 
-
-.personal-info-card__details-section {
-    flex-grow: 1;
-    width: 100%;
+/* Style cho bảng thông tin (thay thế Descriptions) */
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  border: 1px solid #f0f0f0;
 }
 
-.personal-info-card__descriptions {
-    margin-bottom: 1.5rem;
+.info-row {
+  border-bottom: 1px solid #f0f0f0;
 }
 
-/* --- BUTTONS & FORM ACTIONS --- */
-.personal-info-card__button--request {
-    margin-top: 1rem !important; 
-    background-color: var(--color-primary) !important;
+.info-label {
+  background-color: #fafafa;
+  padding: 12px 16px;
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 500;
+  width: 30%;
+  border-right: 1px solid #f0f0f0;
 }
 
-.personal-info-card__form-actions {
-    margin-top: 1.5rem;
-    padding-top: 0.5rem;
-    border-top: 1px solid #f0f0f0;
-    display: flex;
-    gap: 0.75rem; 
+.info-value {
+  padding: 12px 16px;
+  color: rgba(0, 0, 0, 0.65);
+  width: 70%;
 }
 
-.personal-info-card__button--save {
-    margin-right: 0.5rem !important; 
+/* --- Style cho Form (thay thế Antd Form) --- */
+.custom-form-group {
+  margin-bottom: 16px;
+}
+
+.custom-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.custom-label-required::after {
+  content: '*';
+  color: #ff4d4f;
+  margin-left: 4px;
+}
+
+.custom-input {
+  box-sizing: border-box;
+  margin: 0;
+  font-variant: tabular-nums;
+  list-style: none;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  min-width: 0;
+  padding: 8px 11px;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+  background-color: #fff;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+.custom-input:focus {
+  border-color: #40a9ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  outline: 0;
+}
+
+/* --- Buttons --- */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.btn {
+  line-height: 1.5715;
+  position: relative;
+  display: inline-block;
+  font-weight: 400;
+  white-space: nowrap;
+  text-align: center;
+  background-image: none;
+  border: 1px solid transparent;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  user-select: none;
+  touch-action: manipulation;
+  height: 32px;
+  padding: 4px 15px;
+  font-size: 14px;
+  border-radius: 2px;
+  color: rgba(0, 0, 0, 0.85);
+  background: #fff;
+  border-color: #d9d9d9;
+}
+
+.btn-primary {
+  color: #fff;
+  background: #1890ff;
+  border-color: #1890ff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+}
+
+.btn-primary:hover {
+  background: #40a9ff;
+  border-color: #40a9ff;
+}
+
+.btn-default:hover {
+  color: #40a9ff;
+  border-color: #40a9ff;
+}
+
+.btn:disabled {
+  color: rgba(0, 0, 0, 0.25);
+  background: #f5f5f5;
+  border-color: #d9d9d9;
+  text-shadow: none;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* Loading Spinner nhỏ (nếu cần dùng lại) */
+.loading-overlay {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
 }

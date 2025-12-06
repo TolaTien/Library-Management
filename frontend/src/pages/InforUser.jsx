@@ -7,6 +7,7 @@ import BorrowingHistory from "./InforUserComponents/BorrowingHistory.jsx";
 import AdminNotifications from './InforUserComponents/AdminNotifications.jsx';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+// Import file CSS riêng
 import './InforUser.css';
 
 const { Sider, Content } = Layout;
@@ -40,12 +41,10 @@ function InforUser() {
             <header>
                 <Header setActiveComponent={setActiveComponent} />
             </header>
-
             <Layout className="user-profile__container">
                 <Sider width={250} theme="light" className="user-profile__sidebar">
                     <Sidebar activeComponent={activeComponent} setActiveComponent={setActiveComponent} />
                 </Sider>
-
                 <Content className="user-profile__content">
                     <div className="user-profile__active-view">{renderComponent()}</div>
                 </Content>

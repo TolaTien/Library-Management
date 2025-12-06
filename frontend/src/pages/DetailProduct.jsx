@@ -38,7 +38,6 @@ function DetailProduct() {
 
             {/* Breadcrumb */}
             <div className="product-detail__breadcrumb-wrapper">
-                {/* BEM: product-detail__breadcrumb */}
                 <nav className="product-detail__breadcrumb">
                     <Link to={'/'} className="product-detail__breadcrumb-link">Trang chủ</Link>
                     <span className="product-detail__breadcrumb-separator">/</span>

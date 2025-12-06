@@ -32,9 +32,7 @@ const CardIssuanceManagement = () => {
         fetchData();
     }, []);
 
-    // =====================
     // Modal cấp thẻ
-    // =====================
     const showIssueModal = (user) => {
         setSelectedUser(user);
         setIdStudent("");
@@ -69,9 +67,7 @@ const CardIssuanceManagement = () => {
         }
     };
 
-    // =====================
     // Modal Hủy yêu cầu
-    // =====================
     const showCancelModal = (user) => {
         setSelectedUser(user);
         setIsCancelModalVisible(true);
@@ -171,12 +167,10 @@ const CardIssuanceManagement = () => {
                 </tbody>
             </table>
 
-            {/* ================= */}
-            {/* MODAL CẤP THẺ    */}
-            {/* ================= */}
+            {/* MODAL CẤP THẺ */}
             {isIssueModalVisible && (
                 <div className="modal-overlay">
-                    <div className="modal">
+                    <div className="modal-box">
                         <h3>Cấp thẻ cho: {selectedUser?.fullName}</h3>
 
                         <label>Mã số sinh viên</label>
@@ -184,6 +178,7 @@ const CardIssuanceManagement = () => {
                             value={idStudent}
                             onChange={(e) => setIdStudent(e.target.value)}
                             placeholder="Nhập mã số sinh viên..."
+                            className="modal-input"
                         />
 
                         <div className="modal-actions">
@@ -198,13 +193,12 @@ const CardIssuanceManagement = () => {
                 </div>
             )}
 
-            {/* ================= */}
             {/* MODAL HỦY YÊU CẦU */}
-            {/* ================= */}
             {isCancelModalVisible && (
                 <div className="modal-overlay">
-                    <div className="modal">
+                    <div className="modal-box">
                         <h3>Xác nhận hủy yêu cầu</h3>
+
                         <p>
                             Bạn có chắc muốn hủy yêu cầu của{" "}
                             <b>{selectedUser?.fullName}</b> không?

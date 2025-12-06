@@ -1,16 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { Table, Button, Tag } from 'antd';
-import { requestGetAllHistoryBook, requestUpdateStatusBook, requestSendReminder } from '../../config/request';
-import dayjs from 'dayjs';
-import './LoanRequestManagement.css';
+import React, { useEffect, useState } from "react";
+import dayjs from "dayjs";
+import {
+    requestGetAllHistoryBook,
+    requestUpdateStatusBook,
+    requestSendReminder
+} from "../../config/request";
+import "./LoanRequestManagement.css";
 
 const LoanRequestManagement = () => {
     const [data, setData] = useState([]);
     const [filterReminder, setFilterReminder] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const fetchData = async () => {
-        const res = await requestGetAllHistoryBook();
-        setData(res.data);
+        try {
+            setLoading(true);
+            const res = await requestGetAllHistoryBook();
+            setData(res.data);
+        } catch (err) {
+            console.log("Fetch error:", err);
+        } finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -19,148 +30,163 @@ const LoanRequestManagement = () => {
 
     const handleUpdateStatus = async (id, status, productId, userId) => {
         try {
-            const data = { idHistory: id, status, productId, userId };
-            await requestUpdateStatusBook(data);
+            await requestUpdateStatusBook({ idHistory: id, status, productId, userId });
             fetchData();
-        } catch (error) {
-            console.log(error);
+        } catch (err) {
+            console.log("Update error:", err);
         }
     };
 
     const handleSendReminder = async (idHistory, userId) => {
         try {
-            const res = await requestSendReminder({ idHistory, userId });
-            console.log("Reminder sent:", res);
+            await requestSendReminder({ idHistory, userId });
         } catch (err) {
             console.log("Reminder error:", err);
         }
     };
 
-    // Lọc sách quá hạn
-    const overdueList = data.filter((item) => {
-        return dayjs(item.returnDate).isBefore(dayjs()) && item.status === 'success';
-    });
+    const overdueList = data.filter(
+        (item) =>
+            dayjs(item.returnDate).isBefore(dayjs()) && item.status === "success"
+    );
 
     const tableData = filterReminder ? overdueList : data;
 
-    const columns = [
-        { title: 'ID Yêu cầu', dataIndex: 'id', key: 'id', render: (text) => <span>{text.slice(0, 10)}</span> },
-        { title: 'Người mượn', dataIndex: 'fullName', key: 'fullName' },
-        {
-            title: 'Ảnh',
-            dataIndex: 'product',
-            key: 'product',
-            render: (record) => (
-                <img style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-                     src={`${import.meta.env.VITE_API_URL_IMAGE}/${record.image}`}
-                     alt=""
-                />
-            ),
-        },
-        { title: 'Tên sách', dataIndex: 'product', key: 'product', render: (record) => record.nameProduct },
-        { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
-        {
-            title: 'Ngày mượn',
-            dataIndex: 'borrowDate',
-            key: 'borrowDate',
-            render: (text) => dayjs(text).format('DD/MM/YYYY'),
-        },
-        {
-            title: 'Ngày trả',
-            dataIndex: 'returnDate',
-            key: 'returnDate',
-            render: (text) => {
-                const isOverdue = dayjs(text).isBefore(dayjs());
-                return <span style={{ color: isOverdue ? 'red' : 'black' }}>{dayjs(text).format('DD/MM/YYYY')}</span>;
-            },
-        },
-        {
-            title: 'Trạng thái',
-            key: 'status',
-            dataIndex: 'status',
-            render: (status) => {
-                let color = status === 'pending' ? 'green' : status === 'success' ? 'geekblue' : status === 'returned'? 'purple': 'volcano';
-                return (
-                    <Tag color={color}>
-                        {status === 'pending'
-                            ? 'Chờ duyệt'
-                            : status === 'success'
-                                ? 'Đã duyệt'
-                                : status === 'returned'
-                                ? 'Đã trả'
-                                : 'Từ chối'}
-                    </Tag>
-                );
-            },
-        },
-        {
-            title: 'Hành động',
-            key: 'action',
-            render: (text, record) => {
-                const isOverdue = dayjs(record.returnDate).isBefore(dayjs());
-
-                return (
-                    <span>
-                        {record.status === 'pending' && (
-                            <Button
-                                onClick={() =>
-                                    handleUpdateStatus(record.id, 'success', record.product.id, record.userId)
-                                }
-                                type="primary"
-                            >
-                                Duyệt
-                            </Button>
-                        )}
-
-                        {record.status === 'pending' && (
-                            <Button
-                                onClick={() =>
-                                    handleUpdateStatus(record.id, 'cancel', record.product.id, record.userId)
-                                }
-                                type="primary"
-                                danger
-                                style={{ marginLeft: 8 }}
-                            >
-                                Từ chối
-                            </Button>
-                        )}
-
-                        {/* Nút nhắc nhở khi quá hạn */}
-                        {isOverdue && record.status === "success" && (
-                            <Button
-                                onClick={() => handleSendReminder(record.id, record.userId)}
-                                style={{
-                                    marginLeft: 10,
-                                    background: 'orange',
-                                    color: 'white',
-                                    border: 'none'
-                                }}
-                            >
-                                Nhắc nhở
-                            </Button>
-                        )}
-                    </span>
-                );
-            },
-        },
-    ];
-
     return (
-        <div className="loan-request-container">
-            <h2 className="text-2x1 mb-4 font-bold">Quản lý yêu cầu mượn sách</h2>
+        <div className="loan-container">
+            <h2 className="title">Quản lý yêu cầu mượn sách</h2>
 
-            {/* 2 nút chức năng */}
-            <div style={{ marginBottom: 20 }}>
-                <Button type="primary" onClick={() => setFilterReminder(true)} style={{ marginRight: 10 }}>
-                    Xem sách cần nhắc nhở
-                </Button>
+            <div className="top-buttons">
+                <button
+                    className={filterReminder ? "btn-primary" : "btn-outline"}
+                    onClick={() => setFilterReminder(true)}
+                >
+                    Sách quá hạn cần nhắc
+                </button>
 
-                <Button onClick={() => setFilterReminder(false)}>
-                    Xem tất cả yêu cầu
-                </Button>
+                <button
+                    className={!filterReminder ? "btn-primary" : "btn-outline"}
+                    onClick={() => setFilterReminder(false)}
+                >
+                    Tất cả yêu cầu
+                </button>
             </div>
 
-            <Table columns={columns} dataSource={tableData} rowKey="id" />
+            <div className="table-wrapper">
+                <table className="custom-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Người mượn</th>
+                            <th>Ảnh</th>
+                            <th>Tên sách</th>
+                            <th>SL</th>
+                            <th>Ngày mượn</th>
+                            <th>Ngày trả</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {loading ? (
+                            <tr>
+                                <td colSpan="9" className="loading-text">Đang tải...</td>
+                            </tr>
+                        ) : (
+                            tableData.map((record) => {
+                                const overdue = dayjs(record.returnDate).isBefore(dayjs());
+
+                                return (
+                                    <tr key={record.id}>
+                                        <td className="id-col">{record.id.slice(0, 10)}</td>
+                                        <td>{record.fullName}</td>
+
+                                        <td>
+                                            <img
+                                                className="book-img"
+                                                src={`${import.meta.env.VITE_API_URL_IMAGE}/${record.product.image}`}
+                                            />
+                                        </td>
+
+                                        <td className="book-name">{record.product.nameProduct}</td>
+
+                                        <td>{record.quantity}</td>
+
+                                        <td>{dayjs(record.borrowDate).format("DD/MM/YYYY")}</td>
+
+                                        <td className={overdue ? "overdue" : ""}>
+                                            {dayjs(record.returnDate).format("DD/MM/YYYY")}
+                                        </td>
+
+                                        <td>
+                                            <span className={`status-badge ${record.status}`}>
+                                                {record.status === "pending"
+                                                    ? "Chờ duyệt"
+                                                    : record.status === "success"
+                                                    ? "Đã duyệt"
+                                                    : record.status === "returned"
+                                                    ? "Đã trả"
+                                                    : "Từ chối"}
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            <div className="action-group">
+                                                {record.status === "pending" && (
+                                                    <>
+                                                        <button
+                                                            className="btn-small btn-approve"
+                                                            onClick={() =>
+                                                                handleUpdateStatus(
+                                                                    record.id,
+                                                                    "success",
+                                                                    record.product.id,
+                                                                    record.userId
+                                                                )
+                                                            }
+                                                        >
+                                                            Duyệt
+                                                        </button>
+
+                                                        <button
+                                                            className="btn-small btn-danger"
+                                                            onClick={() =>
+                                                                handleUpdateStatus(
+                                                                    record.id,
+                                                                    "cancel",
+                                                                    record.product.id,
+                                                                    record.userId
+                                                                )
+                                                            }
+                                                        >
+                                                            Từ chối
+                                                        </button>
+                                                    </>
+                                                )}
+
+                                                {overdue && record.status === "success" && (
+                                                    <button
+                                                        className="btn-small btn-warning"
+                                                        onClick={() =>
+                                                            handleSendReminder(
+                                                                record.id,
+                                                                record.userId
+                                                            )
+                                                        }
+                                                    >
+                                                        Nhắc nhở
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                );
+                            })
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };

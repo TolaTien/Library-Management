@@ -1,86 +1,158 @@
-/* Toàn bộ phần quản lý sách */
-.book-management {
+.book-container {
     padding: 20px;
-    background-color: #f9fafb; /* nền sáng nhẹ */
-    min-height: 100vh;
-    font-family: "Segoe UI", Roboto, sans-serif;
+    font-family: 'Inter', sans-serif;
 }
 
-/* Tiêu đề */
-.book-management h2 {
-    font-size: 24px;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 16px;
-}
-
-/* Thanh tiêu đề + nút thêm */
-.book-management .header {
+/* -- HEADER --*/
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
-/* Bảng danh sách */
-.ant-table {
-    background-color: #fff;
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* - TABLE - */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background: white;
     border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-/* Hình ảnh sách trong bảng */
-.ant-table img {
+.table th {
+    background: #f4f6f8;
+    font-weight: 600;
+}
+
+.table th,
+.table td {
+    border-bottom: 1px solid #eee;
+    padding: 12px 15px;
+    text-align: left;
+    font-size: 14px;
+}
+
+.table tr:hover {
+    background: #f9fafb;
+}
+
+.book-img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
     border-radius: 6px;
-    border: 1px solid #eee;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-/* Các nút hành động */
-.book-management .ant-btn {
+/* - BUTTONS - */
+.btn {
+    padding: 7px 14px;
+    cursor: pointer;
+    border: none;
     border-radius: 6px;
-}
-
-/* Nút thêm sách */
-.book-management .ant-btn-primary {
-    background-color: #1677ff;
-    border-color: #1677ff;
-}
-
-.book-management .ant-btn-primary:hover {
-    background-color: #0056d8;
-    border-color: #0056d8;
-}
-
-/* Modal form */
-.ant-modal-content {
-    border-radius: 10px;
-}
-
-.ant-form-item-label > label {
+    font-size: 14px;
+    transition: 0.25s;
     font-weight: 500;
 }
 
-/* Input và Select trong form */
-.ant-input,
-.ant-input-number,
-.ant-select-selector,
-.ant-upload {
-    border-radius: 6px !important;
+.btn-small {
+    padding: 5px 10px;
 }
 
-/* Textarea */
-.ant-input-textarea {
-    border-radius: 6px;
+.btn-primary {
+    background: #2563eb;
+    color: white;
 }
 
-/* Khoảng cách trong form */
-.ant-form-item {
-    margin-bottom: 16px;
+.btn-primary:hover {
+    background: #1d4ed8;
 }
 
-/* Loading overlay (nếu có) */
-.book-management .ant-spin {
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #b52a36;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #565e64;
+}
+
+.full {
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* FORM */
+.form {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.preview-img {
+    width: 120px;
+    margin-top: 5px;
+    border-radius: 6px;
+    object-fit: cover;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/*  MODAL */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex;
     align-items: center;
+    justify-content: center;
+    z-index: 999;
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.modal-content {
+    background: white;
+    padding: 25px;
+    width: 480px;
+    border-radius: 10px;
+    animation: slideDown 0.25s ease;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+}
+
+/* ANIMATIONS  */
+@keyframes fadeIn {
+    from { opacity: 0 }
+    to { opacity: 1 }
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }

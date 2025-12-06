@@ -1,16 +1,10 @@
-import React, { useState } from 'react';
-import { Layout, Menu } from 'antd';
-import { UserOutlined, SolutionOutlined, IdcardOutlined, BookOutlined, LineChartOutlined } from '@ant-design/icons';
-
-import UserManagement from './UserManagement';
-import LoanRequestManagement from './LoanRequestManagement';
-import CardIssuanceManagement from './CardIssuanceManagement';
-import BookManagement from './BookManagement';
-import Statistics from './Statistics';
-import './Index.css';
-
-
-const { Header, Content, Sider, Footer } = Layout;
+import React, { useState } from "react";
+import UserManagement from "./UserManagement";
+import LoanRequestManagement from "./LoanRequestManagement";
+import CardIssuanceManagement from "./CardIssuanceManagement";
+import BookManagement from "./BookManagement";
+import Statistics from "./Statistics";
+import "./Index.css";
 
 const components = {
     stats: <Statistics />,
@@ -21,51 +15,69 @@ const components = {
 };
 
 const IndexDashBroad = () => {
-    const [selectedKey, setSelectedKey] = useState('stats');
-
-    const renderContent = () => {
-        return components[selectedKey] || <div>Chọn một mục từ menu</div>;
-    };
+    const [selectedKey, setSelectedKey] = useState("stats");
 
     return (
-        <Layout className="dashboard-layout">
-        <Sider breakpoint="lg" collapsedWidth="0">
-            <div className="logo">Library</div>
-            <Menu
-                theme="dark"
-                mode="inline"
-                defaultSelectedKeys={['stats']}
-                onClick={(e) => setSelectedKey(e.key)}
-            >
-                <Menu.Item key="stats" icon={<LineChartOutlined />}>
-                    Thống kê
-                </Menu.Item>
-                <Menu.Item key="book" icon={<BookOutlined />}>
-                    Quản lý sách
-                </Menu.Item>
-                <Menu.Item key="loan" icon={<SolutionOutlined />}>
-                    Quản lý mượn sách
-                </Menu.Item>
-                <Menu.Item key="card" icon={<IdcardOutlined />}>
-                    Quản lý cấp thẻ
-                </Menu.Item>
-                <Menu.Item key="user" icon={<UserOutlined />}>
-                    Quản lý người dùng
-                </Menu.Item>
-            </Menu>
-        </Sider>
+        <div className="layout">
 
-        <Layout>
-            <Header />
-            <Content className="dashboard-content">
-                <div className="dashboard-inner">
-                    {renderContent()}
-                </div>
-            </Content>
-            <Footer>Thư viện đẳng cấp nhất thế giới</Footer>
-        </Layout>
-    </Layout>
-);
+            {/* SIDEBAR */}
+            <aside className="sidebar">
+                <div className="logo">Library</div>
+
+                <ul className="menu">
+                    <li
+                        className={selectedKey === "stats" ? "active" : ""}
+                        onClick={() => setSelectedKey("stats")}
+                    >
+                         Thống kê
+                    </li>
+
+                    <li
+                        className={selectedKey === "book" ? "active" : ""}
+                        onClick={() => setSelectedKey("book")}
+                    >
+                         Quản lý sách
+                    </li>
+
+                    <li
+                        className={selectedKey === "loan" ? "active" : ""}
+                        onClick={() => setSelectedKey("loan")}
+                    >
+                         Quản lý mượn sách
+                    </li>
+
+                    <li
+                        className={selectedKey === "card" ? "active" : ""}
+                        onClick={() => setSelectedKey("card")}
+                    >
+                         Quản lý cấp thẻ
+                    </li>
+
+                    <li
+                        className={selectedKey === "user" ? "active" : ""}
+                        onClick={() => setSelectedKey("user")}
+                    >
+                         Quản lý người dùng
+                    </li>
+                </ul>
+            </aside>
+
+            {/* MAIN CONTENT */}
+            <div className="main">
+                <header className="header"></header>
+
+                <main className="content">
+                    <div className="content-inner">
+                        {components[selectedKey] || <div>Chọn mục từ menu</div>}
+                    </div>
+                </main>
+
+                <footer className="footer">
+                    Thư viện đẳng cấp nhất thế giới
+                </footer>
+            </div>
+        </div>
+    );
 };
 
 export default IndexDashBroad;

@@ -8,7 +8,7 @@ import {
     requestUploadImageProduct,
 } from '../../config/request';
 
-const BookForm = ({ formData, setFormData, onSubmit, isEdit }) => {
+const BookForm = ({ formData, setFormData, onSubmit, isEdit }) => {//tạo ra object mới bằng cách coppy dữ liệu cũ
     return (
         <form className="form">
             <div className="form-group">
@@ -17,11 +17,11 @@ const BookForm = ({ formData, setFormData, onSubmit, isEdit }) => {
                     type="file"
                     onChange={(e) =>
                         setFormData({ ...formData, image: e.target.files[0] })
-                    }
+                    }//chọn ảnh lấy file và lưu vào formData
                 />
                 {isEdit && formData.imageUrl && (
                     <img className="preview-img" src={formData.imageUrl} />
-                )}
+                )}//nếu sửa  thì hiển thị ảnh cũ
             </div>
 
             <div className="form-group">
@@ -124,21 +124,21 @@ const BookForm = ({ formData, setFormData, onSubmit, isEdit }) => {
             >
                 {isEdit ? 'Lưu thay đổi' : 'Thêm sách'}
             </button>
-        </form>
+        </form>//chỉ chạy hàm onSubmit do cha chuyền vào,hay gửi dữ liệu api
     );
 };
 
 const BookManagement = () => {
-    const [data, setData] = useState([]);
-    const [filterCategory, setFilterCategory] = useState("all");
-    const [categories, setCategories] = useState([]);
-
+    const [data, setData] = useState([]);//mảng ds láy từ server
+    const [filterCategory, setFilterCategory] = useState("all");//giá trị select lọc theo thể loại
+    const [categories, setCategories] = useState([]);//ds thể loại duy nhất lấy từ data
+    //hiện 3 modal thêm,sửa,xóa
     const [modalAdd, setModalAdd] = useState(false);
     const [modalEdit, setModalEdit] = useState(false);
     const [modalDelete, setModalDelete] = useState(false);
 
-    const [formData, setFormData] = useState({});
-    const [selectedBook, setSelectedBook] = useState(null);
+    const [formData, setFormData] = useState({});//dữ liệu form thêm,sửa
+    const [selectedBook, setSelectedBook] = useState(null);//
 
     const fetchData = async () => {
         const res = await requestGetAllProduct();
@@ -147,41 +147,41 @@ const BookManagement = () => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, []);//Khi mount, gọi API lấy tất cả sách.
 
     useEffect(() => {
         const unique = [...new Set(data.map(i => i.category))];
         setCategories(unique);
-    }, [data]);
+    }, [data]);//Tạo danh sách thể loại duy nhất khi data thay đổi.
 
     const filteredData = data.filter(i =>
         filterCategory === "all" ? true : i.category === filterCategory
-    );
-
+    );//lọc data
+    //hàm xử lý khi người dùng bấm nút "Thêm sách".
     const handleAddSubmit = async () => {
-        const fd = new FormData();
-        fd.append("image", formData.image);
+        const fd = new FormData();//tạo form data để upload ảnh
+        fd.append("image", formData.image);//thêm file ảnh
 
-        const urlImg = await requestUploadImageProduct(fd);
+        const urlImg = await requestUploadImageProduct(fd);//up ảnh lên server
 
-        const payload = { ...formData, image: urlImg.data };
+        const payload = { ...formData, image: urlImg.data };//tạo payload gửi lên server
 
         await requestCreateProduct(payload);
         setModalAdd(false);
         setFormData({});
         fetchData();
     };
-
+    //hàm sử dụng khi người dùng bấm nút form sửa
     const handleEditSubmit = async () => {
-        let imageUrl = selectedBook.image;
+        let imageUrl = selectedBook.image;//lấy url ảnh cũ
 
-        if (formData.image instanceof File) {
+        if (formData.image instanceof File) {//nếu chọn ảnh mới
             const fd = new FormData();
             fd.append("image", formData.image);
             const res = await requestUploadImageProduct(fd);
             imageUrl = res.data;
         }
-
+        //gửi dữ liệu đã sửa lên server
         await requestUpdateProduct(selectedBook.id, {
             ...formData,
             image: imageUrl,
@@ -191,13 +191,13 @@ const BookManagement = () => {
         setFormData({});
         fetchData();
     };
-
+    //hàm xóa sách 
     const handleDelete = async () => {
         await requestDeleteProduct(selectedBook.id);
         setModalDelete(false);
         fetchData();
     };
-
+    //giao diện UI chính
     return (
         <div className="book-container">
 
@@ -205,7 +205,7 @@ const BookManagement = () => {
                 <h2>Quản lý sách</h2>
                 <div className="header-actions">
                     <select
-                        value={filterCategory}
+                        value={filterCategory}//lọc theo thể loại
                         onChange={(e) => setFilterCategory(e.target.value)}
                     >
                         <option value="all">Tất cả thể loại</option>
@@ -232,7 +232,7 @@ const BookManagement = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredData.map((b) => (
+                    {filteredData.map((b) => (//lặp qua ds sách đã lọc
                         <tr key={b.id}>
                             <td>
                                 <img
@@ -244,7 +244,7 @@ const BookManagement = () => {
                             <td>{b.publisher}</td>
                             <td>{b.publishYear}</td>
                             <td>{b.stock}</td>
-                            <td>
+                            <td>//nút sửa xóa
                                 <button
                                     className="btn btn-small"
                                     onClick={() => {
@@ -271,7 +271,7 @@ const BookManagement = () => {
                 </tbody>
             </table>
 
-            {/* Modal Add */}
+            {/* Modal Add  hiện khi midalAdd === true*/}
             {modalAdd && (
                 <div className="modal">
                     <div className="modal-content">

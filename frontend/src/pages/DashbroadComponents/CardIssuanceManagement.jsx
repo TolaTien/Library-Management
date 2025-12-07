@@ -7,21 +7,21 @@ import {
 } from "../../config/request";
 
 const CardIssuanceManagement = () => {
-    const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [data, setData] = useState([]);//luu ds yêu cầu cấp thẻ lấy từ api
+    const [loading, setLoading] = useState(false);//trạng thái tải
 
-    const [isIssueModalVisible, setIsIssueModalVisible] = useState(false);
-    const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
+    const [isIssueModalVisible, setIsIssueModalVisible] = useState(false);//trạng thái hiển thị modal cấp thẻ
+    const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);//trạng thái hiển thị modal hủy yêu cầu
 
-    const [selectedUser, setSelectedUser] = useState(null);
-    const [idStudent, setIdStudent] = useState("");
-
+    const [selectedUser, setSelectedUser] = useState(null);//lưu thông tin user dc cấp or hủy yêu cầu
+    const [idStudent, setIdStudent] = useState("");//lưu mã số sinh viên nhập trong modal cấp thẻ
+    //hàm lấy ds yêu cầu cấp thẻ từ api
     const fetchData = async () => {
         setLoading(true);
         try {
-            const res = await requestGetRequestLoan();
-            setData(res.data);
-        } catch {
+            const res = await requestGetRequestLoan();//gọi api
+            setData(res.data);//lưu dữ liệu vào state data
+        } catch {//nêú lỗi
             alert("Không thể tải danh sách yêu cầu");
         } finally {
             setLoading(false);
@@ -30,22 +30,22 @@ const CardIssuanceManagement = () => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, []);//load data khi component render lần đầu
 
     // Modal cấp thẻ
     const showIssueModal = (user) => {
         setSelectedUser(user);
         setIdStudent("");
         setIsIssueModalVisible(true);
-    };
+    };//khi an nút cấp thẻ,modal hiện lên và lưu user dc chọn
 
     const handleIssueCancel = () => {
         setIsIssueModalVisible(false);
         setSelectedUser(null);
-    };
+    };//hàm đóng modal cấp thẻ
 
     const handleIssueSubmit = async () => {
-        if (!idStudent.trim()) {
+        if (!idStudent.trim()) {//kt ng nhập rỗng hay không sau khi loai bỏ khoảng trắng
             alert("Vui lòng nhập mã số sinh viên!");
             return;
         }
@@ -53,8 +53,8 @@ const CardIssuanceManagement = () => {
         setLoading(true);
         try {
             await requestConfirmIdStudent({
-                userId: selectedUser.id,
-                idStudent
+                userId: selectedUser.id,//id user được cấp thẻ
+                idStudent//id sinh viên nhập trong modal
             });
 
             alert(`Đã cấp thẻ cho ${selectedUser.fullName}`);
@@ -86,7 +86,7 @@ const CardIssuanceManagement = () => {
             setLoading(false);
         }
     };
-
+    //giao diện UI chính
     return (
         <div className="card-issuance-container">
             <div className="header">

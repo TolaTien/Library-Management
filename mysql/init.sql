@@ -90,8 +90,6 @@ CREATE TABLE `users` (
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-<<<<<<< HEAD
-=======
 
 --
 -- Dumping data for table `users`
@@ -100,7 +98,6 @@ CREATE TABLE `users` (
 LOCK TABLES `users` WRITE;
 
 UNLOCK TABLES;
->>>>>>> b6b7fbc9235ab922c69b20d1ae91675220ee883a
 
 
 -- ---- Table reminder --------- 

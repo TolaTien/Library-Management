@@ -40,7 +40,7 @@ function App() {
                 categories.add(p.category.trim());
             }
         }) 
-        // ✅ THÊM LỆNH RETURN
+        //  THÊM LỆNH RETURN
         return Array.from(categories).sort();
     }
 

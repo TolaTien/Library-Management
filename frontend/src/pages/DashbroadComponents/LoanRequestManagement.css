@@ -26,8 +26,6 @@
     color: #fff;
     cursor: pointer;
     transition: 0.25s;
-<<<<<<< HEAD
-=======
 }
 
 .btn-primary:hover {
@@ -120,7 +118,6 @@
 .status-badge.pending {
     background: #bfdbfe;
     color: #1e40af;
->>>>>>> b6b7fbc9235ab922c69b20d1ae91675220ee883a
 }
 
 .btn-primary:hover {

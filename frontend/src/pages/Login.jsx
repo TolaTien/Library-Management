@@ -8,10 +8,9 @@ import imagesLogin from '../assets/images/login.webp';
 import './Login.css';
 
 // Custom Input Component
-const Input = ({ type = 'text', name, placeholder, value, onChange, icon, error }) => (
+const Input = ({ type = 'text', name, placeholder, value, onChange, error }) => (
   <div className="input-wrapper">
     <div className="input-container">
-      {icon && <span className="input-icon">{icon}</span>}
       <input
         type={type}
         name={name}
@@ -48,17 +47,17 @@ function LoginUser() {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.email) {
       newErrors.email = 'Vui lòng nhập email!';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Email không hợp lệ!';
     }
-    
+
     if (!formData.password) {
       newErrors.password = 'Vui lòng nhập mật khẩu!';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -79,7 +78,7 @@ function LoginUser() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     if (formData.email === 'admin@gmail.com' && formData.password === '123456') {
@@ -104,36 +103,36 @@ function LoginUser() {
   };
 
   return (
-    <div className="login-page-layout">
+    <div className="auth-page-layout auth-page--login">
       <header>
         <Header />
       </header>
 
-      <main className="login-page__main">
-        <div className="login-page__container">
-          <div className="login-page__content-wrapper">
-            <div className="login-page__image-column">
-              <div className="login-page__image-wrapper">
+      <main className="auth-page__main">
+        <div className="auth-page__container">
+          <div className="auth-page__content-wrapper">
+            <div className="auth-page__image-column">
+              <div className="auth-page__image-wrapper">
                 <img
                   src={imagesLogin}
-                  alt="Tour du lịch"
-                  className="login-page__image"
+                  alt="Ảnh trang đăng nhập"
+                  className="auth-page__image"
                 />
-                <div className="login-page__image-overlay"></div>
-                <div className="login-page__image-text">
-                  <h2 className="login-page__welcome-title">Chào mừng trở lại</h2>
+                <div className="auth-page__image-overlay"></div>
+                <div className="auth-page__image-text">
+                  <h2 className="auth-page__welcome-title">Chào mừng trở lại</h2>
                 </div>
               </div>
             </div>
 
-            <div className="login-page__form-column">
-              <div className="login-page__form-padding">
-                <div className="login-page__form-header">
-                  <h1 className="login-page__form-title">Chào mừng trở lại</h1>
-                  <p className="login-page__form-subtitle">Đăng nhập vào tài khoản của bạn</p>
+            <div className="auth-page__form-column">
+              <div className="auth-page__form-padding">
+                <div className="auth-page__form-header">
+                  <h1 className="auth-page__form-title">Chào mừng trở lại</h1>
+                  <p className="auth-page__form-subtitle">Đăng nhập vào tài khoản của bạn</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="login-form">
+                <form onSubmit={handleSubmit} className="auth-form">
                   <Input
                     type="email"
                     name="email"
@@ -141,7 +140,6 @@ function LoginUser() {
                     value={formData.email}
                     onChange={handleChange}
                     error={errors.email}
-                    icon={<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>}
                   />
 
                   <Input
@@ -151,7 +149,6 @@ function LoginUser() {
                     value={formData.password}
                     onChange={handleChange}
                     error={errors.password}
-                    icon={<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>}
                   />
 
                   <Button
@@ -166,7 +163,7 @@ function LoginUser() {
                     <span>Hoặc</span>
                   </div>
 
-                  <div className="login-page__register-link">
+                  <div className="auth-page__footer-link">
                     <Link to="/register">
                       <Button variant="secondary">Đăng ký</Button>
                     </Link>

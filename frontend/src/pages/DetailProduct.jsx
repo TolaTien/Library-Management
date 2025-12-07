@@ -41,7 +41,7 @@ function DetailProduct() {
                 <nav className="product-detail__breadcrumb">
                     <Link to={'/'} className="product-detail__breadcrumb-link">Trang chủ</Link>
                     <span className="product-detail__breadcrumb-separator">/</span>
-                    <Link to={'/product'} className="product-detail__breadcrumb-link">Sách</Link>
+                    <Link to={'/'} className="product-detail__breadcrumb-link">Sách</Link>
                     <span className="product-detail__breadcrumb-separator">/</span>
                     <span className="product-detail__breadcrumb-current">Chi tiết sách</span>
                 </nav>
@@ -49,11 +49,8 @@ function DetailProduct() {
 
             {/* Main Content */}
             <main className="product-detail__main">
-                {/* BEM: product-detail__content */}
                 <div className="product-detail__content">
-                    {/* BEM: product-detail__grid */}
                     <div className="product-detail__grid">
-                        {/* Book Image */}
                         <div className="product-detail__image-wrapper">
                             <div className="product-detail__image-container">
                                 <img

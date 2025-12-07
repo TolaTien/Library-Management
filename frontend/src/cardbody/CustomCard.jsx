@@ -1,16 +1,6 @@
 import './CustomCard.css'; 
 const CustomCard = (props) => {
-const { 
-    title, 
-    extra, 
-    bordered = true, 
-    children, 
-    className = '', 
-    style,
-    headStyle, 
-    bodyStyle,
-    ...restProps 
-} = props;
+const { title, extra, bordered = true, children, className = '', style ,headStyle, bodyStyle,...restProps } = props;
 
   // Ghép class mặc định và class truyền từ ngoài vào
 const containerClass = `custom-card-wrapper ${bordered ? 'custom-card-bordered' : ''} ${className}`;
@@ -25,10 +15,10 @@ return (
             {extra && <div className="custom-card-extra">{extra}</div>}
         </div>
         </div>
-)}
-    <div className="custom-card-body" style={bodyStyle}>
-        {children}
-    </div>
+    )}
+        <div className="custom-card-body" style={bodyStyle}>
+            {children}
+        </div>
     </div>
 );
 };

@@ -2,9 +2,9 @@ const { Sequelize } = require("sequelize");
 
 
 const connect = new Sequelize(
-    'library',
+    'newdb',
     'root',
-    '123456789',
+    '03062006',
     {
         host: 'localhost',
         dialect: 'mysql',

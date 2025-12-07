@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './AdminNotifications.css';
 import { requestGetReminder } from '../../config/request';
-import { toast } from 'react-toastify'; // Thay message bằng toast
+import { toast } from 'react-toastify'; 
 
 import CustomCard from '../../cardbody/CustomCard';
 
@@ -41,18 +41,15 @@ const AdminNotifications = () => {
                     <div className="notif-spinner"></div>
                     <span>Đang tải thông báo...</span>
                 </div>
-            ) : notifications.length === 0 ? (
-                // Thay thế Empty
+            ) : notifications.length === 0 ? ( // khong co thong bao nao
                 <div className="notif-empty">
-                    <div className="notif-empty-icon">📭</div> {/* Dùng Emoji hộp thư rỗng */}
+                    <div className="notif-empty-icon">📭</div>
                     <span>Không có thông báo nào</span>
                 </div>
             ) : (
                 // Thay thế List
                 <div className="notif-list">
                     {notifications.map((item, index) => (
-                      
-                        // Key nên dùng ID nếu có, tạm dùng index nếu API không trả ID
                         <CustomCard 
                             key={item.id || index} 
                             title={item.title || 'Thông báo hệ thống'}

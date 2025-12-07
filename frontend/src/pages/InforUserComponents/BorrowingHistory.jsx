@@ -53,19 +53,20 @@ const BorrowingHistory = () => {
         try {
             await requestCancelBook({ idHistory });
             toast.success('Huỷ mượn sách thành công');
-            fetchData();
+            fetchData();  // fetch lại sách để cập nhập lại UI
         } catch (error) {
             toast.error(error.response?.data?.message || 'Hủy mượn sách thất bại');
         }
     };
 
     const handleReturnBook = async (idHistory, bookId) => {
-        if (!isReturning) setIsReturning(true);
+        if (!isReturning) 
+            setIsReturning(true);
         try {
             await requestReturnBook({ idHistory, bookId }); 
             setBorrowedBooks(prevBooks => prevBooks.filter(book => book.id !== idHistory));
             toast.success('Trả sách thành công!');
-            setTimeout(() => { fetchData(); }, 500); 
+            setTimeout(() => { fetchData(); }, 500); // load lại UI sau 500 ms
         } catch (error) {
             toast.error(error.response?.data?.message || 'Trả sách thất bại');
         } finally {
@@ -84,7 +85,6 @@ const BorrowingHistory = () => {
         }
     };
 
-    // Hàm xử lý xác nhận thay thế Popconfirm
     const handleConfirmReturn = (item, daysLeft, estimatedFine) => {
         const isOverdue = daysLeft < 0;
         let message = "Bạn có chắc chắn muốn trả cuốn sách này?";
@@ -113,10 +113,7 @@ const BorrowingHistory = () => {
     }
 
     return (
-        // Sử dụng CardBody đã viết trước đó
         <CustomCard title="Lịch sử mượn sách" className="borrow-history">
-            
-            {/* Thay thế Space và Typography bằng div và h4/span */}
             <div className="bh-header-info">
                 <h4 className="bh-title">
                     Số đầu sách đang mượn: <span className="bh-text-strong">{totalBorrowedItems} loại</span>
@@ -131,7 +128,6 @@ const BorrowingHistory = () => {
                     {borrowedBooks.map((item) => {
                         const statusInfo = statusConfig[item.status] || { text: item.status, class: 'tag-default' };
                         const daysLeft = dayjs(item.returnDate).diff(dayjs(), 'day');
-
                         const isOverdue = daysLeft < 0 && item.status === 'success';
                         const estimatedFine = isOverdue ? Math.abs(daysLeft) * 5000 : 0;
 
@@ -148,12 +144,10 @@ const BorrowingHistory = () => {
                                         
                                         <div className="bh-book-info">
                                             <h5 className="bh-book-name">{item.product.nameProduct}</h5>
-                                            
                                             <div className="bh-details">
                                                 <p style={{margin: '4px 0'}} className="bh-text-secondary">Số lượng: {item.quantity}</p>
                                                 <p style={{margin: '4px 0'}} className="bh-text-secondary">Ngày mượn: {dayjs(item.borrowDate).format('DD/MM/YYYY')}</p>
                                                 <p style={{margin: '4px 0'}} className="bh-text-secondary">Ngày trả: {dayjs(item.returnDate).format('DD/MM/YYYY')}</p>
-                                                
                                                 {/* Hiển thị quá hạn */}
                                                 {item.status === 'success' && (
                                                     <div style={{marginTop: '8px'}}>

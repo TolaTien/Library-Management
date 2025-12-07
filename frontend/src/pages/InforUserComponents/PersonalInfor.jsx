@@ -8,14 +8,8 @@ import "./PersonalInfor.css"; // Nhớ import CSS mới
 const PersonalInfo = () => {
     const [loading, setLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
-    
     // Thay thế Form.useForm() bằng state thường
-    const [formData, setFormData] = useState({
-        fullName: '',
-        phone: '',
-        address: ''
-    });
-
+    const [formData, setFormData] = useState({fullName: '',phone: '',address: ''});
     const { dataUser, setDataUser } = useStore();
     const safeDataUser = dataUser || {};
 
@@ -31,7 +25,6 @@ const PersonalInfo = () => {
         }
     }, [dataUser]);
 
-   
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
@@ -51,8 +44,7 @@ const PersonalInfo = () => {
 
     const onSubmitUpdate = async (e) => {
         e.preventDefault(); // Chặn reload trang của form HTML
-        
-        // Validate cơ bản 
+        // validate
         if (!formData.fullName.trim()) {
             toast.error('Vui lòng nhập họ tên!');
             return;
@@ -75,7 +67,7 @@ const PersonalInfo = () => {
     if (loading && !dataUser) {
         return (
             <div className="loading-overlay">
-                <div className="custom-spinner"></div> {/* Spinner CSS dùng chung từ bài trước */}
+                <div className="custom-spinner"></div> 
             </div>
         );
     }

@@ -1,6 +1,4 @@
-/* BorrowingHistory.css */
 
-/* --- 1. Custom Loading Spinner --- */
 .custom-spinner-container {
   display: flex;
   justify-content: center;
@@ -19,7 +17,6 @@
   100% { transform: rotate(360deg); }
 }
 
-/* --- 2. Typography & Layout --- */
 .bh-header-info {
   margin-bottom: 20px;
   display: flex;
@@ -42,7 +39,6 @@
 .bh-text-warning { color: #faad14; }
 .bh-text-success { color: #52c41a; }
 
-/* --- 3. List Item Styles --- */
 .bh-list-item {
   display: flex;
   justify-content: space-between;
@@ -53,7 +49,7 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-  flex-wrap: wrap; /* Cho mobile */
+  flex-wrap: wrap; 
   gap: 16px;
 }
 .bh-item-left {
@@ -78,7 +74,6 @@
   margin: 0 0 8px 0;
 }
 
-/* --- 4. Tags --- */
 .bh-tag {
   display: inline-block;
   padding: 2px 8px;

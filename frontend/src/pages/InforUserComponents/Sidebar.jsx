@@ -18,7 +18,7 @@ const Sidebar = ({ setActiveComponent, activeComponent }) => {
         }
     };
 
-    // Định nghĩa danh sách menu (Dữ liệu thuần, không chứa component Antd)
+    // Định nghĩa danh sách menu (Dữ liệu thuần, )
     const menuItems = [
         {
             key: 'info',

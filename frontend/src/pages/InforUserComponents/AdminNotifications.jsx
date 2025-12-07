@@ -51,7 +51,7 @@ const AdminNotifications = () => {
                 // Thay thế List
                 <div className="notif-list">
                     {notifications.map((item, index) => (
-                        // Dùng CustomCard thay thế Card của Antd
+                      
                         // Key nên dùng ID nếu có, tạm dùng index nếu API không trả ID
                         <CustomCard 
                             key={item.id || index} 

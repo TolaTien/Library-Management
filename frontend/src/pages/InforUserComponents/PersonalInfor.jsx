@@ -31,7 +31,7 @@ const PersonalInfo = () => {
         }
     }, [dataUser]);
 
-    // Hàm xử lý khi nhập input (thay thế cơ chế binding của Antd Form)
+   
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
@@ -52,7 +52,7 @@ const PersonalInfo = () => {
     const onSubmitUpdate = async (e) => {
         e.preventDefault(); // Chặn reload trang của form HTML
         
-        // Validate cơ bản (thay thế rules của Antd)
+        // Validate cơ bản 
         if (!formData.fullName.trim()) {
             toast.error('Vui lòng nhập họ tên!');
             return;

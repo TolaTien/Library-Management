@@ -139,7 +139,7 @@ const BorrowingHistory = () => {
                             <div key={item.id} className="bh-list-item">
                                 <div className="bh-item-wrapper">
                                     <div className="bh-item-left">
-                                        {/* Thay Image của Antd bằng img thường */}
+                                    
                                         <img
                                             src={`${import.meta.env.VITE_API_URL}/${item.product.image}`}
                                             alt={item.product.nameProduct}

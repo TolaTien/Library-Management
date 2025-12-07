@@ -31,7 +31,7 @@
 
 /* Hiệu ứng Hover */
 .menu-item:hover {
-  color: #1890ff; /* Màu xanh Antd */
+  color: #1890ff; 
 }
 
 /* Hiệu ứng khi đang Active (được chọn) */
@@ -41,7 +41,7 @@
   font-weight: 500;
 }
 
-/* Border bên phải khi Active (đặc trưng Antd) */
+/* Border bên phải khi Active  */
 .menu-item.active::after {
   content: '';
   position: absolute;

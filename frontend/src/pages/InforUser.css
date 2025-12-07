@@ -11,7 +11,7 @@
 .user-profile__container {
   display: flex; /* Quan trọng: Để Sidebar và Content nằm ngang hàng */
   flex: 1; /* Chiếm hết khoảng trống còn lại giữa Header và Footer */
-  background-color: #f0f2f5; /* Màu nền xám nhẹ đặc trưng của Antd Layout */
+  background-color: #f0f2f5; 
 }
 
 /* Sidebar bên trái (Thay thế Sider) */

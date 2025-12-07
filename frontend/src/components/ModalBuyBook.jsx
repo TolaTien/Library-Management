@@ -1,51 +1,129 @@
-import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom'; // 1. THÊM IMPORT NÀY
+import React, { useState, useEffect, useMemo } from 'react';
+import ReactDOM from 'react-dom';
 import dayjs from 'dayjs';
 import { useStore } from '../hooks/useStore';
-import { requestCreateHistoryBook } from '../config/request';
+// 1. IMPORT THÊM requestGetHistoryUser
+import { requestCreateHistoryBook, requestGetHistoryUser } from '../config/request';
 import { toast } from 'react-toastify';
 import './ModalBuyBook.css';
 
 const BORROW_DURATION_MAX_DAYS = 30;
+const GLOBAL_MAX_QUANTITY = 5; // Hạn mức tối đa toàn cục
 
 function ModalBuyBook({ visible, onCancel, bookData }) {
     const { dataUser } = useStore();
     const [loading, setLoading] = useState(false);
     
+    // State lưu tổng số sách user đang giữ
+    const [currentBorrowedTotal, setCurrentBorrowedTotal] = useState(0);
+    const [checkingLimit, setCheckingLimit] = useState(false);
+
     const [formData, setFormData] = useState({
         quantity: 1,
         returnDate: ''
     });
 
-    const today = dayjs();
-    const minReturnDate = today.add(1, 'day');
-    const maxReturnDate = today.add(BORROW_DURATION_MAX_DAYS, 'day');
+    const { today, minReturnDate, maxReturnDate } = useMemo(() => {
+        const now = dayjs();
+        return {
+            today: now,
+            minReturnDate: now.add(1, 'day'),
+            maxReturnDate: now.add(BORROW_DURATION_MAX_DAYS, 'day')
+        };
+    }, []);
 
+    // Effect: Khi mở modal -> Reset Form & Gọi API check hạn mức
     useEffect(() => {
         if (visible) {
+            // Reset form cơ bản
             setFormData({
                 quantity: 1,
                 returnDate: minReturnDate.format('YYYY-MM-DD')
             });
+
+            // 2. GỌI API ĐỂ ĐẾM SỐ SÁCH ĐANG MƯỢN
+            const fetchUserHistory = async () => {
+                setCheckingLimit(true);
+                try {
+                    const res = await requestGetHistoryUser();
+                    if (res && res.data) {
+                        // Tính tổng số lượng sách đang ở trạng thái 'pending' hoặc 'success'
+                        const total = res.data.reduce((sum, item) => {
+                            if (item.status === 'success' || item.status === 'pending') {
+                                return sum + (item.quantity || 0);
+                            }
+                            return sum;
+                        }, 0);
+                        setCurrentBorrowedTotal(total);
+                    }
+                } catch (error) {
+                    console.error("Lỗi kiểm tra hạn mức:", error);
+                } finally {
+                    setCheckingLimit(false);
+                }
+            };
+            fetchUserHistory();
         }
     }, [visible, minReturnDate]);
 
+    // Tính số lượng còn được phép mượn
+    const remainingQuota = Math.max(0, GLOBAL_MAX_QUANTITY - currentBorrowedTotal);
+
+    // Xử lý khi nhập số lượng (Logic chặn mới)
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+
+        if (name === 'quantity') {
+            let val = parseInt(value);
+            
+            if (isNaN(val)) {
+                setFormData(prev => ({ ...prev, [name]: '' }));
+                return;
+            }
+
+            // Logic chặn: Không được vượt quá hạn mức còn lại
+            if (val > remainingQuota) {
+                if (remainingQuota === 0) {
+                    toast.error(`Bạn đang giữ ${currentBorrowedTotal}/${GLOBAL_MAX_QUANTITY} quyển. Không thể mượn thêm!`);
+                    val = 0; // Hoặc 1 tùy UX, nhưng ở đây disable nút submit rồi
+                } else {
+                    toast.warning(`Bạn đang giữ ${currentBorrowedTotal} quyển. Chỉ được mượn thêm tối đa ${remainingQuota} quyển!`);
+                    val = remainingQuota;
+                }
+            }
+            
+            // Logic cũ: Không < 1 (Trừ khi hết hạn mức thì chấp nhận hiển thị số khác hoặc disable)
+            if (val < 1 && remainingQuota > 0) val = 1;
+
+            setFormData(prev => ({ ...prev, [name]: val }));
+        } else {
+            setFormData(prev => ({ ...prev, [name]: value }));
+        }
     };
 
     const validateForm = () => {
+        // Check hạn mức toàn cục
+        if (currentBorrowedTotal >= GLOBAL_MAX_QUANTITY) {
+            toast.error(`Bạn đã đạt giới hạn mượn ${GLOBAL_MAX_QUANTITY} quyển. Vui lòng trả sách trước khi mượn tiếp!`);
+            return false;
+        }
+
+        if ((formData.quantity + currentBorrowedTotal) > GLOBAL_MAX_QUANTITY) {
+            toast.error(`Tổng số sách mượn không được quá 5. Bạn chỉ còn lượt cho ${remainingQuota} quyển.`);
+            return false;
+        }
+
+        if (!formData.quantity || formData.quantity < 1) {
+            toast.error('Số lượng mượn không hợp lệ!');
+            return false;
+        }
+
         if (!formData.returnDate) {
             toast.error('Vui lòng chọn ngày trả!');
             return false;
         }
 
         const selectedDate = dayjs(formData.returnDate);
-        
         if (selectedDate.isBefore(minReturnDate, 'day')) {
             toast.error('Ngày trả phải sau ngày mượn ít nhất 1 ngày!');
             return false;
@@ -59,7 +137,6 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
         if (!validateForm()) return;
 
         setLoading(true);
@@ -86,16 +163,15 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
         }
     };
 
-    // Nếu không hiển thị thì return null
     if (!visible) return null;
 
-    const isSubmitDisabled = !bookData || bookData.stock <= 0 || loading;
+    // Disable nút submit nếu hết hạn mức hoặc đang check
+    const isOutOfQuota = remainingQuota <= 0;
+    const isSubmitDisabled = !bookData || bookData.stock <= 0 || loading || isOutOfQuota || checkingLimit;
 
-    // 2. SỬ DỤNG PORTAL ĐỂ ĐẨY MODAL RA BODY
     return ReactDOM.createPortal(
         <div className="custom-modal-overlay">
             <div className="custom-modal-container">
-                {/* Header */}
                 <div className="modal-header">
                     <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
                         <span>📖</span>
@@ -104,9 +180,7 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                     <button className="close-btn" onClick={onCancel}>×</button>
                 </div>
 
-                {/* Body */}
                 <div className="modal-body">
-                    {/* Phần thông tin sách */}
                     {bookData && (
                         <div className="book-info-card">
                             <h4 className="section-title">Thông tin sách</h4>
@@ -118,18 +192,25 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                                 />
                                 <div className="book-text-info">
                                     <div className="book-name">{bookData.nameProduct}</div>
-                                    <div>Nhà xuất bản: <b>{bookData.publisher}</b></div>
-                                    <div>Số trang: <b>{bookData.pages} trang</b></div>
-                                    <div>Năm XB: <b>{bookData.publishYear}</b></div>
-                                    <div>
-                                        Còn lại: <b style={{color: '#1890ff'}}>{bookData.stock} quyển</b>
+                                    <div>Còn lại: <b style={{color: '#1890ff'}}>{bookData.stock} quyển</b></div>
+                                    
+                                    {/* Hiển thị thông báo hạn mức ngay trong UI */}
+                                    <div style={{marginTop: '10px', padding: '8px', background: '#fff7e6', border: '1px solid #ffd591', borderRadius: '4px', fontSize: '13px'}}>
+                                        {checkingLimit ? (
+                                            <span>⏳ Đang kiểm tra hạn mức...</span>
+                                        ) : (
+                                            <span>
+                                                Bạn đang mượn: <b>{currentBorrowedTotal}/5</b> quyển. 
+                                                <br/>
+                                                Có thể mượn thêm: <b style={{color: remainingQuota > 0 ? 'green' : 'red'}}>{remainingQuota}</b> quyển.
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     )}
 
-                    {/* Phần Form nhập liệu */}
                     <div className="borrower-info-card">
                         <h4 className="section-title">👤 Thông tin mượn</h4>
                         
@@ -143,11 +224,17 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                                             name="quantity"
                                             className="custom-input"
                                             min="1"
-                                            max="5"
+                                            max={remainingQuota > 0 ? remainingQuota : 1} // Limit max input
                                             value={formData.quantity}
                                             onChange={handleInputChange}
+                                            disabled={isOutOfQuota || checkingLimit} // Chặn nhập nếu hết quota
                                             required
                                         />
+                                        {isOutOfQuota && (
+                                            <small style={{color: 'red', display: 'block', marginTop: '4px'}}>
+                                                * Bạn đã hết hạn mức mượn sách.
+                                            </small>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -180,6 +267,7 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                                             min={minReturnDate.format('YYYY-MM-DD')}
                                             max={maxReturnDate.format('YYYY-MM-DD')}
                                             required
+                                            disabled={isOutOfQuota}
                                         />
                                     </div>
                                 </div>
@@ -194,7 +282,7 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                                     className="btn-modal btn-submit"
                                     disabled={isSubmitDisabled}
                                 >
-                                    {loading ? 'Đang xử lý...' : 'Xác nhận mượn'}
+                                    {loading ? 'Đang xử lý...' : (isOutOfQuota ? 'Hết hạn mức' : 'Xác nhận mượn')}
                                 </button>
                             </div>
                         </form>
@@ -202,7 +290,7 @@ function ModalBuyBook({ visible, onCancel, bookData }) {
                 </div>
             </div>
         </div>,
-        document.body // Tham số thứ 2: Nơi modal sẽ được render (cuối thẻ body)
+        document.body
     );
 }
 

@@ -31,6 +31,9 @@ const BorrowingHistory = () => {
         fetchData();
     }, []);
 
+
+    
+
     const totalQuantity = useMemo(() => {
         return borrowedBooks.reduce((sum, item) => {
             if (item.status === 'success' || item.status == "pending") {
@@ -128,6 +131,7 @@ const BorrowingHistory = () => {
                     {borrowedBooks.map((item) => {
                         const statusInfo = statusConfig[item.status] || { text: item.status, class: 'tag-default' };
                         const daysLeft = dayjs(item.returnDate).diff(dayjs(), 'day');
+
                         const isOverdue = daysLeft < 0 && item.status === 'success';
                         const estimatedFine = isOverdue ? Math.abs(daysLeft) * 5000 : 0;
 

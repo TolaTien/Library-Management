@@ -37,7 +37,6 @@ const AdminNotifications = () => {
             <h2>📢 Thông báo từ Admin</h2>
 
             {loading ? (
-                // Thay thế Spin
                 <div className="notif-loading">
                     <div className="notif-spinner"></div>
                     <span>Đang tải thông báo...</span>

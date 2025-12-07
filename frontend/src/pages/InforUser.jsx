@@ -12,7 +12,7 @@ import './InforUser.css';
 
 const { Sider, Content } = Layout;
 
-function InforUser() {
+function InforUser() {  
     const location = useLocation();
     const [activeComponent, setActiveComponent] = useState('info');
 

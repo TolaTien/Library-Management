@@ -1,16 +1,14 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Card, Empty, List, Tag, Image, Typography, Space, Spin, Button, Popconfirm } from 'antd'; // ✅ Thêm Popconfirm
+import CustomCard from '../../cardbody/CustomCard';
 import { requestCancelBook, requestGetHistoryUser, requestReturnBook, requestGetFine } from '../../config/request'; 
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 import './BorrowingHistory.css';
 
-const { Text, Title } = Typography;
-
 const statusConfig = {
-    pending: { text: 'Đang chờ duyệt', color: 'gold' },
-    success: { text: 'Thành công', color: 'green' },
-    cancel: { text: 'Đã hủy', color: 'red' },
+    pending: { text: 'Đang chờ duyệt', color: 'gold', class: 'tag-gold' },
+    success: { text: 'Thành công', color: 'green', class: 'tag-green' },
+    cancel: { text: 'Đã hủy', color: 'red', class: 'tag-red' },
 };
 
 const BorrowingHistory = () => {
@@ -33,6 +31,9 @@ const BorrowingHistory = () => {
         fetchData();
     }, []);
 
+
+    
+
     const totalQuantity = useMemo(() => {
         return borrowedBooks.reduce((sum, item) => {
             if (item.status === 'success' || item.status == "pending") {
@@ -47,6 +48,8 @@ const BorrowingHistory = () => {
     ).length;
 
     const handleCancelBook = async (idHistory) => {
+        if (!window.confirm("Bạn có chắc chắn muốn hủy yêu cầu mượn sách này?")) return;
+        
         try {
             await requestCancelBook({ idHistory });
             toast.success('Huỷ mượn sách thành công');
@@ -57,17 +60,12 @@ const BorrowingHistory = () => {
     };
 
     const handleReturnBook = async (idHistory, bookId) => {
-        // Nếu hàm này được gọi trực tiếp (không qua calculateFine), tự bật loading
         if (!isReturning) setIsReturning(true);
-        
         try {
             await requestReturnBook({ idHistory, bookId }); 
             setBorrowedBooks(prevBooks => prevBooks.filter(book => book.id !== idHistory));
             toast.success('Trả sách thành công!');
-
-            setTimeout(() => {
-                fetchData();
-            }, 500); 
+            setTimeout(() => { fetchData(); }, 500); 
         } catch (error) {
             toast.error(error.response?.data?.message || 'Trả sách thất bại');
         } finally {
@@ -75,155 +73,154 @@ const BorrowingHistory = () => {
         }
     };
 
-    const calculateFine = async (idHistory, bookId) => {
+    const calculateFineAndReturn = async (idHistory, bookId) => {
         setIsReturning(true); 
         try {
             await requestGetFine(idHistory);
             await handleReturnBook(idHistory, bookId);
-
         } catch (error) {
             toast.error(error.response?.data?.message || 'Không thể tính toán tiền phạt.');
             setIsReturning(false);
         }
     };
+
+    // Hàm xử lý xác nhận thay thế Popconfirm
+    const handleConfirmReturn = (item, daysLeft, estimatedFine) => {
+        const isOverdue = daysLeft < 0;
+        let message = "Bạn có chắc chắn muốn trả cuốn sách này?";
         
+        if (isOverdue) {
+            message = `SÁCH ĐÃ QUÁ HẠN ${Math.abs(daysLeft)} ngày.\n\n` +
+                    `Tiền phạt dự kiến: ${estimatedFine.toLocaleString()} VNĐ.\n\n` +
+                    `Bạn có đồng ý trả sách và nộp phạt không?`;
+            
+            if (window.confirm(message)) {
+                calculateFineAndReturn(item.id, item.bookId);
+            }
+        } else {
+            if (window.confirm(message)) {
+                handleReturnBook(item.id, item.bookId);
+            }
+        }
+    };
+
     if (loading) {
         return (
-            <div className="borrow-history__loading">
-                <Spin size="large" />
+            <div className="custom-spinner-container">
+                <div className="custom-spinner"></div>
             </div>
         );
     }
 
     return (
-        <Card title="Lịch sử mượn sách" className="borrow-history">
-            <Space direction="vertical" size="middle" style={{ width: '100%', marginBottom: '20px' }}>
-                <Title level={4} style={{ margin: 0 }}>
-                    Số đầu sách đang mượn: <Text strong>{totalBorrowedItems} loại</Text>
-                </Title>
-                <Title level={4} style={{ margin: 0 }}>
-                    Tổng số lượng sách đang mượn: <Text strong>{totalQuantity} quyển</Text>
-                </Title>
-            </Space>
+        // Sử dụng CardBody đã viết trước đó
+        <CustomCard title="Lịch sử mượn sách" className="borrow-history">
+            
+            {/* Thay thế Space và Typography bằng div và h4/span */}
+            <div className="bh-header-info">
+                <h4 className="bh-title">
+                    Số đầu sách đang mượn: <span className="bh-text-strong">{totalBorrowedItems} loại</span>
+                </h4>
+                <h4 className="bh-title">
+                    Tổng số lượng sách đang mượn: <span className="bh-text-strong">{totalQuantity} quyển</span>
+                </h4>
+            </div>
             
             {borrowedBooks.length > 0 ? (
-                <List
-                    itemLayout="vertical"
-                    dataSource={borrowedBooks}
-                    className="borrow-history__list"
-                    renderItem={(item) => {
-                        const statusInfo = statusConfig[item.status] || { text: item.status, color: 'default' };
-                        
-                        // Logic tính toán hiển thị (đã mở comment để Popconfirm dùng)
+                <div className="bh-list">
+                    {borrowedBooks.map((item) => {
+                        const statusInfo = statusConfig[item.status] || { text: item.status, class: 'tag-default' };
                         const daysLeft = dayjs(item.returnDate).diff(dayjs(), 'day');
+
                         const isOverdue = daysLeft < 0 && item.status === 'success';
-                        // Tính tiền phạt dự kiến để hiển thị trong Popconfirm
                         const estimatedFine = isOverdue ? Math.abs(daysLeft) * 5000 : 0;
 
                         return (
-                            <List.Item key={item.id} className="borrow-history__list-item">
-                                <div className="borrow-history__item-wrapper">
-                                    <div className="borrow-history__item-content">
-                                        <Image
-                                            width={100}
-                                            className="borrow-history__image"
+                            <div key={item.id} className="bh-list-item">
+                                <div className="bh-item-wrapper">
+                                    <div className="bh-item-left">
+                                    
+                                        <img
                                             src={`${import.meta.env.VITE_API_URL}/${item.product.image}`}
                                             alt={item.product.nameProduct}
-                                            preview={false}
+                                            className="bh-book-image"
                                         />
-                                        <div className="borrow-history__info-column">
-                                            <Title level={5} className="borrow-history__book-title">
-                                                {item.product.nameProduct}
-                                            </Title>
-                                            <Space direction="vertical" size="small" className="borrow-history__details-list">
-                                                <Text type="secondary">Số lượng: {item.quantity}</Text>
-                                                <Text type="secondary">Ngày mượn: {dayjs(item.borrowDate).format('DD/MM/YYYY')}</Text>
-                                                <Text type="secondary">Ngày trả: {dayjs(item.returnDate).format('DD/MM/YYYY')}</Text>
+                                        
+                                        <div className="bh-book-info">
+                                            <h5 className="bh-book-name">{item.product.nameProduct}</h5>
+                                            
+                                            <div className="bh-details">
+                                                <p style={{margin: '4px 0'}} className="bh-text-secondary">Số lượng: {item.quantity}</p>
+                                                <p style={{margin: '4px 0'}} className="bh-text-secondary">Ngày mượn: {dayjs(item.borrowDate).format('DD/MM/YYYY')}</p>
+                                                <p style={{margin: '4px 0'}} className="bh-text-secondary">Ngày trả: {dayjs(item.returnDate).format('DD/MM/YYYY')}</p>
                                                 
-                                                {/* HIỂN THỊ TRẠNG THÁI QUÁ HẠN */}
+                                                {/* Hiển thị quá hạn */}
                                                 {item.status === 'success' && (
-                                                    <div className="borrow-history__days-info">
+                                                    <div style={{marginTop: '8px'}}>
                                                         {isOverdue ? (
-                                                            <Space direction="vertical" size={0}>
-                                                                <Text strong type="danger">
+                                                            <div>
+                                                                <span className="bh-text-danger bh-text-strong">
                                                                     ĐÃ QUÁ HẠN: {-daysLeft} ngày
-                                                                </Text>
-                                                                <Text type="warning" style={{ fontSize: '13px' }}>
+                                                                </span>
+                                                                <br/>
+                                                                <span className="bh-text-warning" style={{ fontSize: '13px' }}>
                                                                     (Phạt dự kiến: {estimatedFine.toLocaleString('vi-VN')} VNĐ)
-                                                                </Text>
-                                                            </Space>
+                                                                </span>
+                                                            </div>
                                                         ) : (
-                                                            <Text type="success">
+                                                            <span className="bh-text-success">
                                                                 Số ngày còn lại: {daysLeft} ngày
-                                                            </Text>
+                                                            </span>
                                                         )}
                                                     </div>
                                                 )}
 
-                                                {/* LOGIC NÚT TRẢ SÁCH VỚI POPCONFIRM */}
+                                                {/* Nút trả sách */}
                                                 {item.status === 'success' && (
-                                                    isOverdue ? (
-                                                        // TRƯỜNG HỢP 1: QUÁ HẠN -> Dùng Popconfirm
-                                                        <Popconfirm
-                                                            title="Xác nhận trả sách quá hạn"
-                                                            description={
-                                                                <div>
-                                                                    <p>Sách đã quá hạn <Text type="danger" strong>{-daysLeft} ngày</Text>.</p>
-                                                                    <p>Số tiền phạt cần đóng: <Text type="danger" strong>{estimatedFine.toLocaleString()} VNĐ</Text></p>
-                                                                    <p>Bạn có chắc chắn muốn trả sách?</p>
-                                                                </div>
-                                                            }
-                                                            onConfirm={() => calculateFine(item.id, item.bookId)}
-                                                            okText="Đồng ý & Trả"
-                                                            cancelText="Hủy"
-                                                            okButtonProps={{ danger: true, loading: isReturning }}
-                                                        >
-                                                            <Button 
-                                                                type="primary" 
-                                                                danger 
-                                                                className="borrow-history__return-button"
-                                                                disabled={isReturning}
-                                                            >
-                                                                Trả Sách & Nộp Phạt
-                                                            </Button>
-                                                        </Popconfirm>
-                                                    ) : (
-                                                        // TRƯỜNG HỢP 2: BÌNH THƯỜNG -> Nút bấm trực tiếp
-                                                        <Button 
-                                                            type="primary" 
-                                                            onClick={() => handleReturnBook(item.id, item.bookId)}
-                                                            className="borrow-history__return-button"
+                                                    <div style={{marginTop: '10px'}}>
+                                                        <button 
+                                                            className={`bh-btn ${isReturning ? 'btn-disabled' : 'btn-primary'}`}
                                                             disabled={isReturning}
-                                                            loading={isReturning}
+                                                            onClick={() => handleConfirmReturn(item, daysLeft, estimatedFine)}
                                                         >
-                                                            Trả Sách
-                                                        </Button>
-                                                    )
+                                                            {isReturning ? 'Đang xử lý...' : (isOverdue ? 'Trả Sách & Nộp Phạt' : 'Trả Sách')}
+                                                        </button>
+                                                    </div>
                                                 )}
-                                                
-                                            </Space>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div className="borrow-history__action-column">
-                                        <Tag color={statusInfo.color} className="borrow-history__status-tag">{statusInfo.text}</Tag>
-                                        <Text type="secondary" className="borrow-history__id-text">Mã mượn: {item.id.substring(0, 8)}</Text>
+                                    {/* Cột trạng thái và hành động hủy */}
+                                    <div className="bh-action-col">
+                                        <span className={`bh-tag ${statusInfo.class}`}>
+                                            {statusInfo.text}
+                                        </span>
+                                        <span className="bh-text-secondary">
+                                            Mã: {item.id.substring(0, 8)}
+                                        </span>
                                         
                                         {item.status === 'pending' && (
-                                            <Button danger type="primary" onClick={() => handleCancelBook(item.id)}>
+                                            <button 
+                                                className="bh-btn btn-danger"
+                                                onClick={() => handleCancelBook(item.id)}
+                                            >
                                                 Huỷ mượn
-                                            </Button>
+                                            </button>
                                         )}
                                     </div>
                                 </div>
-                            </List.Item>
+                            </div>
                         );
-                    }}
-                />
+                    })}
+                </div>
             ) : (
-                <Empty description="Bạn chưa mượn cuốn sách nào." />
+                // Thay thế Empty
+                <div className="bh-empty">
+                    <p>Bạn chưa mượn cuốn sách nào.</p>
+                </div>
             )}
-        </Card>
+        </CustomCard>
     );
 };
 

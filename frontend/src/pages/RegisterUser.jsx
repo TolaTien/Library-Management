@@ -1,213 +1,212 @@
 import { useState } from 'react';
-import { Button, Form, Input, Divider, message } from 'antd';
-import { UserOutlined, LockOutlined, MailOutlined, PhoneOutlined, HomeOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 import { requestRegister } from '../config/request';
 import { toast } from 'react-toastify';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 import imagesLogin from '../assets/images/login.webp';
-// Import file CSS riêng
-import './RegisterUser.css';
+import './Login.css';
+
+// Custom Input Component
+const Input = ({ type = 'text', name, placeholder, value, onChange, error }) => (
+  <div className="input-wrapper">
+    <div className="input-container">
+      <input
+        type={type}
+        name={name}
+        className={`custom-input ${error ? 'input-error' : ''}`}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+      />
+    </div>
+    {error && <span className="error-message">{error}</span>}
+  </div>
+);
+
+// Custom Button Component
+const Button = ({ children, onClick, loading, type = 'button', variant = 'primary', disabled }) => (
+  <button
+    type={type}
+    className={`custom-button custom-button--${variant}`}
+    onClick={onClick}
+    disabled={loading || disabled}
+  >
+    {loading ? <span className="button-spinner"></span> : children}
+  </button>
+);
 
 function RegisterUser() {
-    const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    phone: '',
+    address: '',
+    typeLogin: 'email'
+  });
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-    const onFinish = async (values) => {
-        setLoading(true);
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.fullName) newErrors.fullName = 'Vui lòng nhập họ tên!';
+    if (!formData.email) newErrors.email = 'Vui lòng nhập email!';
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email không hợp lệ!';
 
-        // Kiểm tra mật khẩu xác nhận (Ant Design Form đã làm phần này, nhưng giữ lại logic kiểm tra kép)
-        if (values.password !== values.confirmPassword) {
-            message.error('Mật khẩu xác nhận không khớp!');
-            setLoading(false);
-            return;
-        }
+    if (!formData.password) newErrors.password = 'Vui lòng nhập mật khẩu!';
+    else if (formData.password.length < 6) newErrors.password = 'Mật khẩu phải có ít nhất 6 ký tự!';
 
-        try {
-            // Loại bỏ confirmPassword trước khi gửi request
-            const { confirmPassword, ...registerData } = values;
-            await requestRegister(registerData);
-            toast.success('Đăng ký thành công!');
-            setLoading(false);
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
-            navigate('/');
-        } catch (error) {
-            // Sử dụng Optional Chaining để xử lý lỗi tốt hơn
-            toast.error(error.response?.data?.message || 'Đăng ký thất bại!'); 
-            setLoading(false);
-        }
-    };
+    if (!formData.confirmPassword) newErrors.confirmPassword = 'Vui lòng xác nhận mật khẩu!';
+    else if (formData.password !== formData.confirmPassword)
+      newErrors.confirmPassword = 'Mật khẩu xác nhận không khớp!';
 
-    return (
-        // BEM: register-page-layout
-        <div className="register-page-layout">
-            <header>
-                <Header />
-            </header>
+    if (!formData.phone) newErrors.phone = 'Vui lòng nhập số điện thoại!';
+    if (!formData.address) newErrors.address = 'Vui lòng nhập địa chỉ!';
 
-            {/* BEM: register-page__main */}
-            <main className="register-page__main">
-                <div className="register-page__container">
-                    {/* BEM: register-page__content-wrapper */}
-                    <div className="register-page__content-wrapper">
-                        {/* Phần hình ảnh */}
-                        {/* BEM: register-page__image-column */}
-                        <div className="register-page__image-column">
-                            <div className="register-page__image-wrapper">
-                                <img
-                                    src={imagesLogin}
-                                    alt="Đăng ký"
-                                    className="register-page__image"
-                                />
-                                <div className="register-page__image-overlay"></div>
-                            </div>
-                        </div>
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-                        {/* Phần form đăng ký */}
-                        {/* BEM: register-page__form-column */}
-                        <div className="register-page__form-column">
-                            <div className="register-page__form-padding">
-                                <div className="register-page__form-header">
-                                    <h1 className="register-page__form-title">Đăng ký tài khoản</h1>
-                                    <p className="register-page__form-subtitle">Tạo tài khoản mới để sử dụng dịch vụ</p>
-                                </div>
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
 
-                                <Form
-                                    name="register_form"
-                                    className="register-form"
-                                    initialValues={{ typeLogin: 'email' }}
-                                    onFinish={onFinish}
-                                    layout="vertical"
-                                    size="large"
-                                >
-                                    <Form.Item
-                                        name="fullName"
-                                        rules={[{ required: true, message: 'Vui lòng nhập họ tên!' }]}
-                                    >
-                                        <Input
-                                            prefix={<UserOutlined className="register-page__input-prefix" />}
-                                            placeholder="Họ và tên"
-                                            className="register-page__input"
-                                        />
-                                    </Form.Item>
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
 
-                                    <Form.Item
-                                        name="email"
-                                        rules={[
-                                            { required: true, message: 'Vui lòng nhập email!' },
-                                            { type: 'email', message: 'Email không hợp lệ!' },
-                                        ]}
-                                    >
-                                        <Input
-                                            prefix={<MailOutlined className="register-page__input-prefix" />}
-                                            placeholder="Email"
-                                            className="register-page__input"
-                                        />
-                                    </Form.Item>
+    setLoading(true);
+    try {
+      const { confirmPassword, ...registerData } = formData;
+      await requestRegister(registerData);
+      toast.success('Đăng ký thành công!');
+      setTimeout(() => window.location.reload(), 1000);
+      navigate('/');
+    } catch (error) {
+      toast.error(error?.response?.data?.message || 'Đăng ký thất bại!');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-                                    <Form.Item
-                                        name="password"
-                                        rules={[
-                                            { required: true, message: 'Vui lòng nhập mật khẩu!' },
-                                            { min: 6, message: 'Mật khẩu phải có ít nhất 6 ký tự!' },
-                                        ]}
-                                    >
-                                        <Input.Password
-                                            prefix={<LockOutlined className="register-page__input-prefix" />}
-                                            placeholder="Mật khẩu"
-                                            className="register-page__input"
-                                        />
-                                    </Form.Item>
+  return (
+    <div className="auth-page-layout auth-page--register">
+      <header>
+        <Header />
+      </header>
 
-                                    <Form.Item
-                                        name="confirmPassword"
-                                        dependencies={['password']}
-                                        rules={[
-                                            { required: true, message: 'Vui lòng xác nhận mật khẩu!' },
-                                            ({ getFieldValue }) => ({
-                                                validator(_, value) {
-                                                    if (!value || getFieldValue('password') === value) {
-                                                        return Promise.resolve();
-                                                    }
-                                                    return Promise.reject(new Error('Mật khẩu xác nhận không khớp!'));
-                                                },
-                                            }),
-                                        ]}
-                                    >
-                                        <Input.Password
-                                            prefix={<LockOutlined className="register-page__input-prefix" />}
-                                            placeholder="Xác nhận mật khẩu"
-                                            className="register-page__input"
-                                        />
-                                    </Form.Item>
-
-                                    {/* BEM: register-page__optional-fields */}
-                                    <div className="register-page__optional-fields">
-                                        <Form.Item 
-                                            name="phone"
-                                            rules={[
-                                                { required: true, message: 'Vui lòng nhập số điện thoại!' },
-                                            
-                                            ]}
-                                        >
-                                            <Input
-                                                prefix={<PhoneOutlined className="register-page__input-prefix" />}
-                                                placeholder="Số điện thoại (bắt buộc)"
-                                                className="register-page__input"
-                                            />
-                                        </Form.Item>
-
-                                        <Form.Item
-                                            name="address"
-                                            rules={[{ required: true, message: 'Vui lòng nhập địa chỉ!' }]}
-                                        >
-                                            <Input
-                                                prefix={<HomeOutlined className="register-page__input-prefix" />}
-                                                placeholder="Địa chỉ (bắt buộc)"
-                                                className="register-page__input"
-                                            />
-                                        </Form.Item>
-                                    </div>
-
-                                    <Form.Item name="typeLogin" hidden>
-                                        <Input type="hidden" />
-                                    </Form.Item>
-
-                                    <Form.Item>
-                                        <Button
-                                            type="primary"
-                                            htmlType="submit"
-                                            className="register-page__button register-page__button--register"
-                                            loading={loading}
-                                        >
-                                            Đăng ký
-                                        </Button>
-                                    </Form.Item>
-
-                                    <Divider plain className="register-page__divider">Hoặc</Divider>
-
-                                    {/* BEM: register-page__login-link */}
-                                    <div className="register-page__login-link">
-                                        <p className="register-page__login-text">Đã có tài khoản?</p>
-                                        <Link to="/login">
-                                            <Button className="register-page__button register-page__button--login">Đăng nhập ngay</Button>
-                                        </Link>
-                                    </div>
-                                </Form>
-                            </div>
-                        </div>
-                    </div>
+      <main className="auth-page__main">
+        <div className="auth-page__container">
+          <div className="auth-page__content-wrapper">
+            <div className="auth-page__form-column">
+              <div className="auth-page__form-padding">
+                <div className="auth-page__form-header">
+                  <h1 className="auth-page__form-title">Đăng ký tài khoản</h1>
+                  <p className="auth-page__form-subtitle">Tạo tài khoản mới để sử dụng dịch vụ</p>
                 </div>
-            </main>
 
-            <footer>
-                <Footer />
-            </footer>
+                <form onSubmit={handleSubmit} className="auth-form">
+                  <Input
+                    type="text"
+                    name="fullName"
+                    placeholder="Họ và tên"
+                    value={formData.fullName}
+                    onChange={handleChange}
+                    error={errors.fullName}
+                  />
+
+                  <Input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    error={errors.email}
+                  />
+
+                  <Input
+                    type="password"
+                    name="password"
+                    placeholder="Mật khẩu"
+                    value={formData.password}
+                    onChange={handleChange}
+                    error={errors.password}
+                  />
+
+                  <Input
+                    type="password"
+                    name="confirmPassword"
+                    placeholder="Xác nhận mật khẩu"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    error={errors.confirmPassword}
+                  />
+
+                  <div className="auth-page__optional-fields">
+                    <Input
+                      type="tel"
+                      name="phone"
+                      placeholder="Số điện thoại"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      error={errors.phone}
+                    />
+
+                    <Input
+                      type="text"
+                      name="address"
+                      placeholder="Địa chỉ"
+                      value={formData.address}
+                      onChange={handleChange}
+                      error={errors.address}
+                    />
+                  </div>
+
+                  <Button type="submit" loading={loading} variant="primary">
+                    Đăng ký
+                  </Button>
+
+                  <div className="divider">
+                    <span>Hoặc</span>
+                  </div>
+
+                  <div className="auth-page__footer-link">
+                    <p className="auth-page__footer-text">Đã có tài khoản?</p>
+                    <Link to="/login">
+                      <Button variant="secondary">Đăng nhập ngay</Button>
+                    </Link>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div className="auth-page__image-column">
+              <div className="auth-page__image-wrapper">
+                <img
+                  src={imagesLogin}
+                  alt="Đăng ký"
+                  className="auth-page__image"
+                />
+                <div className="auth-page__image-overlay"></div>
+              </div>
+            </div>
+          </div>
         </div>
-    );
+      </main>
+
+      <footer>
+        <Footer />
+      </footer>
+    </div>
+  );
 }
 
 export default RegisterUser;

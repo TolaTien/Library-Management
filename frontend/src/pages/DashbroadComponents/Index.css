@@ -1,63 +1,123 @@
-
-/* IndexDashBroad.css */
-
-/* Tổng thể bố cục */
-.dashboard-layout {
-    min-height: 100vh;
-    background-color: #f5f7fa;
+/*  GLOBAL  */
+body {
+    margin: 0;
+    font-family: "Segoe UI", Roboto, sans-serif;
+    background: #f2f4f7;
+    color: #333;
 }
 
-/* Sidebar */
-.ant-layout-sider {
-    background-color: #001529 !important;
+.layout {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
 }
 
-/* Logo ở đầu sidebar */
+/*  SIDEBAR */
+.sidebar {
+    width: 240px;
+    background: #001529;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 6px rgba(0,0,0,0.2);
+}
+
 .logo {
-    height: 40px;
-    margin: 16px;
-    border-radius: 8px;
-    background: linear-gradient(135deg, #1677ff, #4096ff);
-    color: #fff;
-    text-align: center;
+    font-size: 22px;
     font-weight: 600;
-    font-size: 18px;
-    line-height: 40px;
-}
-
-/* Header */
-.ant-layout-header {
-    background: #ffffff !important;
-    border-bottom: 1px solid #f0f0f0;
-    box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
-}
-
-/* Content */
-.dashboard-content {
-    margin: 24px 16px 0;
-}
-
-.dashboard-inner {
-    background: #ffffff;
-    padding: 24px;
-    border-radius: 12px;
-    min-height: 360px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-}
-
-/* Footer */
-.ant-layout-footer {
-    background: #f5f5f5;
-    color: #666;
-    font-size: 14px;
     text-align: center;
+    padding: 18px 0;
+    color: #fff;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
-/* Menu item hover */
-.ant-menu-dark .ant-menu-item:hover {
-    background-color: #1677ff !important;
+/* MENU */
+.menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-.ant-menu-dark .ant-menu-item-selected {
-    background-color: #4096ff !important;
+.menu li {
+    padding: 14px 20px;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: 0.25s ease;
+    border-left: 3px solid transparent;
+}
+
+.menu li:hover {
+    background: #0656c733;
+}
+
+.menu li.active {
+    background: #1890ff;
+    border-left: 3px solid #40a9ff;
+}
+
+/* MAIN AREA  */
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+.header {
+    height: 64px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    font-size: 18px;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* CONTENT */
+.content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.content-inner {
+    background: #fff;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    min-height: 300px;
+}
+
+/* FOOTER */
+.footer {
+    height: 50px;
+    background: #fff;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #555;
+}
+
+/*  RESPONSIVE */
+@media (max-width: 992px) {
+    .sidebar {
+        position: fixed;
+        left: -240px;
+        top: 0;
+        height: 100%;
+        transition: 0.3s;
+        z-index: 100;
+    }
+
+    .sidebar.show {
+        left: 0;
+    }
 }

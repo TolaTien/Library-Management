@@ -1,256 +1,296 @@
-import {
-    Button,
-    Card,
-    Col,
-    DatePicker,
-    Divider,
-    Form,
-    Image,
-    Input,
-    InputNumber,
-    Modal,
-    Row,
-    Space,
-    Typography,
-} from 'antd';
-import { BookOutlined, CalendarOutlined, IdcardOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
+import React, { useState, useEffect, useMemo } from 'react';
+import ReactDOM from 'react-dom';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
 import { useStore } from '../hooks/useStore';
-import { requestCreateHistoryBook } from '../config/request';
+// 1. IMPORT THÊM requestGetHistoryUser
+import { requestCreateHistoryBook, requestGetHistoryUser } from '../config/request';
 import { toast } from 'react-toastify';
 import './ModalBuyBook.css';
 
-
-const { Title, Text } = Typography; 
 const BORROW_DURATION_MAX_DAYS = 30;
-
+const GLOBAL_MAX_QUANTITY = 5; // Hạn mức tối đa toàn cục
 
 function ModalBuyBook({ visible, onCancel, bookData }) {
-    const [form] = Form.useForm(); // form mượn sách
-    const [loading, setLoading] = useState(false);  // trạng thái loading khi submit form
-    const { dataUser } = useStore(); // Lấy thông tin user từ store
-    const today = dayjs();
-    const minReturnDate = today.add(1, 'day');
-    const maxReturnDate = today.add(BORROW_DURATION_MAX_DAYS, 'day');
+    const { dataUser } = useStore();
+    const [loading, setLoading] = useState(false);
+    
+    // State lưu tổng số sách user đang giữ
+    const [currentBorrowedTotal, setCurrentBorrowedTotal] = useState(0);
+    const [checkingLimit, setCheckingLimit] = useState(false);
 
-    // Effect to populate form with user and book data when the modal becomes visible.
+    const [formData, setFormData] = useState({
+        quantity: 1,
+        returnDate: ''
+    });
+
+    const { today, minReturnDate, maxReturnDate } = useMemo(() => {
+        const now = dayjs();
+        return {
+            today: now,
+            minReturnDate: now.add(1, 'day'),
+            maxReturnDate: now.add(BORROW_DURATION_MAX_DAYS, 'day')
+        };
+    }, []);
+
+    // Effect: Khi mở modal -> Reset Form & Gọi API check hạn mức
     useEffect(() => {
-        if (visible && dataUser) {
-            form.setFieldsValue({
+        if (visible) {
+            // Reset form cơ bản
+            setFormData({
                 quantity: 1,
+                returnDate: minReturnDate.format('YYYY-MM-DD')
+            });
+
+            // 2. GỌI API ĐỂ ĐẾM SỐ SÁCH ĐANG MƯỢN
+            const fetchUserHistory = async () => {
+                setCheckingLimit(true);
+                try {
+                    const res = await requestGetHistoryUser();
+                    if (res && res.data) {
+                        // Tính tổng số lượng sách đang ở trạng thái 'pending' hoặc 'success'
+                        const total = res.data.reduce((sum, item) => {
+                            if (item.status === 'success' || item.status === 'pending') {
+                                return sum + (item.quantity || 0);
+                            }
+                            return sum;
+                        }, 0);
+                        setCurrentBorrowedTotal(total);
+                    }
+                } catch (error) {
+                    console.error("Lỗi kiểm tra hạn mức:", error);
+                } finally {
+                    setCheckingLimit(false);
+                }
+            };
+            fetchUserHistory();
+        }
+    }, [visible, minReturnDate]);
+
+    // Tính số lượng còn được phép mượn
+    const remainingQuota = Math.max(0, GLOBAL_MAX_QUANTITY - currentBorrowedTotal);
+
+    // Xử lý khi nhập số lượng (Logic chặn mới)
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+
+        if (name === 'quantity') {
+            let val = parseInt(value);
+            
+            if (isNaN(val)) {
+                setFormData(prev => ({ ...prev, [name]: '' }));
+                return;
+            }
+
+            // Logic chặn: Không được vượt quá hạn mức còn lại
+            if (val > remainingQuota) {
+                if (remainingQuota === 0) {
+                    toast.error(`Bạn đang giữ ${currentBorrowedTotal}/${GLOBAL_MAX_QUANTITY} quyển. Không thể mượn thêm!`);
+                    val = 0; // Hoặc 1 tùy UX, nhưng ở đây disable nút submit rồi
+                } else {
+                    toast.warning(`Bạn đang giữ ${currentBorrowedTotal} quyển. Chỉ được mượn thêm tối đa ${remainingQuota} quyển!`);
+                    val = remainingQuota;
+                }
+            }
+            
+            // Logic cũ: Không < 1 (Trừ khi hết hạn mức thì chấp nhận hiển thị số khác hoặc disable)
+            if (val < 1 && remainingQuota > 0) val = 1;
+
+            setFormData(prev => ({ ...prev, [name]: val }));
+        } else {
+            setFormData(prev => ({ ...prev, [name]: value }));
+        }
+    };
+
+    const validateForm = () => {
+        // Check hạn mức toàn cục
+        if (currentBorrowedTotal >= GLOBAL_MAX_QUANTITY) {
+            toast.error(`Bạn đã đạt giới hạn mượn ${GLOBAL_MAX_QUANTITY} quyển. Vui lòng trả sách trước khi mượn tiếp!`);
+            return false;
+        }
+
+        if ((formData.quantity + currentBorrowedTotal) > GLOBAL_MAX_QUANTITY) {
+            toast.error(`Tổng số sách mượn không được quá 5. Bạn chỉ còn lượt cho ${remainingQuota} quyển.`);
+            return false;
+        }
+
+        if (!formData.quantity || formData.quantity < 1) {
+            toast.error('Số lượng mượn không hợp lệ!');
+            return false;
+        }
+
+        if (!formData.returnDate) {
+            toast.error('Vui lòng chọn ngày trả!');
+            return false;
+        }
+
+        const selectedDate = dayjs(formData.returnDate);
+        if (selectedDate.isBefore(minReturnDate, 'day')) {
+            toast.error('Ngày trả phải sau ngày mượn ít nhất 1 ngày!');
+            return false;
+        }
+        if (selectedDate.isAfter(maxReturnDate, 'day')) {
+            toast.error(`Thời gian mượn tối đa ${BORROW_DURATION_MAX_DAYS} ngày!`);
+            return false;
+        }
+        return true;
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!validateForm()) return;
+
+        setLoading(true);
+        try {
+            const borrowData = {
+                quantity: parseInt(formData.quantity),
                 fullName: dataUser?.fullName || '',
                 address: dataUser?.address || '',
                 phoneNumber: dataUser?.phoneNumber || '',
                 studentId: dataUser?.idStudent || '',
-                returnDate: minReturnDate, // Default return date
-            });
-        }
-    }, [visible, dataUser, form, minReturnDate]);
-
-    const handleSubmit = async (values) => {
-        setLoading(true);
-        try {
-            const borrowData = {
-                ...values,
                 bookId: bookData?.id,
                 borrowDate: today.format('YYYY-MM-DD'),
-                returnDate: values.returnDate.format('YYYY-MM-DD'),
+                returnDate: formData.returnDate,
             };
 
-            try {
-                await requestCreateHistoryBook(borrowData);
-                toast.success('Đăng ký mượn sách thành công!');
-            } catch (error) {
-                console.error('Error submitting borrow request:', error);
-                toast.error(error.response.data.message);
-            }
-
-            form.resetFields();
+            await requestCreateHistoryBook(borrowData);
+            toast.success('Đăng ký mượn sách thành công!');
             onCancel();
         } catch (error) {
             console.error('Error submitting borrow request:', error);
-            toast.error('Đăng ký mượn sách thất bại!');
+            toast.error(error.response?.data?.message || 'Đăng ký mượn sách thất bại!');
         } finally {
             setLoading(false);
         }
     };
 
-    const handleCancel = () => {
-        form.resetFields();
-        onCancel();
-    };
+    if (!visible) return null;
 
-    // Validator for the return date picker
-    const validateReturnDate = (_, value) => {
-        if (!value) {
-            return Promise.reject(new Error('Vui lòng chọn ngày trả!'));
-        }
-        if (value.isBefore(minReturnDate, 'day')) {
-            return Promise.reject(new Error('Ngày trả phải sau ngày mượn ít nhất 1 ngày!'));
-        }
-        if (value.isAfter(maxReturnDate, 'day')) {
-            return Promise.reject(new Error(`Thời gian mượn tối đa ${BORROW_DURATION_MAX_DAYS} ngày!`));
-        }
-        return Promise.resolve();
-    };
+    // Disable nút submit nếu hết hạn mức hoặc đang check
+    const isOutOfQuota = remainingQuota <= 0;
+    const isSubmitDisabled = !bookData || bookData.stock <= 0 || loading || isOutOfQuota || checkingLimit;
 
-    const isSubmitDisabled = !bookData || bookData.stock <= 0 || loading;
-
-    return (
-        <Modal
-            title={
-                // BEM: modal-borrow__title-wrapper
-                <div className="modal-borrow__title-wrapper">
-                    <BookOutlined className="modal-borrow__title-icon" />
-                    {/* BEM: modal-borrow__title-text */}
-                    <span className="modal-borrow__title-text">
-                        Đăng ký mượn sách
-                    </span>
+    return ReactDOM.createPortal(
+        <div className="custom-modal-overlay">
+            <div className="custom-modal-container">
+                <div className="modal-header">
+                    <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+                        <span>📖</span>
+                        <span>Đăng ký mượn sách</span>
+                    </div>
+                    <button className="close-btn" onClick={onCancel}>×</button>
                 </div>
-            }
-            open={visible}
-            onCancel={handleCancel}
-            footer={null}
-            width={800}
-            className="borrow-book-modal"
-            destroyOnHidden
-        >
-            {/* BEM: modal-borrow__content */}
-            <div className="modal-borrow__content">
-                {/* Book Information Section */}
-                {bookData && (
-                    <Card className="modal-borrow__card modal-borrow__card--book">
-                        <Title level={4} className="modal-borrow__section-title">
-                            Thông tin sách
-                        </Title>
-                        <Row gutter={16} align="middle">
-                            {/* BEM: modal-borrow__book-image-col */}
-                            <Col xs={24} sm={8} className="modal-borrow__book-image-col">
-                                <Image
-                                    src={`${import.meta.env.VITE_API_URL}/${bookData.image}`}
-                                    alt={bookData.nameProduct}
-                                    width={120}
-                                    height={160}
-                                    className="modal-borrow__book-image"
-                                    preview={false}
+
+                <div className="modal-body">
+                    {bookData && (
+                        <div className="book-info-card">
+                            <h4 className="section-title">Thông tin sách</h4>
+                            <div className="book-details-wrapper">
+                                <img 
+                                    src={`${import.meta.env.VITE_API_URL_IMAGE}/${bookData.image}`} 
+                                    alt={bookData.nameProduct} 
+                                    className="book-cover-img"
                                 />
-                            </Col>
-                            <Col xs={24} sm={16}>
-                                <Space direction="vertical" size="small" className="w-full">
-                                    <Title level={5} className="modal-borrow__book-name">
-                                        {bookData.nameProduct}
-                                    </Title>
-                                    {/* BEM: modal-borrow__book-details */}
-                                    <div className="modal-borrow__book-details">
-                                        <span>
-                                            Nhà xuất bản: <Text strong>{bookData.publisher}</Text>
-                                        </span>
-                                        <span>
-                                            Số trang: <Text strong>{bookData.pages} trang</Text>
-                                        </span>
-                                        <span>
-                                            Năm XB: <Text strong>{bookData.publishYear}</Text>
-                                        </span>
-                                        <span>
-                                            Còn lại:{' '}
-                                            {/* BEM: modal-borrow__stock-count */}
-                                            <Text strong className="modal-borrow__stock-count">
-                                                {bookData.stock} quyển
-                                            </Text>
-                                        </span>
+                                <div className="book-text-info">
+                                    <div className="book-name">{bookData.nameProduct}</div>
+                                    <div>Còn lại: <b style={{color: '#1890ff'}}>{bookData.stock} quyển</b></div>
+                                    
+                                    {/* Hiển thị thông báo hạn mức ngay trong UI */}
+                                    <div style={{marginTop: '10px', padding: '8px', background: '#fff7e6', border: '1px solid #ffd591', borderRadius: '4px', fontSize: '13px'}}>
+                                        {checkingLimit ? (
+                                            <span>⏳ Đang kiểm tra hạn mức...</span>
+                                        ) : (
+                                            <span>
+                                                Bạn đang mượn: <b>{currentBorrowedTotal}/5</b> quyển. 
+                                                <br/>
+                                                Có thể mượn thêm: <b style={{color: remainingQuota > 0 ? 'green' : 'red'}}>{remainingQuota}</b> quyển.
+                                            </span>
+                                        )}
                                     </div>
-                                </Space>
-                            </Col>
-                        </Row>
-                    </Card>
-                )}
-
-                <Divider className="modal-borrow__divider" />
-
-                {/* Borrower Information Form */}
-                <Card className="modal-borrow__card modal-borrow__card--borrower">
-                    <Title level={4} className="modal-borrow__section-title">
-                        👤 Thông tin mượn
-                    </Title>
-                    <Form form={form} layout="vertical" onFinish={handleSubmit} requiredMark={false} preserve={false}>
-                        <Row gutter={16}>
-                            <Col xs={24} sm={12}>
-                                <Form.Item
-                                    name="quantity"
-                                    label="Số lượng"
-                                    rules={[{ required: true, message: 'Vui lòng nhập số lượng!' }]}
-                                >
-                                    <InputNumber
-                                        min={1}
-                                        max={5}
-                                        placeholder="Số lượng"
-                                        prefix={<BookOutlined />}
-                                        className="modal-borrow__input modal-borrow__input--number"
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Divider className="modal-borrow__divider modal-borrow__divider--small" />
-
-                        <Title level={5} className="modal-borrow__section-subtitle">
-                            📅 Thời gian mượn
-                        </Title>
-
-                        <Row gutter={16}>
-                            <Col xs={24} sm={12}>
-                                <Form.Item label="Ngày mượn">
-                                    <Input
-                                        value={today.format('DD/MM/YYYY')}
-                                        disabled
-                                        className="modal-borrow__input modal-borrow__input--disabled"
-                                        prefix={<CalendarOutlined />}
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col xs={24} sm={12}>
-                                <Form.Item
-                                    name="returnDate"
-                                    label="Ngày trả dự kiến"
-                                    rules={[{ validator: validateReturnDate }]}
-                                >
-                                    {/* BEM: modal-borrow__datepicker */}
-                                    <DatePicker
-                                        className="modal-borrow__datepicker"
-                                        placeholder="Chọn ngày trả"
-                                        format="DD/MM/YYYY"
-                                        showToday={false}
-                                        disabledDate={(current) =>
-                                            current &&
-                                            (current.isBefore(minReturnDate, 'day') ||
-                                                current.isAfter(maxReturnDate, 'day'))
-                                        }
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        {/* BEM: modal-borrow__actions */}
-                        <div className="modal-borrow__actions">
-                            {/* BEM: modal-borrow__button */}
-                            <Button onClick={handleCancel} className="modal-borrow__button modal-borrow__button--cancel">
-                                Hủy bỏ
-                            </Button>
-                            <Button
-                                type="primary"
-                                htmlType="submit"
-                                loading={loading}
-                                className="modal-borrow__button modal-borrow__button--submit"
-                                disabled={isSubmitDisabled}
-                            >
-                                {loading ? 'Đang xử lý...' : ' Xác nhận mượn'}
-                            </Button>
+                                </div>
+                            </div>
                         </div>
-                    </Form>
-                </Card>
+                    )}
+
+                    <div className="borrower-info-card">
+                        <h4 className="section-title">👤 Thông tin mượn</h4>
+                        
+                        <form onSubmit={handleSubmit}>
+                            <div className="form-row">
+                                <div className="form-col">
+                                    <div className="form-group">
+                                        <label className="form-label required-mark">Số lượng</label>
+                                        <input 
+                                            type="number"
+                                            name="quantity"
+                                            className="custom-input"
+                                            min="1"
+                                            max={remainingQuota > 0 ? remainingQuota : 1} // Limit max input
+                                            value={formData.quantity}
+                                            onChange={handleInputChange}
+                                            disabled={isOutOfQuota || checkingLimit} // Chặn nhập nếu hết quota
+                                            required
+                                        />
+                                        {isOutOfQuota && (
+                                            <small style={{color: 'red', display: 'block', marginTop: '4px'}}>
+                                                * Bạn đã hết hạn mức mượn sách.
+                                            </small>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr style={{ border: 'none', borderTop: '1px solid #f0f0f0', margin: '16px 0' }} />
+
+                            <h5 className="section-title" style={{fontSize: '14px'}}>📅 Thời gian mượn</h5>
+
+                            <div className="form-row">
+                                <div className="form-col">
+                                    <div className="form-group">
+                                        <label className="form-label">Ngày mượn</label>
+                                        <input 
+                                            type="text"
+                                            className="custom-input"
+                                            value={today.format('DD/MM/YYYY')}
+                                            disabled
+                                        />
+                                    </div>
+                                </div>
+                                <div className="form-col">
+                                    <div className="form-group">
+                                        <label className="form-label required-mark">Ngày trả dự kiến</label>
+                                        <input 
+                                            type="date"
+                                            name="returnDate"
+                                            className="custom-input"
+                                            value={formData.returnDate}
+                                            onChange={handleInputChange}
+                                            min={minReturnDate.format('YYYY-MM-DD')}
+                                            max={maxReturnDate.format('YYYY-MM-DD')}
+                                            required
+                                            disabled={isOutOfQuota}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="modal-footer">
+                                <button type="button" className="btn-modal btn-cancel" onClick={onCancel}>
+                                    Hủy bỏ
+                                </button>
+                                <button 
+                                    type="submit" 
+                                    className="btn-modal btn-submit"
+                                    disabled={isSubmitDisabled}
+                                >
+                                    {loading ? 'Đang xử lý...' : (isOutOfQuota ? 'Hết hạn mức' : 'Xác nhận mượn')}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-        </Modal>
+        </div>,
+        document.body
     );
 }
 

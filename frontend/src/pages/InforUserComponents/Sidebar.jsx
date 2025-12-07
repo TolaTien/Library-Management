@@ -1,6 +1,5 @@
-import { Menu } from 'antd';
+import React from 'react';
 import './Sidebar.css';
-import { UserOutlined, HistoryOutlined, LogoutOutlined,NotificationOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { requestLogout } from '../../config/request'; 
 
@@ -19,43 +18,61 @@ const Sidebar = ({ setActiveComponent, activeComponent }) => {
         }
     };
 
-    const items = [
+    // Định nghĩa danh sách menu (Dữ liệu thuần, )
+    const menuItems = [
         {
             key: 'info',
-            icon: <UserOutlined />,
+            icon: '👤', // Có thể thay bằng <FaUser /> nếu dùng react-icons
             label: 'Thông tin cá nhân',
             onClick: () => setActiveComponent('info'),
         },
         {
             key: 'history',
-            icon: <HistoryOutlined />,
+            icon: '📖', // Có thể thay bằng <FaHistory />
             label: 'Lịch sử mượn sách',
             onClick: () => setActiveComponent('history'),
         },
         {
-            key: 'notifications',
-            icon: <NotificationOutlined />,
+            key: 'noti',
+            icon: "🔔",
             label: 'Thông báo',
-            onClick: () => setActiveComponent('notifications'),
+            onClick: () => setActiveComponent('noti'),
         },
         {
             key: 'logout',
-            icon: <LogoutOutlined />,
+            icon: '🚪', // Có thể thay bằng <FaSignOutAlt />
             label: 'Đăng xuất',
             onClick: handleLogout,
-            danger: true, // Hiển thị màu đỏ để cảnh báo
+            isDanger: true, // Đánh dấu là nút nguy hiểm
         },
     ];
 
     return (
-        <Menu
-            className="dashbroad-sidebar"
-            selectedKeys={[activeComponent]}
-            mode="inline"
-            items={items}
-        />
+        <div className="custom-sidebar">
+            <ul className="sidebar-menu">
+                {menuItems.map((item) => {
+                    // Kiểm tra xem item này có đang được chọn không
+                    const isActive = activeComponent === item.key;
+                    
+                    // Tạo class động
+                    let className = 'menu-item';
+                    if (isActive) className += ' active';
+                    if (item.isDanger) className += ' danger';
+
+                    return (
+                        <li 
+                            key={item.key} 
+                            className={className}
+                            onClick={item.onClick}
+                        >
+                            <span className="menu-icon">{item.icon}</span>
+                            <span className="menu-label">{item.label}</span>
+                        </li>
+                    );
+                })}
+            </ul>
+        </div>
     );
 };
 
 export default Sidebar;
-

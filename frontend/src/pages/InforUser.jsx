@@ -1,27 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { Layout } from 'antd';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'; // Nhớ thêm useEffect
+import { useLocation } from 'react-router-dom'; 
 import Sidebar from "./InforUserComponents/Sidebar.jsx";
 import PersonalInfo from "./InforUserComponents/PersonalInfor.jsx";
 import BorrowingHistory from "./InforUserComponents/BorrowingHistory.jsx";
-import AdminNotifications from './InforUserComponents/AdminNotifications.jsx';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-// Import file CSS riêng
+import AdminNotifications from './InforUserComponents/AdminNotifications.jsx';
 import './InforUser.css';
 
-const { Sider, Content } = Layout;
-
 function InforUser() {
-    const location = useLocation();
-    const [activeComponent, setActiveComponent] = useState('info');
+    const [activeComponent, setActiveComponent] = useState('info'); 
+    const location = useLocation(); // Hook để lấy dữ liệu gửi từ navigate
 
-    // Khi navigate từ Header, set activeComponent dựa vào state truyền từ navigate
+    // Thêm đoạn này để bắt sự kiện từ Header
     useEffect(() => {
-        if (location.state?.activeTab) {
-            setActiveComponent(location.state.activeTab);
+        if (location.state && location.state.tab) {
+            setActiveComponent(location.state.tab);
         }
-    }, [location.state]);
+    }, [location]);
 
     const renderComponent = () => {
         switch (activeComponent) {
@@ -29,7 +25,7 @@ function InforUser() {
                 return <PersonalInfo />;
             case 'history':
                 return <BorrowingHistory />;
-            case 'notifications':
+            case 'noti':
                 return <AdminNotifications />;
             default:
                 return <PersonalInfo />;
@@ -37,24 +33,27 @@ function InforUser() {
     };
 
     return (
-        <Layout className="user-profile-layout">
+        <div className="user-profile-layout">
             <header>
-                <Header setActiveComponent={setActiveComponent} />
+                <Header />
             </header>
-            <Layout className="user-profile__container">
-                <Sider width={250} theme="light" className="user-profile__sidebar">
+            
+            <div className="user-profile__container">
+                <aside className="user-profile__sidebar">
                     <Sidebar activeComponent={activeComponent} setActiveComponent={setActiveComponent} />
-                </Sider>
-                <Content className="user-profile__content">
-                    <div className="user-profile__active-view">{renderComponent()}</div>
-                </Content>
-            </Layout>
-
+                </aside>
+                
+                <main className="user-profile__content">
+                    <div className="user-profile__active-view">
+                        {renderComponent()}
+                    </div>
+                </main>
+            </div>
+            
             <footer>
                 <Footer />
             </footer>
-        </Layout>
+        </div>
     );
 }
-
 export default InforUser;

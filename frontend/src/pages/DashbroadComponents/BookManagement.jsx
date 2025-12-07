@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import './BookManagement.css';
-import { Table, Button, Input, Modal, Form, InputNumber, Select, Upload, message } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
 import {
     requestCreateProduct,
     requestDeleteProduct,
@@ -10,437 +8,319 @@ import {
     requestUploadImageProduct,
 } from '../../config/request';
 
-const { Option } = Select;
-
-// Component Form sách để tái sử dụng
-const BookForm = ({ form, onFinish, initialValues, isEdit = false }) => {
-    useEffect(() => {
-        if (initialValues) {
-            // Xử lý dữ liệu cho edit form
-            const formValues = { ...initialValues };
-
-            // Nếu là edit và có ảnh, tạo file list cho Upload component
-            if (isEdit && initialValues.image) {
-                formValues.image = {
-                    fileList: [
-                        {
-                            uid: '-1',
-                            name: 'current-image',
-                            status: 'done',
-                            url: initialValues.image.startsWith('http')
-                                ? initialValues.image
-                                : `${import.meta.env.VITE_API_URL}/${initialValues.image}`,
-                        },
-                    ],
-                };
-            }
-
-            form.setFieldsValue(formValues);
-        } else {
-            // Nếu không có initialValues thì reset form (tránh giữ giá trị cũ)
-            form.resetFields();
-        }
-    }, [initialValues, form, isEdit]);
-
+const BookForm = ({ formData, setFormData, onSubmit, isEdit }) => {
     return (
-        <Form form={form} layout="vertical" onFinish={onFinish} initialValues={initialValues}>
-            <Form.Item
-                name="image"
-                label="Ảnh bìa"
-                rules={[{ required: !isEdit, message: 'Vui lòng tải lên ảnh bìa!' }]}
-            >
-                <Upload
-                    name="image"
-                    listType="picture"
-                    beforeUpload={() => false}
-                    maxCount={1}
-                    defaultFileList={
-                        isEdit && initialValues?.image
-                            ? [
-                                  {
-                                      uid: '-1',
-                                      name: 'current-image',
-                                      status: 'done',
-                                      url: initialValues.image.startsWith('http')
-                                          ? initialValues.image
-                                          : `${import.meta.env.VITE_API_URL}/${initialValues.image}`,
-                                  },
-                              ]
-                            : []
+        <form className="form">
+            <div className="form-group">
+                <label>Ảnh bìa</label>
+                <input
+                    type="file"
+                    onChange={(e) =>
+                        setFormData({ ...formData, image: e.target.files[0] })
                     }
-                >
-                    <Button icon={<UploadOutlined />}>{isEdit ? 'Thay đổi ảnh' : 'Tải lên'}</Button>
-                </Upload>
-            </Form.Item>
-            <Form.Item
-                name="nameProduct"
-                label="Tên sách"
-                rules={[{ required: true, message: 'Vui lòng nhập tên sách!' }]}
+                />
+                {isEdit && formData.imageUrl && (
+                    <img className="preview-img" src={formData.imageUrl} />
+                )}
+            </div>
+
+            <div className="form-group">
+                <label>Tên sách</label>
+                <input
+                    value={formData.nameProduct || ''}
+                    onChange={(e) =>
+                        setFormData({ ...formData, nameProduct: e.target.value })
+                    }
+                />
+            </div>
+
+            <div className="form-group">
+                <label>Nhà xuất bản</label>
+                <input
+                    value={formData.publisher || ''}
+                    onChange={(e) =>
+                        setFormData({ ...formData, publisher: e.target.value })
+                    }
+                />
+            </div>
+
+            <div className="form-group">
+                <label>Năm xuất bản</label>
+                <input
+                    type="number"
+                    value={formData.publishYear || ''}
+                    onChange={(e) =>
+                        setFormData({ ...formData, publishYear: e.target.value })
+                    }
+                />
+            </div>
+
+            <div className="form-group">
+                <label>Số lượng</label>
+                <input
+                    type="number"
+                    value={formData.stock || ''}
+                    onChange={(e) =>
+                        setFormData({ ...formData, stock: e.target.value })
+                    }
+                />
+            </div>
+
+            <div className="form-group">
+                <label>Mô tả</label>
+                <textarea
+                    value={formData.description || ''}
+                    onChange={(e) =>
+                        setFormData({ ...formData, description: e.target.value })
+                    }
+                />
+            </div>
+
+            <div className="form-group">
+                <label>Thể loại</label>
+                <input
+                    value={formData.category || ''}
+                    onChange={(e) =>
+                        setFormData({ ...formData, category: e.target.value })
+                    }
+                />
+            </div>
+
+            <div className="form-group">
+                <label>Số trang</label>
+                <input
+                    type="number"
+                    value={formData.pages || ''}
+                    onChange={(e) =>
+                        setFormData({ ...formData, pages: e.target.value })
+                    }
+                />
+            </div>
+
+            <div className="form-group">
+                <label>Ngôn ngữ</label>
+                <input
+                    value={formData.language || ''}
+                    onChange={(e) =>
+                        setFormData({ ...formData, language: e.target.value })
+                    }
+                />
+            </div>
+
+            <div className="form-group">
+                <label>Công ty phát hành</label>
+                <input
+                    value={formData.publishingCompany || ''}
+                    onChange={(e) =>
+                        setFormData({ ...formData, publishingCompany: e.target.value })
+                    }
+                />
+            </div>
+
+            <button
+                type="button"
+                className="btn btn-primary full"
+                onClick={onSubmit}
             >
-                <Input />
-            </Form.Item>
-            <Form.Item
-                name="publisher"
-                label="Nhà xuất bản"
-                rules={[{ required: true, message: 'Vui lòng nhập nhà xuất bản!' }]}
-            >
-                <Input />
-            </Form.Item>
-            <Form.Item
-                name="publishYear"
-                label="Năm xuất bản"
-                rules={[{ required: true, message: 'Vui lòng nhập năm xuất bản!' }]}
-            >
-                <InputNumber className="w-full" />
-            </Form.Item>
-            <Form.Item name="stock" label="Số lượng" rules={[{ required: true, message: 'Vui lòng nhập số lượng!' }]}>
-                <InputNumber className="w-full" min={0} />
-            </Form.Item>
-            <Form.Item name="description" label="Mô tả">
-                <Input.TextArea />
-            </Form.Item>
-            <Form.Item
-                name="category"
-                label="Thể loại"
-                rules={[{ required: true, message: 'Vui lòng chọn thể loại!' }]}
-            >
-                <Input />
-            </Form.Item>
-            <Form.Item name="pages" label="Số trang" rules={[{ required: true, message: 'Vui lòng nhập số trang!' }]}>
-                <InputNumber className="w-full" min={1} />
-            </Form.Item>
-            <Form.Item
-                name="language"
-                label="Ngôn ngữ"
-                rules={[{ required: true, message: 'Vui lòng nhập ngôn ngữ!' }]}
-            >
-                <Input />
-            </Form.Item>
-            <Form.Item
-                name="publishingCompany"
-                label="Công ty phát hành"
-                rules={[{ required: true, message: 'Vui lòng nhập công ty phát hành!' }]}
-            >
-                <Input />
-            </Form.Item>
-        </Form>
+                {isEdit ? 'Lưu thay đổi' : 'Thêm sách'}
+            </button>
+        </form>
     );
 };
 
 const BookManagement = () => {
     const [data, setData] = useState([]);
-    const [filterCategory, setFilterCategory] = useState('all');
+    const [filterCategory, setFilterCategory] = useState("all");
     const [categories, setCategories] = useState([]);
 
+    const [modalAdd, setModalAdd] = useState(false);
+    const [modalEdit, setModalEdit] = useState(false);
+    const [modalDelete, setModalDelete] = useState(false);
 
-    const [isAddModalVisible, setIsAddModalVisible] = useState(false);
-    const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-    const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-    const [editingBook, setEditingBook] = useState(null);
-    const [deletingBook, setDeletingBook] = useState(null);
-    const [loading, setLoading] = useState(false);
-
-    const [addForm] = Form.useForm();
-    const [editForm] = Form.useForm();
+    const [formData, setFormData] = useState({});
+    const [selectedBook, setSelectedBook] = useState(null);
 
     const fetchData = async () => {
-        try {
-            setLoading(true);
-            const res = await requestGetAllProduct();
-            setData(res.data);
-        } catch (error) {
-            console.error('Failed to fetch books:', error);
-            message.error('Không thể tải dữ liệu sách');
-        } finally {
-            setLoading(false);
-        }
+        const res = await requestGetAllProduct();
+        setData(res.data);
     };
 
     useEffect(() => {
         fetchData();
     }, []);
+
     useEffect(() => {
-        const uniqueCategories = [...new Set(data.map(item => item.category))];
-        setCategories(uniqueCategories);
+        const unique = [...new Set(data.map(i => i.category))];
+        setCategories(unique);
     }, [data]);
 
+    const filteredData = data.filter(i =>
+        filterCategory === "all" ? true : i.category === filterCategory
+    );
 
-    // dữ liệu đã lọc
-    const filteredData = data.filter((item) => {
-        if (filterCategory === 'all') return true;
-        return item.category === filterCategory;
-;
-    });
+    const handleAddSubmit = async () => {
+        const fd = new FormData();
+        fd.append("image", formData.image);
 
-    // --- Xử lý cho Modal Thêm Sách ---
-    const showAddModal = () => {
-        setIsAddModalVisible(true);
+        const urlImg = await requestUploadImageProduct(fd);
+
+        const payload = { ...formData, image: urlImg.data };
+
+        await requestCreateProduct(payload);
+        setModalAdd(false);
+        setFormData({});
+        fetchData();
     };
 
-    const handleAddOk = () => {
-        addForm.submit();
-    };
+    const handleEditSubmit = async () => {
+        let imageUrl = selectedBook.image;
 
-    const handleAddCancel = () => {
-        setIsAddModalVisible(false);
-        addForm.resetFields();
-    };
-
-    const onAddFinish = async (values) => {
-        try {
-            setLoading(true);
-
-            if (!values.image?.fileList || values.image.fileList.length === 0) {
-                message.error('Vui lòng chọn ảnh bìa');
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append('image', values.image.fileList[0].originFileObj);
-
-            const urlImage = await requestUploadImageProduct(formData);
-            const payload = {
-                ...values,
-                image: urlImage.data,
-            };
-
-            await requestCreateProduct(payload);
-            message.success('Thêm sách thành công');
-            handleAddCancel();
-            fetchData();
-        } catch (error) {
-            console.error('Add product error:', error);
-            message.error('Không thể thêm sách');
-        } finally {
-            setLoading(false);
+        if (formData.image instanceof File) {
+            const fd = new FormData();
+            fd.append("image", formData.image);
+            const res = await requestUploadImageProduct(fd);
+            imageUrl = res.data;
         }
+
+        await requestUpdateProduct(selectedBook.id, {
+            ...formData,
+            image: imageUrl,
+        });
+
+        setModalEdit(false);
+        setFormData({});
+        fetchData();
     };
 
-    // --- Xử lý cho Modal Sửa Sách ---
-    const showEditModal = (record) => {
-        setEditingBook(record);
-        setIsEditModalVisible(true);
-
-        // set giá trị cho form edit (nếu muốn set ngay)
-        // editForm.setFieldsValue(record); // BookForm useEffect cũng đã set
+    const handleDelete = async () => {
+        await requestDeleteProduct(selectedBook.id);
+        setModalDelete(false);
+        fetchData();
     };
-
-    const handleEditOk = () => {
-        editForm.submit();
-    };
-
-    const handleEditCancel = () => {
-        setIsEditModalVisible(false);
-        setEditingBook(null);
-        editForm.resetFields();
-    };
-
-    const onEditFinish = async (values) => {
-        try {
-            setLoading(true);
-            let imageUrl = editingBook.image; // Giữ ảnh cũ mặc định
-
-            // Kiểm tra nếu có ảnh mới được upload
-            if (values.image?.fileList && values.image.fileList.length > 0) {
-                const newFile = values.image.fileList[0];
-
-                // Chỉ upload nếu có file mới (không phải ảnh cũ)
-                if (newFile.originFileObj) {
-                    const formData = new FormData();
-                    formData.append('image', newFile.originFileObj);
-                    const urlImage = await requestUploadImageProduct(formData);
-                    imageUrl = urlImage.data;
-                }
-            }
-
-            const updateData = {
-                ...values,
-                image: imageUrl,
-            };
-
-            await requestUpdateProduct(editingBook.id, updateData);
-            message.success('Cập nhật sách thành công');
-            handleEditCancel();
-            fetchData();
-        } catch (error) {
-            console.error('Update product error:', error);
-            message.error('Không thể cập nhật sách');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // --- Xử lý cho Modal Xóa Sách ---
-    const showDeleteModal = (record) => {
-        setDeletingBook(record);
-        setIsDeleteModalVisible(true);
-    };
-
-    const handleDeleteOk = async () => {
-        try {
-            setLoading(true);
-            await requestDeleteProduct(deletingBook.id);
-            message.success('Xóa sách thành công');
-            fetchData();
-            handleDeleteCancel();
-        } catch (error) {
-            console.error('Delete product error:', error);
-            message.error('Không thể xóa sách');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleDeleteCancel = () => {
-        setIsDeleteModalVisible(false);
-        setDeletingBook(null);
-    };
-
-    const columns = [
-        {
-            title: 'Ảnh',
-            dataIndex: 'image',
-            key: 'image',
-            width: 100,
-            render: (text) => (
-                <img
-                    style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '4px' }}
-                    src={text?.startsWith('http') ? text : `${import.meta.env.VITE_API_URL_IMAGE}/${text}`}
-                    alt="book cover"
-                    onError={(e) => {
-                        e.target.src = '/placeholder-book.png';
-                    }}
-                />
-            ),
-        },
-        {
-            title: 'Tên sách',
-            dataIndex: 'nameProduct',
-            key: 'nameProduct',
-            ellipsis: true,
-            width: 200,
-        },
-        {
-            title: 'Nhà xuất bản',
-            dataIndex: 'publisher',
-            key: 'publisher',
-            ellipsis: true,
-            width: 150,
-        },
-        {
-            title: 'Năm xuất bản',
-            dataIndex: 'publishYear',
-            key: 'publishYear',
-            width: 120,
-        },
-        {
-            title: 'Số lượng',
-            dataIndex: 'stock',
-            key: 'stock',
-            width: 100,
-        },
-        {
-            title: 'Hành động',
-            key: 'action',
-            width: 150,
-            render: (_, record) => (
-                <span className="flex gap-2">
-                    <Button type="primary" size="small" onClick={() => showEditModal(record)} loading={loading}>
-                        Sửa
-                    </Button>
-                    <Button
-                        type="primary"
-                        danger
-                        size="small"
-                        onClick={() => showDeleteModal(record)}
-                        loading={loading}
-                    >
-                        Xóa
-                    </Button>
-                </span>
-            ),
-        },
-    ];
 
     return (
-        <div className="book-management">
+        <div className="book-container">
+
             <div className="header">
                 <h2>Quản lý sách</h2>
-                <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                    <Select
+                <div className="header-actions">
+                    <select
                         value={filterCategory}
-                        onChange={(value) => setFilterCategory(value)}
-                        style={{ width: 200 }}
+                        onChange={(e) => setFilterCategory(e.target.value)}
                     >
-                        <Option value="all">Tất cả thể loại</Option>
-                        {categories.map((category) => (
-                            <Option key={category} value={category}>
-                                {category}
-                            </Option>
+                        <option value="all">Tất cả thể loại</option>
+                        {categories.map((c) => (
+                            <option key={c} value={c}>{c}</option>
                         ))}
-                        
-                    </Select>
+                    </select>
 
-                    <Button type="primary" onClick={showAddModal} loading={loading}>
+                    <button className="btn btn-primary" onClick={() => setModalAdd(true)}>
                         Thêm sách
-                    </Button>
+                    </button>
                 </div>
             </div>
 
-            <Table
-                columns={columns}
-                dataSource={filteredData}
-                rowKey="id"
-                loading={loading}
-                pagination={{
-                    pageSize: 10,
-                    showSizeChanger: true,
-                    showQuickJumper: true,
-                    showTotal: (total, range) => `${range[0]}-${range[1]} của ${total} sách`,
-                }}
-            />
+            <table className="table">
+                <thead>
+                    <tr>
+                        <th>Ảnh</th>
+                        <th>Tên sách</th>
+                        <th>NXB</th>
+                        <th>Năm</th>
+                        <th>Số lượng</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {filteredData.map((b) => (
+                        <tr key={b.id}>
+                            <td>
+                                <img
+                                    className="book-img"
+                                    src={`${import.meta.env.VITE_API_URL_IMAGE}/${b.image}`}
+                                />
+                            </td>
+                            <td>{b.nameProduct}</td>
+                            <td>{b.publisher}</td>
+                            <td>{b.publishYear}</td>
+                            <td>{b.stock}</td>
+                            <td>
+                                <button
+                                    className="btn btn-small"
+                                    onClick={() => {
+                                        setSelectedBook(b);
+                                        setFormData({ ...b, imageUrl: b.image });
+                                        setModalEdit(true);
+                                    }}
+                                >
+                                    Sửa
+                                </button>
 
-            {/* Modal Thêm Sách */}
-            <Modal
-                title="Thêm sách mới"
-                open={isAddModalVisible}
-                onOk={handleAddOk}
-                onCancel={handleAddCancel}
-                okText="Thêm"
-                cancelText="Hủy"
-                width={800}
-                confirmLoading={loading}
-            >
-                <BookForm form={addForm} onFinish={onAddFinish} />
-            </Modal>
+                                <button
+                                    className="btn btn-danger btn-small"
+                                    onClick={() => {
+                                        setSelectedBook(b);
+                                        setModalDelete(true);
+                                    }}
+                                >
+                                    Xóa
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
 
-            {/* Modal Sửa Sách */}
-            <Modal
-                title="Chỉnh sửa thông tin sách"
-                open={isEditModalVisible}
-                onOk={handleEditOk}
-                onCancel={handleEditCancel}
-                okText="Lưu"
-                cancelText="Hủy"
-                width={800}
-                confirmLoading={loading}
-            >
-                <BookForm form={editForm} onFinish={onEditFinish} initialValues={editingBook} isEdit={true} />
-            </Modal>
+            {/* Modal Add */}
+            {modalAdd && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h3>Thêm sách mới</h3>
+                        <BookForm
+                            formData={formData}
+                            setFormData={setFormData}
+                            onSubmit={handleAddSubmit}
+                        />
+                        <button className="btn btn-secondary" onClick={() => setModalAdd(false)}>
+                            Đóng
+                        </button>
+                    </div>
+                </div>
+            )}
 
-            {/* Modal Xóa Sách */}
-            <Modal
-                title="Xác nhận xóa sách"
-                open={isDeleteModalVisible}
-                onOk={handleDeleteOk}
-                onCancel={handleDeleteCancel}
-                okText="Xóa"
-                cancelText="Hủy"
-                okButtonProps={{ danger: true }}
-                confirmLoading={loading}
-            >
-                <p>Bạn có chắc chắn muốn xóa sách "{deletingBook?.nameProduct}" không?</p>
-            </Modal>
+            {/* Modal Edit */}
+            {modalEdit && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h3>Chỉnh sửa sách</h3>
+                        <BookForm
+                            formData={formData}
+                            setFormData={setFormData}
+                            onSubmit={handleEditSubmit}
+                            isEdit={true}
+                        />
+                        <button className="btn btn-secondary" onClick={() => setModalEdit(false)}>
+                            Đóng
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal Delete */}
+            {modalDelete && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h3>Bạn có chắc muốn xóa?</h3>
+                        <p>{selectedBook?.nameProduct}</p>
+                        <button className="btn btn-danger" onClick={handleDelete}>
+                            Xóa
+                        </button>
+                        <button className="btn btn-secondary" onClick={() => setModalDelete(false)}>
+                            Hủy
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

@@ -1,7 +1,72 @@
+/* AdminNotifications.css */
+
 .admin-notifications {
-    padding: 20px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  min-height: 200px; /* Đảm bảo chiều cao tối thiểu cho đẹp */
 }
 
 .admin-notifications h2 {
-    margin-bottom: 15px;
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #1890ff; /* Màu xanh chủ đạo */
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 10px;
+}
+
+/* Danh sách thông báo */
+.notif-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* Khoảng cách giữa các card */
+}
+
+/* Style riêng cho nội dung card thông báo */
+.notif-card-content {
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Trạng thái Loading */
+.notif-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  color: #1890ff;
+}
+
+/* Spinner quay quay (Tái sử dụng code cũ hoặc dùng cái này) */
+.notif-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #1890ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Trạng thái Rỗng (Empty) */
+.notif-empty {
+  text-align: center;
+  padding: 40px 0;
+  color: #999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.notif-empty-icon {
+  font-size: 40px;
+  opacity: 0.5;
 }

@@ -1,82 +1,54 @@
-/* --- CSS Variables --- */
-:root {
-    --color-page-bg: #f9fafb; /* gray-50 - Background của trang nếu cần */
-    --color-card-bg: #ffffff; /* white */
-    --color-border: #e5e7eb; /* gray-200 */
-    --color-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
-}
+/* InforUser.css */
 
-/* --- USER-PROFILE-LAYOUT BLOCK --- */
+/* Wrapper tổng thể: Giữ cho footer luôn nằm dưới đáy màn hình */
 .user-profile-layout {
-    /* Thay thế style={{ minHeight: '100vh' }} */
-    min-height: 100vh;
-    background-color: var(--color-page-bg) !important;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Chiếm toàn bộ chiều cao màn hình */
 }
 
-/* --- CONTAINER ELEMENT --- */
+/* Container chứa Sidebar và Content */
 .user-profile__container {
-    /* Thay thế style={{ width: '90%', margin: '20px auto' }} */
-    width: 90%;
-    max-width: 1400px; /* Thêm max-width để hiện đại hơn */
-    margin: 20px auto !important; /* Ant Design Layout component thường cần !important */
-    background: transparent !important; /* Đảm bảo layout ngoài không có màu nền trắng */
+  display: flex; /* Quan trọng: Để Sidebar và Content nằm ngang hàng */
+  flex: 1; /* Chiếm hết khoảng trống còn lại giữa Header và Footer */
+  background-color: #f0f2f5; 
 }
 
-/* --- SIDEBAR ELEMENT --- */
+/* Sidebar bên trái (Thay thế Sider) */
 .user-profile__sidebar {
-    /* Thay thế theme="light" className="border-r border-gray-200" */
-    border-right: 1px solid var(--color-border);
-    border-radius: 0.5rem 0 0 0.5rem; /* Bo góc trái */
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05); /* Đổ bóng nhẹ */
-    overflow: hidden; /* Quan trọng để giữ bo góc */
+  width: 250px; /* Độ rộng cố định giống props width={250} */
+  background: #fff; /* Màu nền trắng */
+  border-right: 1px solid #f0f0f0; /* Viền ngăn cách */
+  flex-shrink: 0; /* Không bị co lại khi màn hình nhỏ */
 }
 
-/* --- CONTENT ELEMENT --- */
+/* Content bên phải (Thay thế Content) */
 .user-profile__content {
-    /* Thay thế style={{ paddingLeft: '20px', margin: 0 }} */
-    padding-left: 20px !important;
-    margin: 0 !important;
-    background: transparent !important;
+  flex: 1; /* Tự động giãn ra chiếm hết phần còn lại */
+  padding: 24px; /* Khoảng cách lề bên trong */
+  overflow: initial; /* Đảm bảo nội dung dài vẫn cuộn được */
 }
 
-/* --- ACTIVE-VIEW ELEMENT (Nơi hiển thị PersonalInfo/BorrowingHistory) --- */
+/* Wrapper cho component con bên trong */
 .user-profile__active-view {
-    /* Thay thế className="bg-white p-6 rounded-lg shadow-md min-h-full" */
-    background-color: var(--color-card-bg);
-    padding: 1.5rem; /* p-6 */
-    border-radius: 0.5rem; /* rounded-lg */
-    box-shadow: var(--color-shadow); /* shadow-md */
-    min-height: 100%;
-    /* Thêm border để đồng bộ với sidebar */
-    border: 1px solid var(--color-border);
-    border-left: none; /* Tránh border kép với sidebar */
-    border-radius: 0 0.5rem 0.5rem 0; /* Bo góc phải */
+  background: transparent;
+  min-height: 100%;
 }
 
-/* Responsive adjustment for small screens (sidebar should stack) */
+/* --- Responsive cho Mobile --- */
 @media (max-width: 768px) {
-    .user-profile__container {
-        flex-direction: column;
-        width: 100%;
-        margin: 10px auto !important;
-        padding: 0 10px;
-    }
+  .user-profile__container {
+    flex-direction: column; /* Trên điện thoại thì xếp dọc */
+  }
 
-    .user-profile__sidebar {
-        width: 100% !important;
-        max-width: none !important;
-        border-right: none;
-        border-bottom: 1px solid var(--color-border);
-        margin-bottom: 10px;
-        border-radius: 0.5rem; /* Bo góc đầy đủ */
-    }
-
-    .user-profile__content {
-        padding-left: 0 !important;
-    }
-
-    .user-profile__active-view {
-        border-radius: 0.5rem; /* Bo góc đầy đủ */
-        border-left: 1px solid var(--color-border);
-    }
+  .user-profile__sidebar {
+    width: 100%; /* Sidebar full màn hình */
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  .user-profile__content {
+    padding: 16px;
+  }
 }

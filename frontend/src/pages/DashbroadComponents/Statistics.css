@@ -1,37 +1,57 @@
-/* Toàn bộ phần thống kê */
 .statistics-container {
     background: #fff;
     padding: 24px;
     border-radius: 10px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    width: 100%;
 }
 
-/* Tiêu đề chính */
 .statistics-container h2 {
     font-size: 22px;
     font-weight: 700;
-    color: #333;
     margin-bottom: 20px;
+    color: #333;
 }
 
-/* Khoảng cách giữa các card */
-.statistics-container .ant-card {
+/* ======= 3 CARD THỐNG KÊ ======= */
+.stats-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    flex: 1;
+    background: #fafafa;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.stat-title {
+    font-size: 15px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #222;
+}
+
+/* ======= BIỂU ĐỒ ======= */
+.chart-card {
+    background: #fafafa;
+    padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
-/* Card biểu đồ */
-.statistics-container .ant-card-head-title {
+.chart-card h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
     font-weight: 600;
     color: #444;
-}
-
-/* Chỉnh layout biểu đồ cho đẹp */
-.statistics-container .ant-card-body {
-    padding: 20px;
-}
-
-/* Khoảng cách giữa hàng các thống kê */
-.statistics-container .ant-row.mb-6 {
-    margin-bottom: 24px;
 }

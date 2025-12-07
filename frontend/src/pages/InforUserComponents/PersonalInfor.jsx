@@ -1,134 +1,208 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Avatar, Descriptions, Button, Spin, message, Form, Input, Upload } from 'antd';
-import { UserOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons';
-import { requestIdStudent, requestUpdateUser,  } from '../../config/request';
+import  { useState, useEffect } from 'react';
+import CustomCard from '../../cardbody/CustomCard';
+import { requestIdStudent, requestUpdateUser } from '../../config/request';
 import { toast } from 'react-toastify';
 import { useStore } from '../../hooks/useStore';
-import "./PersonalInfor.css";
+import "./PersonalInfor.css"; // Nhớ import CSS mới
 
 const PersonalInfo = () => {
-    // FIX: Đặt loading thành false sau khi dataUser được load lần đầu,
     const [loading, setLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
-    const [form] = Form.useForm();
+    
+    // Thay thế Form.useForm() bằng state thường
+    const [formData, setFormData] = useState({
+        fullName: '',
+        phone: '',
+        address: ''
+    });
 
-    const {dataUser, setDataUser} = useStore();
+    const { dataUser, setDataUser } = useStore();
+    const safeDataUser = dataUser || {};
 
     useEffect(() => {
         if (dataUser) {
-            form.setFieldsValue(dataUser);
-            // Giả sử dataUser đã được fetch xong, ta dừng loading ban đầu
+            // Đồng bộ dữ liệu vào state form khi có dataUser
+            setFormData({
+                fullName: dataUser.fullName || '',
+                phone: dataUser.phone || '',
+                address: dataUser.address || ''
+            });
             setLoading(false);
         }
-    }, [dataUser, form]);
+    }, [dataUser]);
+
+    // Hàm xử lý khi nhập input (thay thế cơ chế binding của Antd Form)
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
 
     const handleRequestStudentId = async () => {
         try {
             const res = await requestIdStudent();
             toast.success(res.message);
         } catch (error) {
-            toast.error(error.response.data.message);
+            toast.error(error.response?.data?.message || "Lỗi gửi yêu cầu");
         }
     };
 
-    const handleUpdateProfile = async (values) => {
+    const onSubmitUpdate = async (e) => {
+        e.preventDefault(); // Chặn reload trang của form HTML
+        
+        // Validate cơ bản (thay thế rules của Antd)
+        if (!formData.fullName.trim()) {
+            toast.error('Vui lòng nhập họ tên!');
+            return;
+        }
+
         setLoading(true);
         try {
-            await requestUpdateUser(values);
+            await requestUpdateUser(formData);
             setIsEditing(false);
-            setDataUser({ ...dataUser, ...values }); // Cập nhật dataUser trong store
-            toast.success('Cập nhật thông tin thành công')
+            setDataUser({ ...dataUser, ...formData });
+            toast.success('Cập nhật thông tin thành công');
         } catch (error) {
-            toast.error(error.response.data.message);
+            toast.error(error.response?.data?.message || "Lỗi cập nhật");
         } finally {
             setLoading(false);
         }
     };
 
-
-    // Kiểm tra dataUser trước khi sử dụng để tránh lỗi
-    const safeDataUser = dataUser || {};
-
-    const viewItems = [
-        { key: '1', label: 'Họ và tên', children: safeDataUser.fullName },
-        { key: '2', label: 'Email', children: safeDataUser.email },
-        { key: '3', label: 'Số điện thoại', children: safeDataUser.phone },
-        { key: '4', label: 'Địa chỉ', children: safeDataUser.address },
-        { key: '5', label: 'Mã sinh viên', children: safeDataUser.idStudent || 'Chưa có' },
-    ];
-    
-    // Hiển thị Loading State
-    if (loading || !dataUser) {
+    // Component Loading thay thế Spin
+    if (loading && !dataUser) {
         return (
-            <div className="personal-info-card__loading">
-                <Spin size="large" />
+            <div className="loading-overlay">
+                <div className="custom-spinner"></div> {/* Spinner CSS dùng chung từ bài trước */}
             </div>
         );
     }
 
+    // Nút chỉnh sửa để đưa vào props extra của CustomCard
+    const EditButton = (
+        !isEditing && (
+            <button 
+                className="btn btn-default" 
+                onClick={() => setIsEditing(true)} 
+                disabled={loading}
+            >
+                ✏️ Chỉnh sửa
+            </button>
+        )
+    );
+
     return (
-        <Card
+        <CustomCard
             title="Thông tin cá nhân"
-            variant={false}
             className="personal-info-card"
-            extra={
-                !isEditing && (
-                    <Button icon={<EditOutlined />} onClick={() => setIsEditing(true)} loading={loading}>
-                        Chỉnh sửa
-                    </Button>
-                )
-            }
+            extra={EditButton}
         >
-            {/* BEM: personal-info-card__content */}
-            <div className="personal-info-card__content">
-                {/* BEM: personal-info-card__avatar-section */}
-                <div className="personal-info-card__avatar-section">
-                    <Avatar
-                        size={100}
-                        src={`${import.meta.env.VITE_API_URL}/${safeDataUser.avatar}`}
-                        icon={<UserOutlined />}
-                        className="personal-info-card__avatar"
-                    />
-                </div>
-                
-                {/* BEM: personal-info-card__details-section */}
-                <div className="personal-info-card__details-section">
-                    {isEditing ? (
-                        <Form form={form} layout="vertical" onFinish={handleUpdateProfile}>
-                            <Form.Item
-                                name="fullName"
-                                label="Họ và tên"
-                                rules={[{ required: true, message: 'Vui lòng nhập họ tên!' }]}
-                            >
-                                <Input />
-                            </Form.Item>
-                            <Form.Item name="phone" label="Số điện thoại">
-                                <Input />
-                            </Form.Item>
-                            <Form.Item name="address" label="Địa chỉ">
-                                <Input />
-                            </Form.Item>
-                            {/* BEM: personal-info-card__form-actions */}
-                            <Form.Item className="personal-info-card__form-actions">
-                                <Button type="primary" htmlType="submit" className="personal-info-card__button--save" loading={loading}>
-                                    Lưu thay đổi
-                                </Button>
-                                <Button onClick={() => setIsEditing(false)} disabled={loading}>Hủy</Button>
-                            </Form.Item>
-                        </Form>
+            <div className="personal-info-container">
+                {/* Phần Avatar */}
+                <div className="avatar-section">
+                    {safeDataUser.avatar ? (
+                        <img 
+                            src={`${import.meta.env.VITE_API_URL}/${safeDataUser.avatar}`} 
+                            alt="Avatar" 
+                            className="profile-avatar"
+                        />
                     ) : (
+                        // Placeholder nếu không có ảnh
+                        <div className="profile-avatar-placeholder">
+                            {safeDataUser.fullName ? safeDataUser.fullName.charAt(0).toUpperCase() : 'U'}
+                        </div>
+                    )}
+                </div>
+
+                {/* Phần Thông tin chi tiết */}
+                <div className="details-section">
+                    {isEditing ? (
+                        // FORM CHỈNH SỬA (HTML Form chuẩn)
+                        <form onSubmit={onSubmitUpdate}>
+                            <div className="custom-form-group">
+                                <label className="custom-label custom-label-required">Họ và tên</label>
+                                <input
+                                    type="text"
+                                    name="fullName"
+                                    className="custom-input"
+                                    value={formData.fullName}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+
+                            <div className="custom-form-group">
+                                <label className="custom-label">Số điện thoại</label>
+                                <input
+                                    type="text"
+                                    name="phone"
+                                    className="custom-input"
+                                    value={formData.phone}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+
+                            <div className="custom-form-group">
+                                <label className="custom-label">Địa chỉ</label>
+                                <input
+                                    type="text"
+                                    name="address"
+                                    className="custom-input"
+                                    value={formData.address}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+
+                            <div className="action-buttons">
+                                <button type="submit" className="btn btn-primary" disabled={loading}>
+                                    {loading ? 'Đang lưu...' : 'Lưu thay đổi'}
+                                </button>
+                                <button type="button" className="btn btn-default" onClick={() => setIsEditing(false)} disabled={loading}>
+                                    Hủy
+                                </button>
+                            </div>
+                        </form>
+                    ) : (
+                        // CHẾ ĐỘ XEM (View Mode)
                         <>
-                            <Descriptions bordered layout="vertical" items={viewItems} className="personal-info-card__descriptions" />
-                            {!safeDataUser.idStudent  && ( // Hiển thị nếu MSSV chưa có
-                                <Button type="primary" onClick={handleRequestStudentId} className="personal-info-card__button--request">
+                            <div className="info-table">
+                                <div className="info-row" style={{display: 'flex'}}>
+                                    <div className="info-label">Họ và tên</div>
+                                    <div className="info-value">{safeDataUser.fullName}</div>
+                                </div>
+                                <div className="info-row" style={{display: 'flex'}}>
+                                    <div className="info-label">Email</div>
+                                    <div className="info-value">{safeDataUser.email}</div>
+                                </div>
+                                <div className="info-row" style={{display: 'flex'}}>
+                                    <div className="info-label">Số điện thoại</div>
+                                    <div className="info-value">{safeDataUser.phone || 'Chưa cập nhật'}</div>
+                                </div>
+                                <div className="info-row" style={{display: 'flex'}}>
+                                    <div className="info-label">Địa chỉ</div>
+                                    <div className="info-value">{safeDataUser.address || 'Chưa cập nhật'}</div>
+                                </div>
+                                <div className="info-row" style={{display: 'flex', borderBottom: 'none'}}>
+                                    <div className="info-label">Mã sinh viên</div>
+                                    <div className="info-value">{safeDataUser.idStudent || 'Chưa có'}</div>
+                                </div>
+                            </div>
+
+                            {!safeDataUser.idStudent && (
+                                <button 
+                                    className="btn btn-primary" 
+                                    onClick={handleRequestStudentId}
+                                    style={{marginTop: '10px'}}
+                                >
                                     Gửi yêu cầu cấp mã sinh viên
-                                </Button>
+                                </button>
                             )}
                         </>
                     )}
                 </div>
             </div>
-        </Card>
+        </CustomCard>
     );
 };
 

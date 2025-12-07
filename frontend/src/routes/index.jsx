@@ -4,7 +4,8 @@ import Login from '../pages/Login';
 import RegisterUser from '../pages/RegisterUser';
 import Admin from '../pages/DashbroadComponents/index';
 import InforUser from '../pages/InforUser';
-
+import BorrowingHistory from '../pages/InforUserComponents/BorrowingHistory';
+import AdminNotifications from '../pages/InforUserComponents/AdminNotifications';
 export const routes = [
     {
         path: '/',
@@ -13,6 +14,14 @@ export const routes = [
     {
         path: '/product/:id',
         component: <DetailProduct />,
+    },
+    {
+        path: '/notifications',
+        component: <AdminNotifications/>,
+    },
+    {
+        path: '/borrowingHistory',
+        component: <BorrowingHistory />,
     },
     {
         path: '/login',
@@ -27,7 +36,7 @@ export const routes = [
         component: <Admin />,
     },
     {
-        path: '/infoUser',
-        component: <InforUser />,
+        path: '/inforUser',
+        component: <InforUser/>,
     },
 ];

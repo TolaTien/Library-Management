@@ -1,7 +1,70 @@
-/* --- USER-SIDEBAR BLOCK (Ant Design Menu) --- */
-.user-sidebar.ant-menu {
-    /* Thay thế h-full */
-    height: 100%;
-    /* Thêm style để menu khớp với container (InfoUser.css) */
-    border-right: none;
+/* Sidebar.css */
+
+.custom-sidebar {
+  width: 100%;
+  background: #fff;
+  border-right: 1px solid #f0f0f0; /* Viền phải mỏng */
+  height: 100%;
+  padding-top: 10px;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-item {
+  padding: 0 24px;
+  height: 48px;
+  line-height: 48px; /* Căn giữa chiều dọc */
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Khoảng cách giữa icon và text */
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.85);
+  margin-bottom: 4px; /* Khoảng cách nhỏ giữa các item */
+  position: relative;
+}
+
+/* Hiệu ứng Hover */
+.menu-item:hover {
+  color: #1890ff; 
+}
+
+/* Hiệu ứng khi đang Active (được chọn) */
+.menu-item.active {
+  background-color: #e6f7ff; /* Nền xanh nhạt */
+  color: #1890ff; /* Chữ xanh đậm */
+  font-weight: 500;
+}
+
+/* Border bên phải khi Active  */
+.menu-item.active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  border-right: 3px solid #1890ff;
+}
+
+/* Style riêng cho nút Đăng xuất (Danger) */
+.menu-item.danger {
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.menu-item.danger:hover {
+  color: #ff4d4f; /* Màu đỏ khi hover */
+  background-color: transparent; /* Không đổi màu nền */
+}
+
+/* Icon style */
+.menu-icon {
+  font-size: 16px;
+  min-width: 16px;
+  display: flex;
+  align-items: center;
 }

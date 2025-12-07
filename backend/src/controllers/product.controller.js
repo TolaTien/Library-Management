@@ -79,7 +79,7 @@ class controllerProduct {
                 data: product,
             });
         } catch (error) {
-            console.error('❌ Lỗi tại createProduct:', error);
+            console.error(' Lỗi tại createProduct:', error);
             res.status(500).json({ success: false, message: 'Lỗi server', error: error.message });
         }
     }
@@ -96,7 +96,7 @@ class controllerProduct {
                 data: products,
             });
         } catch (error) {
-            console.error('❌ Lỗi tại getAllProduct:', error);
+            console.error(' Lỗi tại getAllProduct:', error);
             res.status(500).json({ success: false, message: 'Lỗi server', error: error.message });
         }
     }

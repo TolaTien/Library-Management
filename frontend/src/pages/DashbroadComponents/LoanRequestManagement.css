@@ -26,6 +26,101 @@
     color: #fff;
     cursor: pointer;
     transition: 0.25s;
+<<<<<<< HEAD
+=======
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+}
+
+.btn-outline {
+    background: transparent;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid #2563eb;
+    color: #2563eb;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.btn-outline:hover {
+    background: #2563eb;
+    color: #fff;
+}
+
+/* TABLE */
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.custom-table thead {
+    background: #f3f4f6;
+}
+
+.custom-table th {
+    padding: 12px;
+    font-weight: bold;
+    text-align: left;
+    color: #374151;
+}
+
+.custom-table td {
+    padding: 12px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.loading-text {
+    text-align: center;
+    padding: 20px;
+}
+
+.book-img {
+    width: 70px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+.book-name {
+    font-weight: 500;
+    max-width: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.id-col {
+    font-weight: bold;
+    color: #4b5563;
+}
+
+.overdue {
+    color: red;
+    font-weight: bold;
+}
+
+/* STATUS TAG */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-block;
+    text-align: center;
+}
+
+.status-badge.pending {
+    background: #bfdbfe;
+    color: #1e40af;
+>>>>>>> b6b7fbc9235ab922c69b20d1ae91675220ee883a
 }
 
 .btn-primary:hover {

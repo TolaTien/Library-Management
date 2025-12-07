@@ -1,135 +1,138 @@
-/* --- CSS Variables --- */
-:root {
-    --color-text-medium: #4b5563;       /* gray-600 (Text secondary) */
-    --color-red-danger: #ef4444;        /* red-500 */
-    --color-border: #e5e7eb;            /* gray-200 */
-    --color-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05); 
-    --color-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+/* BorrowingHistory.css */
+
+/* --- 1. Custom Loading Spinner --- */
+.custom-spinner-container {
+  display: flex;
+  justify-content: center;
+  padding: 50px;
+}
+.custom-spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #1890ff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-/* --- BORROW-HISTORY BLOCK (Ant Design Card) --- */
-.borrow-history.ant-card {
-    border: none;
+/* --- 2. Typography & Layout --- */
+.bh-header-info {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.bh-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+.bh-text-strong {
+  font-weight: 700;
+}
+.bh-text-secondary {
+  color: #8c8c8c;
+  font-size: 14px;
+}
+.bh-text-danger { color: #ff4d4f; }
+.bh-text-warning { color: #faad14; }
+.bh-text-success { color: #52c41a; }
+
+/* --- 3. List Item Styles --- */
+.bh-list-item {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 16px 0;
+}
+.bh-item-wrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  flex-wrap: wrap; /* Cho mobile */
+  gap: 16px;
+}
+.bh-item-left {
+  display: flex;
+  gap: 16px;
+}
+.bh-book-image {
+  width: 100px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #f0f0f0;
+}
+.bh-book-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.bh-book-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
 }
 
-/* --- LOADING ELEMENT --- */
-.borrow-history__loading {
-    /* Thay thế flex justify-center items-center h-64 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 16rem; /* h-64 (256px) */
+/* --- 4. Tags --- */
+.bh-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 12px;
+  border-radius: 2px;
+  border: 1px solid;
+  margin-bottom: 8px;
+}
+.tag-gold { background: #fffbe6; border-color: #ffe58f; color: #faad14; }
+.tag-green { background: #f6ffed; border-color: #b7eb8f; color: #52c41a; }
+.tag-red { background: #fff1f0; border-color: #ffa39e; color: #ff4d4f; }
+.tag-default { background: #fafafa; border-color: #d9d9d9; color: rgba(0,0,0,0.65); }
+
+/* --- 5. Buttons --- */
+.bh-btn {
+  cursor: pointer;
+  padding: 4px 15px;
+  font-size: 14px;
+  border-radius: 2px;
+  transition: all 0.3s;
+  border: 1px solid transparent;
+  outline: none;
+}
+.btn-primary {
+  background-color: #1890ff;
+  color: #fff;
+  border-color: #1890ff;
+}
+.btn-primary:hover { background-color: #40a9ff; }
+
+.btn-danger {
+  background-color: #ff4d4f;
+  color: #fff;
+  border-color: #ff4d4f;
+}
+.btn-danger:hover { background-color: #ff7875; }
+
+.btn-disabled {
+  background-color: #f5f5f5;
+  color: rgba(0,0,0,0.25);
+  border-color: #d9d9d9;
+  cursor: not-allowed;
 }
 
-/* --- LIST ELEMENT (Ant Design List) --- */
-.borrow-history__list .borrow-history__item-list {
-    /* Thay thế !p-0 mb-4 */
-    padding: 0 !important;
-    margin-bottom: 1rem; /* mb-4 */
-    border-bottom: none !important;
+/* --- 6. Empty State --- */
+.bh-empty {
+  text-align: center;
+  padding: 40px;
+  color: #8c8c8c;
 }
 
-/* --- ITEM ELEMENT (Container bọc mỗi mục) --- */
-.borrow-history__item {
-    /* Thay thế bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-300 */
-    background-color: var(--color-card-bg);
-    padding: 1rem; /* p-4 */
-    border-radius: 0.5rem; /* rounded-lg */
-    box-shadow: var(--color-shadow-sm); 
-    border: 1px solid var(--color-border);
-    transition: box-shadow 0.3s ease-in-out;
-    width: 100%;
-}
-
-.borrow-history__item:hover {
-    box-shadow: var(--color-shadow-md);
-}
-
-/* --- ITEM CONTENT (Flex container bên trong) --- */
-.borrow-history__item-content {
-    /* Thay thế flex flex-col sm:flex-row gap-4 */
-    display: flex;
-    flex-direction: column;
-    gap: 1rem; /* gap-4 */
-}
-
-@media (min-width: 640px) { /* sm breakpoint */
-    .borrow-history__item-content {
-        flex-direction: row;
-    }
-}
-
-/* --- IMAGE ELEMENT --- */
-.borrow-history__image {
-    /* Thay thế width={100} className="rounded object-cover self-center sm:self-start" */
-    width: 100px !important;
-    height: 140px; /* Tỉ lệ phổ biến cho sách */
-    object-fit: cover;
-    border-radius: 4px; /* rounded */
-    align-self: center;
-    flex-shrink: 0;
-}
-@media (min-width: 640px) {
-    .borrow-history__image {
-        align-self: flex-start;
-    }
-}
-
-
-/* --- INFO COLUMN --- */
-.borrow-history__info-column {
-    /* Thay thế flex-grow */
-    flex-grow: 1;
-}
-
-.borrow-history__book-title {
-    /* Thay thế level={5} className="mb-1" */
-    margin-bottom: 0.25rem !important;
-}
-
-.borrow-history__details {
-    /* Thay thế w-full text-sm */
-    width: 100%;
-    font-size: 0.875rem; /* text-sm */
-}
-
-.borrow-history__days-remaining {
-    /* Thay thế text-red-500 */
-    color: var(--color-red-danger);
-    font-weight: 500;
-    margin: 0;
-    padding-top: 0.5rem;
-}
-
-
-/* --- ACTION COLUMN --- */
-.borrow-history__action-column {
-    /* Thay thế flex flex-col items-start sm:items-end justify-between mt-2 sm:mt-0 */
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-top: 0.5rem; /* mt-2 */
-}
-
-@media (min-width: 640px) {
-    .borrow-history__action-column {
-        align-items: flex-end;
-        margin-top: 0;
-    }
-}
-
-.borrow-history__status-tag {
-    margin-bottom: 0.5rem; /* mb-2 */
-}
-
-.borrow-history__id-text {
-    /* Thay thế text-xs */
-    font-size: 0.75rem !important; /* text-xs */
-    margin-bottom: 0.5rem;
-}
-
-.borrow-history__button--cancel {
-    /* Đảm bảo nút có margin top khi cần */
-    margin-top: 0.5rem;
+.bh-action-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
 }

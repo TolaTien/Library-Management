@@ -106,19 +106,17 @@
 }
 
 /* Cover Type Badge Modifiers */
-.book-card__badge--hard-cover {
-    background: linear-gradient(to right, #60a5fa, #6366f1);
-    color: var(--color-white);
-    border-color: rgba(147, 197, 253, 0.5);
+.book-card__badge--cover {
+    background: linear-gradient(135deg, #7c3aed, #4f46e5); 
+    color: #ffffff; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); 
+    border: 1px solid rgba(255, 255, 255, 0.4); 
+    transition: transform 0.2s ease-in-out;
 }
 
-.book-card__badge--soft-cover {
-    background: linear-gradient(to right, #fb923c, #f59e0b);
-    color: var(--color-white);
-    border-color: rgba(253, 186, 116, 0.5);
+.book-card__badge--cover:hover {
+    transform: translateY(-2px); 
 }
-
-/* --- BODY ELEMENTS --- */
 .book-card__body {
     padding: 1rem; 
     display: flex;
@@ -128,8 +126,6 @@
     position: relative;
     z-index: 10;
 }
-
-/* 2. TITLE */
 .book-card__title-link {
     text-decoration: none;
     color: inherit;
@@ -145,7 +141,6 @@
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
     margin-top: 0;
 }
 

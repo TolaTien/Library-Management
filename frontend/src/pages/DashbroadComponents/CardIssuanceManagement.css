@@ -80,6 +80,45 @@
     justify-content: center;
     align-items: center;
     z-index: 999;
+<<<<<<< HEAD
+}
+
+/* Khung modal */
+.modal-box {
+    background: white;
+    padding: 25px;
+    width: 420px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    animation: fadeIn 0.25s ease;
+}
+
+.modal-box h3 {
+    margin-bottom: 15px;
+}
+
+.modal-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    margin-top: 5px;
+}
+
+/* Footer buttons */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+=======
+>>>>>>> b6b7fbc9235ab922c69b20d1ae91675220ee883a
 }
 
 /* Khung modal */

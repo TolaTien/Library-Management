@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Card, Statistic } from 'antd';
-import { Pie, Column } from '@ant-design/charts';
-import { UserOutlined, BookOutlined, SolutionOutlined } from '@ant-design/icons';
+import {
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    Tooltip,
+    CartesianGrid,
+    ResponsiveContainer,
+} from "recharts";
 import { requestStatistics } from '../../config/request';
 import './Statistics.css';
-
 
 const Statistics = () => {
     const [data, setData] = useState({});
@@ -17,62 +22,43 @@ const Statistics = () => {
         fetchData();
     }, []);
 
-    // Fake data for charts
-
-
-    const loanStatusData = data?.booksData;
-
-
-    const columnConfig = {
-        data: loanStatusData,
-        xField: 'status',
-        yField: 'count',
-        label: {
-            position: 'top',
-            style: {
-                fill: '#FFFFFF',
-                opacity: 0.6,
-            },
-        },
-        xAxis: {
-            label: {
-                autoHide: true,
-                autoRotate: false,
-            },
-        },
-    };
+    const loanStatusData = data?.booksData || [];
 
     return (
         <div className="statistics-container">
-            <h2 className="text-2xl mb-4">Thống kê tổng quan</h2>
-            <Row gutter={16} className="mb-6">
-                <Col span={8}>
-                    <Card>
-                        <Statistic title="Tổng số người dùng" value={data?.totalUsers || 0} prefix={<UserOutlined />} />
-                    </Card>
-                </Col>
-                <Col span={8}>
-                    <Card>
-                        <Statistic title="Tổng số đầu sách" value={data?.totalBooks || 0} prefix={<BookOutlined />} />
-                    </Card>
-                </Col>
-                <Col span={8}>
-                    <Card>
-                        <Statistic
-                            title="Yêu cầu chờ duyệt"
-                            value={data?.pendingRequests || 0}
-                            prefix={<SolutionOutlined />}
-                        />
-                    </Card>
-                </Col>
-            </Row>
-            <Row gutter={24}>
-                <Col span={24}>
-                    <Card title="Tình trạng mượn sách">
-                        <Column {...columnConfig} />
-                    </Card>
-                </Col>
-            </Row>
+            <h2>Thống kê tổng quan</h2>
+
+            {/* 3 CARD THỐNG KÊ */}
+            <div className="stats-row">
+                <div className="stat-card">
+                    <div className="stat-title">Tổng số người dùng</div>
+                    <div className="stat-value">{data?.totalUsers || 0}</div>
+                </div>
+
+                <div className="stat-card">
+                    <div className="stat-title">Tổng số đầu sách</div>
+                    <div className="stat-value">{data?.totalBooks || 0}</div>
+                </div>
+
+                <div className="stat-card">
+                    <div className="stat-title">Yêu cầu chờ duyệt</div>
+                    <div className="stat-value">{data?.pendingRequests || 0}</div>
+                </div>
+            </div>
+
+            {/* BIỂU ĐỒ */}
+            <div className="chart-card">
+                <h3>Tình trạng mượn sách</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={loanStatusData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="status" />
+                        <YAxis />
+                        <Tooltip />
+                        <Bar dataKey="count" fill="#3b82f6" />
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
         </div>
     );
 };

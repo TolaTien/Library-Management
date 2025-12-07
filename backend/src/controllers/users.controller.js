@@ -215,7 +215,6 @@ class ControllerUser {
         if (!user) return res.status(404).json({ message: 'Người dùng không tồn tại' });
 
         user.idStudent = idStudent;
-        user.cardStatus = 'active';   // ⭐ Ghi trạng thái đã duyệt
         await user.save();
         return res.status(200).json({ status: 'success', message: 'Xác nhận thành công' });
 
@@ -282,7 +281,7 @@ class ControllerUser {
     async getListRequest(req, res) {
         const requestList = await User.findAll({
             // where: { idStudent: '0' },
-             where: { idStudent: { [Op.ne]: null } },
+            where: { idStudent: { [Op.ne]: null } },
             attributes: ['id', 'fullName', 'email', 'phone', 'idStudent', 'createdAt'],
             order: [['createdAt', 'DESC']],
         });
@@ -290,7 +289,6 @@ class ControllerUser {
     }
 
 
-    ////////////////////////////UPDATE///////////////////////////////////////////////////////
 
 
 

@@ -24,7 +24,7 @@ const Reminder = connect.define(
             },
         },
         {
-           freezeTableName: true,
+            freezeTableName: true,
             timestamps: true,
         }
     );

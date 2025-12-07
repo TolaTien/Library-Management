@@ -1,7 +1,5 @@
-import { useNavigate, Link } from 'react-router-dom';
-import { Dropdown, Avatar, Button } from 'antd';
-import { UserOutlined, LogoutOutlined, HistoryOutlined, NotificationOutlined } from '@ant-design/icons';
-import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
 import useDebounce from '../hooks/useDebounce';
 import { requestLogout, requestSearchProduct } from '../config/request';
 import { useStore } from '../hooks/useStore';
@@ -16,6 +14,10 @@ function Header({ setActiveComponent }) {
     const [isResultVisible, setIsResultVisible] = useState(false);
     const debounce = useDebounce(valueSearch, 500);
 
+    // State cho Dropdown Menu
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const dropdownRef = useRef(null); // Ref để bắt sự kiện click outside
+
     const handleLogout = async () => {
         try {
             await requestLogout();
@@ -26,6 +28,20 @@ function Header({ setActiveComponent }) {
         }
     };
 
+    // Xử lý click ra ngoài để đóng dropdown
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsMenuOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    // Xử lý Search
     useEffect(() => {
         const fetchData = async () => {
             if (!debounce.trim()) {
@@ -59,7 +75,7 @@ function Header({ setActiveComponent }) {
                     {/* Logo */}
                     <Link to={'/'} className="library-header__logo-link">
                         <div className="library-header__logo">
-                            <h1 className="library-header__title">
+                            <h1 className="library-header__title"> 
                                 <img className="library-icon" src={libraryIcon} alt="library-icon" />
                                 Thư Viện
                             </h1>
@@ -70,18 +86,8 @@ function Header({ setActiveComponent }) {
                     <div className="library-header__search">
                         <div className="library-header__search-wrapper">
                             <div className="library-header__search-icon-wrapper">
-                                <svg
-                                    className="library-header__search-icon"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                    />
+                                <svg className="library-header__search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                 </svg>
                             </div>
                             <input
@@ -121,64 +127,56 @@ function Header({ setActiveComponent }) {
                     {/* Auth / User Info */}
                     <div className="library-header__user-action">
                         {dataUser && dataUser.id ? (
-                            <Dropdown
-                                menu={{
-                                    items: [
-                                        {
-                                            key: 'info',
-                                            icon: <UserOutlined />,
-                                            label: 'Thông tin cá nhân',
-                                            onClick: () => handleSelectInfo('info'),
-                                        },
-                                        {
-                                            key: 'history',
-                                            icon: <HistoryOutlined />,
-                                            label: 'Lịch sử mượn sách',
-                                            onClick: () => handleSelectInfo('history'),
-                                        },
-                                        {
-                                            key: 'notifications',
-                                            icon: <NotificationOutlined />,
-                                            label: 'Thông báo từ quản trị viên',
-                                            onClick: () => handleSelectInfo('notifications'),
-                                        },
-                                        { type: 'divider' },
-                                        {
-                                            key: 'logout',
-                                            icon: <LogoutOutlined />,
-                                            label: 'Đăng xuất',
-                                            danger: true,
-                                            onClick: handleLogout,
-                                        },
-                                    ],
-                                }}
-                                placement="bottomRight"
-                                arrow
-                            >
-                                <div className="library-header__user-avatar-wrapper">
-                                    <Avatar
-                                        size={32}
-                                        icon={<UserOutlined />}
-                                        src={dataUser.avatar}
-                                        className="library-header__user-avatar"
-                                    />
-                                    <div className="library-header__user-info">
-                                        <p className="library-header__user-name">
-                                            {dataUser.fullName || 'Người dùng'}
-                                        </p>
-                                        <p className="library-header__user-email">{dataUser.email}</p>
+                            // --- CUSTOM DROPDOWN ---
+                            <div className="user-dropdown-container" ref={dropdownRef}>
+                                {/* Nút kích hoạt Dropdown */}
+                                <div className="user-trigger" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                                    {dataUser.avatar ? (
+                                        <img 
+                                            src={dataUser.avatar} 
+                                            alt="avatar" 
+                                            className="custom-avatar" 
+                                        />
+                                    ) : (
+                                        <div className="custom-avatar-placeholder">
+                                            {dataUser.fullName ? dataUser.fullName.charAt(0).toUpperCase() : 'U'}
+                                        </div>
+                                    )}
+                                    <div className="user-info-text">
+                                        <span className="user-name">{dataUser.fullName || 'Người dùng'}</span>
+                                        <span className="user-email">{dataUser.email}</span>
                                     </div>
                                 </div>
-                            </Dropdown>
+
+                                {/* Menu Dropdown */}
+                                {isMenuOpen && (
+                                    <div className="custom-dropdown-menu">
+                                        <div className="dropdown-item" onClick={() => {navigate('/inforUser', { state: { tab: 'info' } }); setIsMenuOpen(false);}}>
+                                            <span className="dropdown-icon">👤</span> Thông tin cá nhân
+                                        </div>
+                                        <div className="dropdown-item" onClick={() => {navigate('/inforUser', { state: { tab: 'history' } }); setIsMenuOpen(false);}}>
+                                            <span className="dropdown-icon">📖</span> Lịch sử mượn sách
+                                        </div>
+                                        <div className="dropdown-item" onClick={() => {navigate('/inforUser', { state: { tab: 'noti' } }); setIsMenuOpen(false);}}>
+                                            <span className="dropdown-icon">🔔</span> Thông Báo
+                                        </div>
+                                        <div className="dropdown-divider"></div>
+                                        <div className="dropdown-item danger" onClick={handleLogout}>
+                                            <span className="dropdown-icon">🚪</span> Đăng xuất
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         ) : (
+                            // --- LOGIN / REGISTER BUTTONS ---
                             <div className="library-header__auth-buttons">
                                 <Link to={'/login'}>
-                                    <Button className="library-header__button library-header__button--login">
+                                    <button className="btn-header btn-login">
                                         Đăng nhập
-                                    </Button>
+                                    </button>
                                 </Link>
                                 <Link to={'/register'}>
-                                    <button className="library-header__button library-header__button--register">
+                                    <button className="btn-header btn-register">
                                         Đăng ký
                                     </button>
                                 </Link>

@@ -12,6 +12,9 @@ const LoanRequestManagement = () => {
     const [filterReminder, setFilterReminder] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    // trạng thái sắp xếp SL
+    const [sortOrder, setSortOrder] = useState("none"); // none | asc | desc
+
     const fetchData = async () => {
         try {
             setLoading(true);
@@ -45,12 +48,29 @@ const LoanRequestManagement = () => {
         }
     };
 
+    // Toggle sort SL
+    const toggleSortQuantity = () => {
+        setSortOrder(prev => {
+            if (prev === "none") return "asc";
+            if (prev === "asc") return "desc";
+            return "none";
+        });
+    };
+
+    // Lọc sách quá hạn
     const overdueList = data.filter(
         (item) =>
             dayjs(item.returnDate).isBefore(dayjs()) && item.status === "success"
     );
 
-    const tableData = filterReminder ? overdueList : data;
+    const baseData = filterReminder ? overdueList : data;
+
+    // Sắp xếp theo SL
+    const sortedData = [...baseData].sort((a, b) => {
+        if (sortOrder === "asc") return a.quantity - b.quantity;
+        if (sortOrder === "desc") return b.quantity - a.quantity;
+        return 0;
+    });
 
     return (
         <div className="loan-container">
@@ -80,7 +100,17 @@ const LoanRequestManagement = () => {
                             <th>Người mượn</th>
                             <th>Ảnh</th>
                             <th>Tên sách</th>
-                            <th>SL</th>
+
+                            {/* Cột SL có thể sort */}
+                            <th
+                                style={{ cursor: "pointer" }}
+                                onClick={toggleSortQuantity}
+                            >
+                                SL
+                                {sortOrder === "asc" && " ▲"}
+                                {sortOrder === "desc" && " ▼"}
+                            </th>
+
                             <th>Ngày mượn</th>
                             <th>Ngày trả</th>
                             <th>Trạng thái</th>
@@ -94,7 +124,7 @@ const LoanRequestManagement = () => {
                                 <td colSpan="9" className="loading-text">Đang tải...</td>
                             </tr>
                         ) : (
-                            tableData.map((record) => {
+                            sortedData.map((record) => {
                                 const overdue = dayjs(record.returnDate).isBefore(dayjs());
 
                                 return (
@@ -111,6 +141,7 @@ const LoanRequestManagement = () => {
 
                                         <td className="book-name">{record.product.nameProduct}</td>
 
+                                        {/* SL sắp xếp */}
                                         <td>{record.quantity}</td>
 
                                         <td>{dayjs(record.borrowDate).format("DD/MM/YYYY")}</td>

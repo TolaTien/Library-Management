@@ -9,13 +9,15 @@ import "./UserManagement.css";
 const UserManagement = () => {
     const [data, setData] = useState([]);
 
-    // Modal
+    // Modal sửa/xóa
     const [showEdit, setShowEdit] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
 
+    // User đang thao tác
     const [editingUser, setEditingUser] = useState(null);
     const [deletingUser, setDeletingUser] = useState(null);
 
+    // Form sửa user
     const [form, setForm] = useState({
         fullName: "",
         email: "",
@@ -63,6 +65,9 @@ const UserManagement = () => {
         fetchData();
     };
 
+    // ✅ Sort theo người mượn nhiều nhất → ít nhất
+    const sortedData = [...data].sort((a, b) => b.borrowed - a.borrowed);
+
     return (
         <div className="user-management">
             <h2 className="title">Quản lý người dùng</h2>
@@ -83,18 +88,21 @@ const UserManagement = () => {
                     </thead>
 
                     <tbody>
-                        {data.map((u) => (
+                        {sortedData.map((u) => (
                             <tr key={u.id}>
                                 <td>{u.id}</td>
                                 <td>{u.fullName}</td>
                                 <td>{u.email}</td>
+
                                 <td>
                                     <span className={`role-tag ${u.role}`}>
                                         {u.role === "admin" ? "Admin" : "Người dùng"}
                                     </span>
                                 </td>
+
                                 <td>{u.borrowed}</td>
                                 <td>{u.returned}</td>
+
                                 <td>
                                     <div className="action-buttons">
                                         <button
@@ -118,7 +126,7 @@ const UserManagement = () => {
                 </table>
             </div>
 
-            {/*  EDIT MODAL */}
+            {/* EDIT MODAL */}
             {showEdit && (
                 <div className="modal-backdrop">
                     <div className="modal-box">
@@ -155,13 +163,14 @@ const UserManagement = () => {
                         </select>
 
                         <div className="modal-actions">
-                            <button
-                                className="btn-primary"
-                                onClick={handleUpdateUser}
-                            >
+                            <button className="btn-primary" onClick={handleUpdateUser}>
                                 Lưu
                             </button>
-                            <button className="btn-outline" onClick={() => setShowEdit(false)}>
+
+                            <button
+                                className="btn-outline"
+                                onClick={() => setShowEdit(false)}
+                            >
                                 Hủy
                             </button>
                         </div>
@@ -169,7 +178,7 @@ const UserManagement = () => {
                 </div>
             )}
 
-            {/*  DELETE MODAL */}
+            {/* DELETE MODAL */}
             {showDelete && (
                 <div className="modal-backdrop">
                     <div className="modal-box">
@@ -181,13 +190,14 @@ const UserManagement = () => {
                         </p>
 
                         <div className="modal-actions">
-                            <button
-                                className="btn-danger"
-                                onClick={handleDeleteUser}
-                            >
+                            <button className="btn-danger" onClick={handleDeleteUser}>
                                 Xóa
                             </button>
-                            <button className="btn-outline" onClick={() => setShowDelete(false)}>
+
+                            <button
+                                className="btn-outline"
+                                onClick={() => setShowDelete(false)}
+                            >
                                 Hủy
                             </button>
                         </div>

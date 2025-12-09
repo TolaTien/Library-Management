@@ -226,12 +226,12 @@ class ControllerUser {
             const totalUsers = await User.count();
             const totalBooks = await Product.count();
             const pendingRequests = await History.count({ where: {status: 'pending'}});
-            const bookInStock = await Product.count({ where: { stock: { [Op.gt] : 0 }}});
-            const booksOutOfStock = totalBooks - bookInStock;
-            const bookStatus = [
-                {type: 'Còn sách', value: bookInStock },
-                {type: 'Hết sách', value: booksOutOfStock }
-            ]
+            // const bookInStock = await Product.count({ where: { stock: { [Op.gt] : 0 }}});
+            // const booksOutOfStock = totalBooks - bookInStock;
+            // const bookStatus = [
+            //     {type: 'Còn sách', value: bookInStock },
+            //     {type: 'Hết sách', value: booksOutOfStock }
+            // ]
             const aprovedBooks = await History.count( { where: {status: 'success' } });
             const rejectedBooks = await History.count({ where: {status: 'cancel' } });
             const expiredDay = new Date();
@@ -246,7 +246,7 @@ class ControllerUser {
             return res.status(200).json({
                 status: 'success',
                 message: 'Lấy thống kê thành công',
-                data: { totalUsers, totalBooks, pendingRequests, bookStatus, booksData },
+                data: { totalUsers, totalBooks, pendingRequests, booksData },
             });
         }catch(err) {
             console.error(err);
@@ -280,7 +280,6 @@ class ControllerUser {
     // Danh sách chờ cấp mã
     async getListRequest(req, res) {
         const requestList = await User.findAll({
-            // where: { idStudent: '0' },
             where: { idStudent: { [Op.ne]: null } },
             attributes: ['id', 'fullName', 'email', 'phone', 'idStudent', 'createdAt'],
             order: [['createdAt', 'DESC']],

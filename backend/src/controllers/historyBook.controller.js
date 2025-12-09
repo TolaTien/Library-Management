@@ -146,7 +146,7 @@ class historyBookController {
                 return res.status(400).json({ success: false, message: 'Lịch sử mượn không tồn tại' });
             }
 
-            // Nếu admin duyệt và status = 'approved', trừ stock
+            // Nếu admin duyệt và status = 'success', trừ stock
             if (status === 'success') {
                 const product = await Product.findOne({ where: { id: findHistory.bookId } });
                 if (!product) {
